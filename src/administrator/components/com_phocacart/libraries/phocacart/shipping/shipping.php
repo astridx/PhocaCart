@@ -14,14 +14,15 @@ defined('_JEXEC') or die();
 
 class PhocacartShipping
 {
-
 	protected $type = array(0,1);// 0 all, 1 online shop, 2 pos (category type, payment method type, shipping method type)
 
-	public function __construct() {
+	public function __construct()
+	{
 
 	}
 
-	public function setType($type = array(0,1)) {
+	public function setType($type = array(0,1))
+	{
 		$this->type = $type;
 	}
 
@@ -32,68 +33,71 @@ class PhocacartShipping
 	 * Always test for the id before using this function
 	 */
 
-	public function getPossibleShippingMethods($amountNetto, $amountBrutto, $quantity, $country, $region, $weight, $length, $width, $height, $id = 0, $selected = 0) {
+	public function getPossibleShippingMethods($amountNetto, $amountBrutto, $quantity, $country, $region, $weight, $length, $width, $height, $id = 0, $selected = 0)
+	{
 
 		$app			= JFactory::getApplication();
 		$paramsC 		= PhocacartUtils::getComponentParameters();
-		$shipping_amount_rule	= $paramsC->get( 'shipping_amount_rule', 0 );
+		$shipping_amount_rule	= $paramsC->get('shipping_amount_rule', 0);
 
 		$user 			= PhocacartUser::getUser();
-		$userLevels		= implode (',', $user->getAuthorisedViewLevels());
-		$userGroups 	= implode (',', PhocacartGroup::getGroupsById($user->id, 1, 1));
+		$userLevels		= implode(',', $user->getAuthorisedViewLevels());
+		$userGroups 	= implode(',', PhocacartGroup::getGroupsById($user->id, 1, 1));
 
 		$db 			= JFactory::getDBO();
 
 		$wheres	  		= array();
+
 		// ACCESS
 		$wheres[] = " s.published = 1";
-		$wheres[] = " s.access IN (".$userLevels.")";
-		$wheres[] = " (ga.group_id IN (".$userGroups.") OR ga.group_id IS NULL)";
+		$wheres[] = " s.access IN (" . $userLevels . ")";
+		$wheres[] = " (ga.group_id IN (" . $userGroups . ") OR ga.group_id IS NULL)";
 
-		$wheres[] = " s.type IN (". implode(',', $this->type). ')';
+		$wheres[] = " s.type IN (" . implode(',', $this->type) . ')';
 
-		if ((int)$id > 0) {
-			$wheres[] =  's.id = '.(int)$id;
+		if ((int) $id > 0)
+		{
+			$wheres[] = 's.id = ' . (int) $id;
 			$limit = ' LIMIT 1';
-			//$group = '';
-		} else {
-			$limit = '';
 
+			// $group = '';
+		}
+		else
+		{
+			$limit = '';
 		}
 
 		$columns		= 's.id, s.tax_id, s.cost, s.cost_additional, s.calculation_type, s.title, s.description, s.image, s.access,'
-		.' s.active_amount, s.active_quantity, s.active_zone, s.active_country, s.active_region,'
-		.' s.active_weight, s.active_size,'
-		.' s.lowest_amount, s.highest_amount, s.minimal_quantity, s.maximal_quantity, s.lowest_weight,'
-		.' s.highest_weight, s.default,'
-		.' s.minimal_length, s.minimal_width, s.minimal_height, s.maximal_length, s.maximal_width, s.maximal_height,'
-		.' t.id as taxid, t.title as taxtitle, t.tax_rate as taxrate, t.calculation_type as taxcalculationtype,'
-		.' GROUP_CONCAT(DISTINCT r.region_id) AS region,'
-		.' GROUP_CONCAT(DISTINCT c.country_id) AS country,'
-		.' GROUP_CONCAT(DISTINCT z.zone_id) AS zone';
+		. ' s.active_amount, s.active_quantity, s.active_zone, s.active_country, s.active_region,'
+		. ' s.active_weight, s.active_size,'
+		. ' s.lowest_amount, s.highest_amount, s.minimal_quantity, s.maximal_quantity, s.lowest_weight,'
+		. ' s.highest_weight, s.default,'
+		. ' s.minimal_length, s.minimal_width, s.minimal_height, s.maximal_length, s.maximal_width, s.maximal_height,'
+		. ' t.id as taxid, t.title as taxtitle, t.tax_rate as taxrate, t.calculation_type as taxcalculationtype,'
+		. ' GROUP_CONCAT(DISTINCT r.region_id) AS region,'
+		. ' GROUP_CONCAT(DISTINCT c.country_id) AS country,'
+		. ' GROUP_CONCAT(DISTINCT z.zone_id) AS zone';
 		$groupsFull		= 's.id, s.tax_id, s.cost, s.cost_additional, s.calculation_type, s.title, s.description, s.image, s.access,'
-		.' s.active_amount, s.active_quantity, s.active_zone, s.active_country, s.active_region,'
-		.' s.active_weight, s.active_size,'
-		.' s.lowest_amount, s.highest_amount, s.minimal_quantity, s.maximal_quantity, s.lowest_weight,'
-		.' s.minimal_length, s.minimal_width, s.minimal_height, s.maximal_length, s.maximal_width, s.maximal_height,'
-		.' s.highest_weight, s.default,'
-		.' t.id, t.title, t.tax_rate, t.calculation_type';
+		. ' s.active_amount, s.active_quantity, s.active_zone, s.active_country, s.active_region,'
+		. ' s.active_weight, s.active_size,'
+		. ' s.lowest_amount, s.highest_amount, s.minimal_quantity, s.maximal_quantity, s.lowest_weight,'
+		. ' s.minimal_length, s.minimal_width, s.minimal_height, s.maximal_length, s.maximal_width, s.maximal_height,'
+		. ' s.highest_weight, s.default,'
+		. ' t.id, t.title, t.tax_rate, t.calculation_type';
 		$groupsFast		= 's.id';
 		$groups			= PhocacartUtilsSettings::isFullGroupBy() ? $groupsFull : $groupsFast;
 
+		$where 		= ( count($wheres) ? ' WHERE ' . implode(' AND ', $wheres) : '' );
 
-
-		$where 		= ( count( $wheres ) ? ' WHERE '. implode( ' AND ', $wheres ) : '' );
-
-		$query = ' SELECT '.$columns
-				.' FROM #__phocacart_shipping_methods AS s'
-				.' LEFT JOIN #__phocacart_shipping_method_regions AS r ON r.shipping_id = s.id'
-				.' LEFT JOIN #__phocacart_shipping_method_countries AS c ON c.shipping_id = s.id'
-				.' LEFT JOIN #__phocacart_shipping_method_zones AS z ON z.shipping_id = s.id'
-				.' LEFT JOIN #__phocacart_taxes AS t ON t.id = s.tax_id'
-				.' LEFT JOIN #__phocacart_item_groups AS ga ON s.id = ga.item_id AND ga.type = 7'// type 8 is payment
+		$query = ' SELECT ' . $columns
+				. ' FROM #__phocacart_shipping_methods AS s'
+				. ' LEFT JOIN #__phocacart_shipping_method_regions AS r ON r.shipping_id = s.id'
+				. ' LEFT JOIN #__phocacart_shipping_method_countries AS c ON c.shipping_id = s.id'
+				. ' LEFT JOIN #__phocacart_shipping_method_zones AS z ON z.shipping_id = s.id'
+				. ' LEFT JOIN #__phocacart_taxes AS t ON t.id = s.tax_id'
+				. ' LEFT JOIN #__phocacart_item_groups AS ga ON s.id = ga.item_id AND ga.type = 7'// Type 8 is payment
 				. $where
-				. ' GROUP BY '.$groups
+				. ' GROUP BY ' . $groups
 				. $limit;
 
 		PhocacartUtils::setConcatCharCount();
@@ -101,20 +105,21 @@ class PhocacartShipping
 
 		$shippings = $db->loadObjectList();
 
-		/*if (empty($shippings)) {
+		/*
+		if (empty($shippings)) {
 			return false;
 		}*/
-		if (!empty($shippings) && !isset($shippings[0]->id) || (isset($shippings[0]->id) && (int)$shippings[0]->id < 1)) {
+		if (!empty($shippings) && !isset($shippings[0]->id) || (isset($shippings[0]->id) && (int) $shippings[0]->id < 1))
+		{
 			return false;
 		}
 
-
 		$i = 0;
 
-		if (!empty($shippings)) {
-			foreach($shippings as $k => $v) {
-
-
+		if (!empty($shippings))
+		{
+			foreach ($shippings as $k => $v)
+			{
 				$v->active = 0;
 				$v->selected = 0;
 				$a = 0;
@@ -124,129 +129,166 @@ class PhocacartShipping
 				$r = 0;
 				$w = 0;
 				$s = 0;
+
 				// Amount Rule
-				if($v->active_amount == 1) {
-
-
-					if ($shipping_amount_rule == 0 || $shipping_amount_rule == 2) {
+				if ($v->active_amount == 1)
+				{
+					if ($shipping_amount_rule == 0 || $shipping_amount_rule == 2)
+					{
 						// No tax, brutto
-						if ($amountBrutto >= $v->lowest_amount && $amountBrutto <= $v->highest_amount) {
+						if ($amountBrutto >= $v->lowest_amount && $amountBrutto <= $v->highest_amount)
+						{
 							$a = 1;
 						}
-
-					} else if ($shipping_amount_rule == 1) {
-						// Netto
-						if ($amountNetto >= $v->lowest_amount && $amountNetto <= $v->highest_amount) {
-							$a = 1;
-						}
-
 					}
-
-				} else {
+					elseif ($shipping_amount_rule == 1)
+					{
+						// Netto
+						if ($amountNetto >= $v->lowest_amount && $amountNetto <= $v->highest_amount)
+						{
+							$a = 1;
+						}
+					}
+				}
+				else
+				{
 					$a = 1;
 				}
 
-
 				// Quantity Rule
-				if($v->active_quantity == 1) {
-					if ($quantity >= $v->minimal_quantity && $quantity <= $v->maximal_quantity) {
+				if ($v->active_quantity == 1)
+				{
+					if ($quantity >= $v->minimal_quantity && $quantity <= $v->maximal_quantity)
+					{
 						$q = 1;
 					}
-				} else {
+				}
+				else
+				{
 					$q = 1;
 				}
 
 				// Zone Rule
-				if($v->active_zone == 1) {
-					if (isset($v->zone) && $v->zone != '')  {
+				if ($v->active_zone == 1)
+				{
+					if (isset($v->zone) && $v->zone != '')
+					{
 						$zones = explode(',', $v->zone);
 
-						if (PhocacartZone::isCountryOrRegionIncluded($zones, (int)$country, (int)$region)) {
+						if (PhocacartZone::isCountryOrRegionIncluded($zones, (int) $country, (int) $region))
+						{
 							$z = 1;
 						}
 					}
-
-				} else {
+				}
+				else
+				{
 					$z = 1;
 				}
 
 				// Country Rule
-				if($v->active_country == 1) {
-					if (isset($v->country) && $v->country != '') {
+				if ($v->active_country == 1)
+				{
+					if (isset($v->country) && $v->country != '')
+					{
 						$countries = explode(',', $v->country);
-						if (in_array((int)$country, $countries)) {
+
+						if (in_array((int) $country, $countries))
+						{
 							$c = 1;
 						}
 					}
-
-				} else {
+				}
+				else
+				{
 					$c = 1;
 				}
 
 				// Region Rule
-				if($v->active_region == 1) {
-					if (isset($v->region) && $v->region != '') {
+				if ($v->active_region == 1)
+				{
+					if (isset($v->region) && $v->region != '')
+					{
 						$regions = explode(',', $v->region);
-						if (in_array((int)$region, $regions)) {
+
+						if (in_array((int) $region, $regions))
+						{
 							$r = 1;
 						}
 					}
-				} else {
+				}
+				else
+				{
 					$r = 1;
 				}
 
 				// Weight Rule
-				if($v->active_weight == 1) {
+				if ($v->active_weight == 1)
+				{
 					if (($weight >= $v->lowest_weight || $weight == $v->lowest_weight)
-						&& ($weight <= $v->highest_weight || $weight == $v->highest_weight)) {
+						&& ($weight <= $v->highest_weight || $weight == $v->highest_weight))
+					{
 						$w = 1;
 					}
-
-				} else {
+				}
+				else
+				{
 					$w = 1;
 				}
 
 				// Size Rule
-				if($v->active_size == 1) {
+				if ($v->active_size == 1)
+				{
 					$sP = 0;
+
 					if (($length >= $v->minimal_length || $length == $v->minimal_length)
-						&& ($length <= $v->maximal_length || $length == $v->maximal_length)) {
-
+						&& ($length <= $v->maximal_length || $length == $v->maximal_length))
+					{
 						$sP++;
 					}
+
 					if (($width >= $v->minimal_width || $width == $v->minimal_width)
-						&& ($width <= $v->maximal_width || $width == $v->maximal_width)) {
-
+						&& ($width <= $v->maximal_width || $width == $v->maximal_width))
+					{
 						$sP++;
 					}
+
 					if (($height >= $v->minimal_height || $height == $v->minimal_height)
-						&& ($height <= $v->maximal_height || $height == $v->maximal_height)) {
-
+						&& ($height <= $v->maximal_height || $height == $v->maximal_height))
+					{
 						$sP++;
 					}
 
-					if ($sP == 3) {
+					if ($sP == 3)
+					{
 						$s = 1;
 					}
-				} else {
+				}
+				else
+				{
 					$s = 1;
 				}
 
-
 				// No rule was set for shipping, it will be displayed at all events
-				if($v->active_amount == 0 && $v->active_quantity == 0 && $v->active_country == 0 && $v->active_region == 0 && $v->active_weight == 0) {
+				if ($v->active_amount == 0 && $v->active_quantity == 0 && $v->active_country == 0 && $v->active_region == 0 && $v->active_weight == 0)
+				{
 					$v->active = 1;
 				}
 
-				// if some of the rules is not valid, all the payment is NOT valid
-				if ($a == 0 || $q == 0 || $z == 0 || $c == 0 || $r == 0 || $w == 0 || $s == 0) {
+				// If some of the rules is not valid, all the payment is NOT valid
+				if ($a == 0 || $q == 0 || $z == 0 || $c == 0 || $r == 0 || $w == 0 || $s == 0)
+				{
 					$v->active = 0;
-				} else {
+				}
+				else
+				{
 					$v->active = 1;
 				}
 
-				if ($v->active == 0) {
-					if (isset($shippings[$i])) {
+				if ($v->active == 0)
+				{
+					if (isset($shippings[$i]))
+					{
 						unset($shippings[$i]);
 					}
 				}
@@ -254,29 +296,34 @@ class PhocacartShipping
 				// Try to set default for frontend form
 				// If user selected some shipping, such will be set as default
 				// If not then the default will be set
-				if ((int)$selected > 0) {
-					if ((int)$v->id == (int)$selected) {
+				if ((int) $selected > 0)
+				{
+					if ((int) $v->id == (int) $selected)
+					{
 						$v->selected = 1;
 					}
-				} else {
+				}
+				else
+				{
 					$v->selected = $v->default;
 				}
 
-
 				$i++;
 			}
-
 		}
 
 		return $shippings;
 
 	}
 
-	public function checkAndGetShippingMethodInsideCart($id, $total) {
+	public function checkAndGetShippingMethodInsideCart($id, $total)
+	{
 
-		if ((int)$id > 0 && !empty($total)) {
+		if ((int) $id > 0 && !empty($total))
+		{
 			return $this->checkAndGetShippingMethods($id, 0, $total);
 		}
+
 		return false;
 
 	}
@@ -288,11 +335,14 @@ class PhocacartShipping
 	 * @param number $id
 	 * @return boolean|array
 	 */
-	public function checkAndGetShippingMethod($id = 0) {
+	public function checkAndGetShippingMethod($id = 0)
+	{
 
-		if ((int)$id > 0) {
+		if ((int) $id > 0)
+		{
 			return $this->checkAndGetShippingMethods($id);
 		}
+
 		return false;
 
 	}
@@ -304,99 +354,125 @@ class PhocacartShipping
 	 * @return boolean|array
 	 */
 
-	public function checkAndGetShippingMethods($selectedShippingId = 0, $selected = 0, $total = array()) {
+	public function checkAndGetShippingMethods($selectedShippingId = 0, $selected = 0, $total = array())
+	{
 
-
-		if (empty($total)) {
-			$cart					= new PhocacartCartRendercheckout();
+		if (empty($total))
+		{
+			$cart					= new PhocacartCartRendercheckout;
 			$cart->setType($this->type);
 			$cart->setFullItems();
 			$total					= $cart->getTotal();
 			$totalFinal				= $total[0];
-			//$currentShippingId 		= $cart->getShippingId();
-		} else {
+
+			// $currentShippingId        = $cart->getShippingId();
+		}
+		else
+		{
 			$totalFinal				= $total;
 		}
 
 		$user					= PhocacartUser::getUser();
-		$data					= PhocacartUser::getUserData((int)$user->id);
-		$fields 				= PhocacartFormUser::getFormXml('', '_phs', 1,1,0);
+		$data					= PhocacartUser::getUserData((int) $user->id);
+		$fields 				= PhocacartFormUser::getFormXml('', '_phs', 1, 1, 0);
 
-		if (!empty($data)) {
+		if (!empty($data))
+		{
 			$dataAddress	= PhocacartUser::getAddressDataOutput($data, $fields['array'], $user);
-		} else {
-            // Is this guest user
-            $guest = PhocacartUserGuestuser::getGuestUser();
-            if ($guest) {
-                $data 			= PhocacartUserGuestuser::getUserAddressGuest();
-                $dataAddress	= PhocacartUser::getAddressDataOutput($data, $fields['array'], $user, 1);
-            }
+		}
+		else
+		{
+			// Is this guest user
+			$guest = PhocacartUserGuestuser::getGuestUser();
 
-        }
+			if ($guest)
+			{
+				$data 			= PhocacartUserGuestuser::getUserAddressGuest();
+				$dataAddress	= PhocacartUser::getAddressDataOutput($data, $fields['array'], $user, 1);
+			}
+		}
 
 		$country = 0;
-		if(isset($dataAddress['bcountry']) && (int)$dataAddress['bcountry']) {
-			$country = (int)$dataAddress['bcountry'];
+
+		if (isset($dataAddress['bcountry']) && (int) $dataAddress['bcountry'])
+		{
+			$country = (int) $dataAddress['bcountry'];
 		}
 
 		$region = 0;
-		if(isset($dataAddress['bregion']) && (int)$dataAddress['bregion']) {
-			$region = (int)$dataAddress['bregion'];
+
+		if (isset($dataAddress['bregion']) && (int) $dataAddress['bregion'])
+		{
+			$region = (int) $dataAddress['bregion'];
 		}
 
 		$shippingMethods	= $this->getPossibleShippingMethods($totalFinal['netto'], $totalFinal['brutto'], $totalFinal['quantity'], $country, $region, $totalFinal['weight'], $totalFinal['length'], $totalFinal['width'], $totalFinal['height'], $selectedShippingId, $selected);
 
-
-		if (!empty($shippingMethods)) {
+		if (!empty($shippingMethods))
+		{
 			return $shippingMethods;
 		}
+
 		return false;
 
 	}
 
-	public function getShippingMethod($shippingId) {
+	public function getShippingMethod($shippingId)
+	{
 
-		//$app			= JFactory::getApplication();
-		//$paramsC 		= PhocacartUtils::getComponentParameters();
-		//$shipping_amount_rule	= $paramsC->get( 'shipping_amount_rule', 0 );
+		// $app          = JFactory::getApplication();
+		// $paramsC      = PhocacartUtils::getComponentParameters();
+		// $shipping_amount_rule = $paramsC->get( 'shipping_amount_rule', 0 );
 
 		$db = JFactory::getDBO();
 
 		$query = ' SELECT s.id, s.tax_id, s.cost, s.cost_additional, s.calculation_type, s.title, s.method, s.description, s.image,'
-				.' t.id as taxid, t.title as taxtitle, t.tax_rate as taxrate, t.calculation_type as taxcalculationtype'
-				.' FROM #__phocacart_shipping_methods AS s'
-				.' LEFT JOIN #__phocacart_taxes AS t ON t.id = s.tax_id'
-				.' WHERE s.id = '.(int)$shippingId
-				.' ORDER BY s.id'
-				.' LIMIT 1';
+				. ' t.id as taxid, t.title as taxtitle, t.tax_rate as taxrate, t.calculation_type as taxcalculationtype'
+				. ' FROM #__phocacart_shipping_methods AS s'
+				. ' LEFT JOIN #__phocacart_taxes AS t ON t.id = s.tax_id'
+				. ' WHERE s.id = ' . (int) $shippingId
+				. ' ORDER BY s.id'
+				. ' LIMIT 1';
 		$db->setQuery($query);
 
 		$shipping = $db->loadObject();
+
 		return $shipping;
 	}
 
-	/* Used as payment rule */
-	public static function getShippingMethods($paymentId, $select = 0, $table = 'payment') {
+	// Used as payment rule
 
-		if ($table == 'payment') {
+	public static function getShippingMethods($paymentId, $select = 0, $table = 'payment')
+	{
+
+		if ($table == 'payment')
+		{
 			$t = '#__phocacart_payment_method_shipping';
 			$c = 'payment_id';
 		}
 
-		$db =JFactory::getDBO();
+		$db = JFactory::getDBO();
 
-		if ($select == 1) {
+		if ($select == 1)
+		{
 			$query = 'SELECT p.shipping_id';
-		} else {
+		}
+		else
+		{
 			$query = 'SELECT a.*';
 		}
+
 		$query .= ' FROM #__phocacart_shipping_methods AS a'
-				.' LEFT JOIN '.$t.' AS p ON a.id = p.shipping_id'
-			    .' WHERE p.'.$c.' = '.(int) $paymentId;
+				. ' LEFT JOIN ' . $t . ' AS p ON a.id = p.shipping_id'
+				. ' WHERE p.' . $c . ' = ' . (int) $paymentId;
 		$db->setQuery($query);
-		if ($select == 1) {
+
+		if ($select == 1)
+		{
 			$items = $db->loadColumn();
-		} else {
+		}
+		else
+		{
 			$items = $db->loadObjectList();
 		}
 
@@ -415,93 +491,108 @@ class PhocacartShipping
 
 		$row = JTable::getInstance('PhocacartCart', 'Table');
 
-
-		if ((int)$userId > 0) {
-			if (!$row->load(array('user_id' => (int)$userId, 'vendor_id' => 0, 'ticket_id' => 0, 'unit_id' => 0, 'section_id' => 0))) {
-				return false;// there must be some info in cart yet
+		if ((int) $userId > 0)
+		{
+			if (!$row->load(array('user_id' => (int) $userId, 'vendor_id' => 0, 'ticket_id' => 0, 'unit_id' => 0, 'section_id' => 0)))
+			{
+				return false;// There must be some info in cart yet
 			}
 		}
 
-		if (!empty($row->cart)) {
+		if (!empty($row->cart))
+		{
+			$data['shipping'] = (int) $shippingId;
+			$data['user_id'] = (int) $userId;
 
-			$data['shipping'] = (int)$shippingId;
-			$data['user_id'] = (int)$userId;
-
-			if (!$row->bind($data)) {
+			if (!$row->bind($data))
+			{
 				$this->setError($this->_db->getErrorMsg());
+
 				return false;
 			}
 
 			$row->date = gmdate('Y-m-d H:i:s');
 
-			if (!$row->check()) {
+			if (!$row->check())
+			{
 				$this->setError($this->_db->getErrorMsg());
+
 				return false;
 			}
 
-
-			if (!$row->store()) {
+			if (!$row->store())
+			{
 				$this->setError($this->_db->getErrorMsg());
+
 				return false;
 			}
-			return (int)$shippingId;
+
+			return (int) $shippingId;
 		}
 
 		return false;
 	}
 
 
-	/* Used as payment rule too
+	/*
+	 Used as payment rule too
 	 * Used in administration (this is why $type = array();
 	 */
-	public static function getAllShippingMethodsSelectBox($name, $id, $activeArray, $javascript = NULL, $order = 'id', $type = array() ) {
+	public static function getAllShippingMethodsSelectBox($name, $id, $activeArray, $javascript = null, $order = 'id', $type = array() )
+	{
 
-		$db =JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		$query = 'SELECT a.id AS value, a.title AS text'
-				.' FROM #__phocacart_shipping_methods AS a';
+				. ' FROM #__phocacart_shipping_methods AS a';
 
-		$query .= !empty($type) && is_array($type) ? ' WHERE a.type IN ('. implode(',', $type). ')' : '';
-		$query .= ' ORDER BY a.'. $order;
+		$query .= !empty($type) && is_array($type) ? ' WHERE a.type IN (' . implode(',', $type) . ')' : '';
+		$query .= ' ORDER BY a.' . $order;
 
 		$db->setQuery($query);
 		$methods = $db->loadObjectList();
 
+		$methodsO = JHtml::_('select.genericlist', $methods, $name, 'class="inputbox" size="4" multiple="multiple"' . $javascript, 'value', 'text', $activeArray, $id);
 
-		$methodsO = JHtml::_('select.genericlist', $methods, $name, 'class="inputbox" size="4" multiple="multiple"'. $javascript, 'value', 'text', $activeArray, $id);
 		return $methodsO;
 	}
 
-	/* used as payment rule*/
-	public static function storeShippingMethods($shippingsArray, $id, $table = 'payment') {
+	// Used as payment rule
 
-		if ($table == 'payment') {
+	public static function storeShippingMethods($shippingsArray, $id, $table = 'payment')
+	{
+
+		if ($table == 'payment')
+		{
 			$t = '#__phocacart_payment_method_shipping';
 			$c = 'payment_id';
 		}
 
-		if ((int)$id > 0) {
-			$db =JFactory::getDBO();
+		if ((int) $id > 0)
+		{
+			$db = JFactory::getDBO();
 			$query = ' DELETE '
-					.' FROM '.$t
-					. ' WHERE '.$c.' = '. (int)$id;
+					. ' FROM ' . $t
+					. ' WHERE ' . $c . ' = ' . (int) $id;
 			$db->setQuery($query);
 			$db->execute();
 
-			if (!empty($shippingsArray)) {
-
+			if (!empty($shippingsArray))
+			{
 				$values 		= array();
 				$valuesString 	= '';
 
-				foreach($shippingsArray as $k => $v) {
-					$values[] = ' ('.(int)$id.', '.(int)$v[0].')';
+				foreach ($shippingsArray as $k => $v)
+				{
+					$values[] = ' (' . (int) $id . ', ' . (int) $v[0] . ')';
 				}
 
-				if (!empty($values)) {
+				if (!empty($values))
+				{
 					$valuesString = implode($values, ',');
 
-					$query = ' INSERT INTO '.$t.' ('.$c.', shipping_id)'
-								.' VALUES '.(string)$valuesString;
+					$query = ' INSERT INTO ' . $t . ' (' . $c . ', shipping_id)'
+								. ' VALUES ' . (string) $valuesString;
 
 					$db->setQuery($query);
 					$db->execute();
@@ -516,15 +607,17 @@ class PhocacartShipping
 	 * cart to e.g. one item, shipping cannot stay the same, the same happens with countries and region
 	 */
 
-	public static function removeShipping($type = 0) {
+	public static function removeShipping($type = 0)
+	{
 
-		if ($type == 0 || $type == 1) {
-
+		if ($type == 0 || $type == 1)
+		{
 			$session 		= JFactory::getSession();
 			$session->set('guestshipping', false, 'phocaCart');
 		}
 
-		if ($type == 0) {
+		if ($type == 0)
+		{
 			$db = JFactory::getDBO();
 			$user = array();
 			$vendor = array();
@@ -534,26 +627,30 @@ class PhocacartShipping
 			$dUser = PhocacartUser::defineUser($user, $vendor, $ticket, $unit, $section);
 
 			$pos_shipping_force = 0;
-			if (PhocacartPos::isPos()) {
+
+			if (PhocacartPos::isPos())
+			{
 				$app = JFactory::getApplication();
 				$paramsC = PhocacartUtils::getComponentParameters();
 				$pos_shipping_force = $paramsC->get('pos_shipping_force', 0);
 			}
 
-			$query = 'UPDATE #__phocacart_cart_multiple SET shipping = ' . (int)$pos_shipping_force
-				. ' WHERE user_id = ' . (int)$user->id
-				. ' AND vendor_id = ' . (int)$vendor->id
-				. ' AND ticket_id = ' . (int)$ticket->id
-				. ' AND unit_id = ' . (int)$unit->id
-				. ' AND section_id = ' . (int)$section->id;
+			$query = 'UPDATE #__phocacart_cart_multiple SET shipping = ' . (int) $pos_shipping_force
+				. ' WHERE user_id = ' . (int) $user->id
+				. ' AND vendor_id = ' . (int) $vendor->id
+				. ' AND ticket_id = ' . (int) $ticket->id
+				. ' AND unit_id = ' . (int) $unit->id
+				. ' AND section_id = ' . (int) $section->id;
 			$db->setQuery($query);
 
 			$db->execute();
 		}
+
 		return true;
 	}
 
-	/* Checkout - is there even some shipping NOT is used reverse
+	/*
+	 Checkout - is there even some shipping NOT is used reverse
 	 * This function is different to getPossibleShippingMethods()
 	 *
 	 * getPossibleShippingMethods - all methods they fit the criterias (e.g. amount rule, contry rule, etc.)
@@ -562,28 +659,31 @@ class PhocacartShipping
 	 * IF NO SHIPPPING METHOD EXIST - it is ignored when 1) skip_shipping_method parameter is enabled 2) all products are digital and skip_shipping_method is enabled
 	 *
 	 * */
-	public static function isShippingNotUsed($options = array()) {
+	public static function isShippingNotUsed($options = array())
+	{
 
 		$paramsC 		= PhocacartUtils::getComponentParameters();
-		$skip_shipping_method	= $paramsC->get( 'skip_shipping_method', 0 );
+		$skip_shipping_method	= $paramsC->get('skip_shipping_method', 0);
 
 		// 1) TEST IF ANY SHIPPING METHOD EXISTS
-		$db =JFactory::getDBO();
+		$db = JFactory::getDBO();
 		$query = 'SELECT a.id'
-				.' FROM #__phocacart_shipping_methods AS a'
-				.' WHERE a.published = 1'
-				.' AND a.type IN (0, 1)'
-				.' ORDER BY id LIMIT 1';
+				. ' FROM #__phocacart_shipping_methods AS a'
+				. ' WHERE a.published = 1'
+				. ' AND a.type IN (0, 1)'
+				. ' ORDER BY id LIMIT 1';
 		$db->setQuery($query);
 		$methods = $db->loadObjectList();
 
-		if (empty($methods) && $skip_shipping_method == 2) {
+		if (empty($methods) && $skip_shipping_method == 2)
+		{
 			return true;
 		}
 
 		// 2) TEST IF SHIPPING METHOD IS NOT DISABLED FOR ALL DOWNLOADABLE PRODUCTS
 		// PRODUCTTYPE tested
-		if (isset($options['all_digital_products']) &&  $options['all_digital_products'] == 1 && $skip_shipping_method == 1) {
+		if (isset($options['all_digital_products']) &&  $options['all_digital_products'] == 1 && $skip_shipping_method == 1)
+		{
 			return true;
 		}
 
@@ -593,57 +693,63 @@ class PhocacartShipping
 	/*
 	 * Get all PCS Plugins
 	 */
-	public static function getShippingPluginMethods($namePlugin = '') {
+	public static function getShippingPluginMethods($namePlugin = '')
+	{
 
 		$db 	= JFactory::getDBO();
 		$lang	= JFactory::getLanguage();
 		$client	= JApplicationHelper::getClientInfo(0);
 		$query = 'SELECT a.extension_id , a.name, a.element, a.folder'
-				.' FROM #__extensions AS a'
-				.' WHERE a.type = '.$db->quote('plugin')
-				.' AND a.enabled = 1'
-				.' AND a.folder = ' . $db->quote('pcs');
+				. ' FROM #__extensions AS a'
+				. ' WHERE a.type = ' . $db->quote('plugin')
+				. ' AND a.enabled = 1'
+				. ' AND a.folder = ' . $db->quote('pcs');
 
-		if ($namePlugin != '') {
-			$query .= 'AND a.element = '. $db->quote($namePlugin);
+		if ($namePlugin != '')
+		{
+			$query .= 'AND a.element = ' . $db->quote($namePlugin);
 		}
 
 		$query .= ' ORDER BY a.ordering';
 		$db->setQuery($query);
 		$plugins = $db->loadObjectList();
 
-
-		if ($namePlugin == '') {
+		if ($namePlugin == '')
+		{
 			$i 		= 0;
-			$p[0]['text'] 	= '- ' .JText::_('COM_PHOCACART_SELECT_SHIPPING_METHOD').' -';
+			$p[0]['text'] 	= '- ' . JText::_('COM_PHOCACART_SELECT_SHIPPING_METHOD') . ' -';
 			$p[0]['value'] 	= '';
-		} else {
+		}
+		else
+		{
 			$i 		= -1;
 		}
-		if (!empty($plugins)) {
-			foreach($plugins as $k => $v) {
 
+		if (!empty($plugins))
+		{
+			foreach ($plugins as $k => $v)
+			{
 				// Load the core and/or local language file(s).
 				$folder 	= 'pcs';
 				$element	= $v->element;
-			$lang->load('plg_'.$folder.'_'.$element, JPATH_ADMINISTRATOR, null, false, false)
-		||	$lang->load('plg_'.$folder.'_'.$element, $client->path.'/plugins/'.$folder.'/'.$element, null, false, false)
-		||	$lang->load('plg_'.$folder.'_'.$element, JPATH_ADMINISTRATOR, $lang->getDefault(), false, false)
-		||	$lang->load('plg_'.$folder.'_'.$element, $client->path.'/plugins/'.$folder.'/'.$element, $lang->getDefault(), false, false);
+				$lang->load('plg_' . $folder . '_' . $element, JPATH_ADMINISTRATOR, null, false, false)
+				||	$lang->load('plg_' . $folder . '_' . $element, $client->path . '/plugins/' . $folder . '/' . $element, null, false, false)
+				||	$lang->load('plg_' . $folder . '_' . $element, JPATH_ADMINISTRATOR, $lang->getDefault(), false, false)
+				||	$lang->load('plg_' . $folder . '_' . $element, $client->path . '/plugins/' . $folder . '/' . $element, $lang->getDefault(), false, false);
 
 				$i++;
 
-				$name = JText::_(strtoupper($v->name) );
+				$name = JText::_(strtoupper($v->name));
 				$name = str_replace('Plugin', '', $name);
 				$name = str_replace('Phoca Cart Shipping -', '', $name);
 
 				$p[$i]['text'] = JText::_($name);
 				$p[$i]['value'] = $v->element;
 			}
-
 		}
 
-		if ($namePlugin != '' && !empty($p[0])) {
+		if ($namePlugin != '' && !empty($p[0]))
+		{
 			return $p[0];
 		}
 
@@ -651,4 +757,4 @@ class PhocacartShipping
 
 	}
 }
-?>
+

@@ -17,25 +17,31 @@ class JFormRulePhocaCartEmail extends JFormRuleEmail
 	{
 
 		$app = JFactory::getApplication();
-		//E_ERROR, E_WARNING, E_NOTICE, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE.
+
+		// E_ERROR, E_WARNING, E_NOTICE, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE.
 		$info = array();
 		$info['field'] = 'phocacart_email';
 		$params = PhocacartUtils::getComponentParameters();
 
-		//EMAIL FORMAT
-		if(!parent::test($element, $value, $group, $input, $form)){
+		// EMAIL FORMAT
+		if (!parent::test($element, $value, $group, $input, $form))
+		{
+			$app->enqueueMessage(JText::_('COM_PHOCACART_BAD_EMAIL'), 'warning');
 
-			$app->enqueueMessage(JText::_('COM_PHOCACART_BAD_EMAIL' ), 'warning');
 			return false;
 		}
 
-		//BANNED EMAIL
+		// BANNED EMAIL
 		$banned = $params->get('banned_email');
-		foreach(explode(';', $banned) as $item){
-			if (trim($item) != '') {
-				if (\Joomla\String\StringHelper::stristr($item, $value) !== false){
 
-					$app->enqueueMessage(JText::_('COM_PHOCACART_BAD_EMAIL' ), 'warning');
+		foreach (explode(';', $banned) as $item)
+		{
+			if (trim($item) != '')
+			{
+				if (\Joomla\String\StringHelper::stristr($item, $value) !== false)
+				{
+					$app->enqueueMessage(JText::_('COM_PHOCACART_BAD_EMAIL'), 'warning');
+
 					return false;
 				}
 			}

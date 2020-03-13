@@ -15,8 +15,8 @@ use Mike42\Escpos\CapabilityProfile;
 
 class P822DCapabilityProfile
 {
-    public static function getInstance()
-    {
-        return CapabilityProfile::load('P822D');
-    }
+	public static function getInstance()
+	{
+		return CapabilityProfile::load('P822D');
+	}
 }

@@ -15,8 +15,8 @@ use Mike42\Escpos\CapabilityProfile;
 
 class SimpleCapabilityProfile
 {
-    public static function getInstance()
-    {
-        return CapabilityProfile::load('simple');
-    }
+	public static function getInstance()
+	{
+		return CapabilityProfile::load('simple');
+	}
 }

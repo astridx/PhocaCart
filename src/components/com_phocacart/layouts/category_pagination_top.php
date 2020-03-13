@@ -17,7 +17,7 @@ echo '<div class="'.$d['s']['c']['row'].' ph-pagination-top">';
 
 if ($d['t']['show_pagination_top']) {
 
-    echo '<div class="'.$d['s']['c']['col.xs12.sm5.md5'].' ph-pag-top-row">';
+	echo '<div class="'.$d['s']['c']['col.xs12.sm5.md5'].' ph-pag-top-row">';
 	if ($d['t']['display_item_ordering_top']) {
 
 		$ordering = str_replace( 'class="inputbox"', 'class="'.$d['s']['c']['inputbox.form-control'].' chosen-select" style="width: 16em;" aria-label="'.JText::_('COM_PHOCACART_ORDER_FRONT').'"', $d['t']['ordering']);
@@ -26,9 +26,9 @@ if ($d['t']['show_pagination_top']) {
 		echo $ordering;
 
 	}
-    echo '</div>';
+	echo '</div>';
 
-    echo '<div class="'.$d['s']['c']['col.xs12.sm3.md3'].' ph-pag-top-row">';
+	echo '<div class="'.$d['s']['c']['col.xs12.sm3.md3'].' ph-pag-top-row">';
 	if ($d['t']['show_pagination_limit_top']) {
 
 		$limit = str_replace( 'class="inputbox"', 'class="'.$d['s']['c']['inputbox.form-control'].' chosen-select" aria-label="'.JText::_('COM_PHOCACART_DISPLAY_NUM').'"', $d['t']['pagination']->getLimitBox());
@@ -37,10 +37,10 @@ if ($d['t']['show_pagination_top']) {
 		echo $limit;
 
 	}
-    echo '</div>';
+	echo '</div>';
 
 
-    echo '<div class="'.$d['s']['c']['col.xs12.sm4.md4'].' ph-pag-top-row">';
+	echo '<div class="'.$d['s']['c']['col.xs12.sm4.md4'].' ph-pag-top-row">';
 	if ($d['t']['show_switch_layout_type']) {
 
 		echo '<button type="button" aria-label="'.JText::_('COM_PHOCACART_GRID').'" class="'.$d['s']['c']['btn.btn-default'].' phItemSwitchLayoutType grid '.$d['t']['layouttypeactive'][0].'" data-layouttype="grid"><span class="'.$d['s']['i']['grid'].'"></span></button> ';
@@ -48,9 +48,9 @@ if ($d['t']['show_pagination_top']) {
 		echo '<button type="button" aria-label="'.JText::_('COM_PHOCACART_LIST').'" class="'.$d['s']['c']['btn.btn-default'].' phItemSwitchLayoutType list '.$d['t']['layouttypeactive'][2].'" data-layouttype="list"><span class="'.$d['s']['i']['list'].'"></span></button>';
 
 	}
-    echo '</div>';
+	echo '</div>';
 
-    echo '<div class="ph-cb"></div>';
+	echo '<div class="ph-cb"></div>';
 }
 echo '</div>';
 echo '<input type="hidden" name="format" value="raw" />';

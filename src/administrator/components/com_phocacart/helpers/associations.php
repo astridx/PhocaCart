@@ -61,13 +61,11 @@ class PhocaCartAssociationsHelper extends AssociationExtensionHelper
 	{
 		$type = $this->getType($typeName);
 
-
-
 		$context    = 'com_phocacart.item';
 		$catidField = '';
 
-		
-		if ($typeName === 'phocacartcategory') {
+		if ($typeName === 'phocacartcategory')
+		{
 			$context    = 'com_phocacart.category';
 			$catidField = '';
 		}
@@ -167,9 +165,10 @@ class PhocaCartAssociationsHelper extends AssociationExtensionHelper
 
 				case 'phocacartcategory':
 					$fields['created_user_id'] = false;
-					//$fields['created_user_id'] = 'a.created_user_id';
-					//$fields['ordering'] = 'a.lft';
-					//$fields['level'] = 'a.level';
+
+					// $fields['created_user_id'] = 'a.created_user_id';
+					// $fields['ordering'] = 'a.lft';
+					// $fields['level'] = 'a.level';
 					$fields['catid'] = '';
 					$fields['state'] = 'a.published';
 

@@ -12,7 +12,7 @@ $layoutI	= new JLayoutFile('image', null, array('component' => 'com_phocacart'))
 
 $app 		= JFactory::getApplication();
 $d 			= $displayData;
-$price		= new PhocacartPrice();
+$price		= new PhocacartPrice;
 $msgSuffix	= '<span id="ph-msg-ns" class="ph-hidden"></span>';
 
 $p['tax_calculation']					= $d['params']->get( 'tax_calculation', 0 );
@@ -67,7 +67,7 @@ if (!empty($d['fullitems'][1])) {
 	$cTotE = $d['s']['c']['col.xs0.sm6.md6']; // empty space
 	$cTotT = $d['s']['c']['col.xs8.sm4.md4']; // title
 	$cTotB = $d['s']['c']['col.xs4.sm2.md2']; // price
-	if ((int)$p['tax_calculation'] > 0) {
+	if ((int) $p['tax_calculation'] > 0) {
 		$cP 	= $d['s']['c']['col.xs2.sm2.md2'];// title - 4 (Tax, Netto)
 	} else {
 		$cP 	= $d['s']['c']['col.xs6.sm6.md6'];// title + 4 (Tax, Netto)
@@ -80,7 +80,7 @@ if (!empty($d['fullitems'][1])) {
 
 		$cI 	= $d['s']['c']['col.xs0.sm0.md0'];// image (display: none in css)
 		//$cQ		= 'col-sm-3 col-md-3 col-xs-3';// quantity
-		if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+		if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 			$cP 	= $d['s']['c']['col.xs2.sm2.md2'];// - 4 (Tax, Netto)
 		} else {
 			$cP 	= $d['s']['c']['col.xs6.sm6.md6'];// + 4 (Tax, Netto)
@@ -113,13 +113,13 @@ if (!empty($d['fullitems'][1])) {
 	echo '<div class="'.$cI.' ph-checkout-cart-image">'.JText::_('COM_PHOCACART_IMAGE').'</div>';
 	echo '<div class="'.$cP.' ph-checkout-cart-product">'.JText::_('COM_PHOCACART_PRODUCT').'</div>';
 
-	if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+	if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 		echo '<div class="'.$cN.' ph-checkout-cart-netto">'.JText::_('COM_PHOCACART_PRICE_EXCL_TAX').'</div>';
 	}
 
 	echo '<div class="'.$cQ.' ph-checkout-cart-quantity">'.JText::_('COM_PHOCACART_QUANTITY').'</div>';
 
-	if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+	if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 		echo '<div class="'.$cT.' ph-checkout-cart-tax">'.JText::_('COM_PHOCACART_TAX').'</div>';
 	}
 
@@ -134,7 +134,7 @@ if (!empty($d['fullitems'][1])) {
 
 	foreach($d['fullitems'][1] as $k => $v) {
 
-		$link 				= PhocacartRoute::getItemRoute((int)$v['id'], (int)$v['catid'], $v['alias']);
+		$link 				= PhocacartRoute::getItemRoute((int) $v['id'], (int) $v['catid'], $v['alias']);
 
 		// Design only
 		$lineThroughClass	= '';
@@ -169,7 +169,7 @@ if (!empty($d['fullitems'][1])) {
 		echo '</div>';
 
 
-		if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+		if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 			echo '<div class="'.$cN.$cVRow.$lineThroughClass.' ph-checkout-cart-netto">'.$price->getPriceFormat($v['netto']).'</div>';
 		}
 
@@ -177,12 +177,12 @@ if (!empty($d['fullitems'][1])) {
 
 		echo '<form action="'.$d['linkcheckout'].'" class="form-inline phItemCartUpdateBoxForm" method="post">';
 		echo '<div class="form-group">';
-		echo '<input type="hidden" name="id" value="'.(int)$v['id'].'">';
-		echo '<input type="hidden" name="catid" value="'.(int)$v['catid'].'">';
+		echo '<input type="hidden" name="id" value="'.(int) $v['id'].'">';
+		echo '<input type="hidden" name="catid" value="'.(int) $v['catid'].'">';
 		echo '<input type="hidden" name="idkey" value="'.$v['idkey'].'">';
-		echo '<input type="hidden" name="ticketid" value="'.(int)$d['ticketid'].'">';
-		echo '<input type="hidden" name="unitid" value="'.(int)$d['unitid'].'">';
-		echo '<input type="hidden" name="sectionid" value="'.(int)$d['sectionid'].'">';
+		echo '<input type="hidden" name="ticketid" value="'.(int) $d['ticketid'].'">';
+		echo '<input type="hidden" name="unitid" value="'.(int) $d['unitid'].'">';
+		echo '<input type="hidden" name="sectionid" value="'.(int) $d['sectionid'].'">';
 		echo '<input type="'.$inputNumber.'" class="form-control ph-input-quantity ph-input-sm" name="quantity" value="'.$v['quantity'].'">';
 		echo '<input type="hidden" name="task" value="'.$task.'">';
 		echo '<input type="hidden" name="tmpl" value="component" />';
@@ -199,7 +199,7 @@ if (!empty($d['fullitems'][1])) {
 
 		echo '</div>';// end quantity
 
-		if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+		if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 			echo '<div class="'.$cT.$cVRow.$lineThroughClass.' ph-checkout-cart-tax">'.$price->getPriceFormat($v['tax'] * $v['quantity']).'</div>';
 		}
 
@@ -261,11 +261,11 @@ if (!empty($d['fullitems'][1])) {
 				echo '<div class="'.$r.$cV.' ph-checkout-discount-row">';
 				echo '<div class="'.$cI.$cVRow.'"></div>';
 				echo '<div class="'.$cP.$cVRow.' ph-checkout-cart-title">'.$discountTitle.' '.$d['fullitems'][5][$k]['rewardproducttxtsuffix'].'</div>';
-				if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+				if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 					echo '<div class="'.$cN.$cVRow.' ph-checkout-cart-netto">'.$rewardNetto.'</div>';
 				}
 				echo '<div class="'.$cQ.$cVRow.' ph-checkout-cart-quantity"></div>';
-				if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+				if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 					echo '<div class="'.$cT.$cVRow.' ph-checkout-cart-tax">'.$rewardTax.'</div>';
 				}
 				echo '<div class="'.$cB.$cVRow.' ph-checkout-cart-brutto">'.$rewardFinal.'</div>';
@@ -295,11 +295,11 @@ if (!empty($d['fullitems'][1])) {
 				echo '<div class="'.$r.$cV.' ph-checkout-discount-row">';
 				echo '<div class="'.$cI.$cVRow.'"></div>';
 				echo '<div class="'.$cP.$cVRow.' ph-checkout-cart-title">'.$discountTitle.'</div>';
-				if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+				if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 					echo '<div class="'.$cN.$cVRow.' ph-checkout-cart-netto">'.$productNetto.'</div>';
 				}
 				echo '<div class="'.$cQ.$cVRow.' ph-checkout-cart-quantity"></div>';
-				if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+				if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 					echo '<div class="'.$cT.$cVRow.' ph-checkout-cart-tax">'.$productTax.'</div>';
 				}
 				echo '<div class="'.$cB.$cVRow.' ph-checkout-cart-brutto">'.$productFinal.'</div>';
@@ -328,11 +328,11 @@ if (!empty($d['fullitems'][1])) {
 				echo '<div class="'.$r.$cV.' ph-checkout-discount-row">';
 				echo '<div class="'.$cI.$cVRow.'"></div>';
 				echo '<div class="'.$cP.$cVRow.' ph-checkout-cart-title">'.$discountTitle.'</div>';
-				if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+				if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 					echo '<div class="'.$cN.$cVRow.' ph-checkout-cart-netto">'.$cartNetto.'</div>';
 				}
 				echo '<div class="'.$cQ.$cVRow.' ph-checkout-cart-quantity"></div>';
-				if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+				if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 					echo '<div class="'.$cT.$cVRow.' ph-checkout-cart-tax">'.$cartTax.'</div>';
 				}
 				echo '<div class="'.$cB.$cVRow.' ph-checkout-cart-brutto">'.$cartFinal.'</div>';
@@ -360,11 +360,11 @@ if (!empty($d['fullitems'][1])) {
 				echo '<div class="'.$r.$cV.' ph-checkout-discount-row">';
 				echo '<div class="'.$cI.$cVRow.'"></div>';
 				echo '<div class="'.$cP.$cVRow.' ph-checkout-cart-title">'.$couponTitle.'</div>';
-				if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+				if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 					echo '<div class="'.$cN.$cVRow.' ph-checkout-cart-netto">'.$couponNetto.'</div>';
 				}
 				echo '<div class="'.$cQ.$cVRow.' ph-checkout-cart-quantity"></div>';
-				if ((int)$p['tax_calculation'] > 0 && $displayTax) {
+				if ((int) $p['tax_calculation'] > 0 && $displayTax) {
 					echo '<div class="'.$cT.$cVRow.' ph-checkout-cart-tax">'.$couponTax.'</div>';
 				}
 				echo '<div class="'.$cB.$cVRow.' ph-checkout-cart-brutto">'.$couponFinal.'</div>';
@@ -446,7 +446,7 @@ if (!empty($d['fullitems'][1])) {
 	// CART DISCOUNT
 
 	if ($d['total'][3]['dnetto']) {
-	    echo '<div class="'.$r.' ph-cart-discount-box">';
+		echo '<div class="'.$r.' ph-cart-discount-box">';
 		echo '<div class="'.$cTotE.'"></div>';
 		echo '<div class="'.$cTotT.' ph-cart-cart-discount-txt">'.JText::_('COM_PHOCACART_CART_DISCOUNT').$d['total'][3]['discountcarttxtsuffix'].'</div>';
 		echo '<div class="'.$cTotB.' ph-right ph-cart-cart-discount">'.$price->getPriceFormat($d['total'][3]['dnetto'], 1).'</div>';
@@ -504,14 +504,14 @@ if (!empty($d['fullitems'][1])) {
 
 		if ($p['zero_shipping_price_calculation'] == -1 && $sC['zero'] == 1) {
 			// Hide completely
-		} else 	if ($p['zero_shipping_price_calculation'] == 0 && $sC['zero'] == 1) {
+		} elseif ($p['zero_shipping_price_calculation'] == 0 && $sC['zero'] == 1) {
 			// Display blank price field
 			echo '<div class="'.$r.' ph-cart-shipping-box">';
 			echo '<div class="'.$cTotE.'"></div>';
 			echo '<div class="'.$cTotT.' ph-cart-shipping-txt">'.$sC['title'].'</div>';
 			echo '<div class="'.$cTotB.' ph-checkout-total-amount ph-right ph-cart-shipping"></div>';
 			echo '</div>';// end row
-		} else if ($p['zero_shipping_price_calculation'] == 2 && $sC['zero'] == 1) {
+		} elseif ($p['zero_shipping_price_calculation'] == 2 && $sC['zero'] == 1) {
 			// Display free text
 			echo '<div class="'.$r.' ph-cart-shipping-box">';
 			echo '<div class="'.$cTotE.'"></div>';
@@ -556,14 +556,14 @@ if (!empty($d['fullitems'][1])) {
 
 		if ($p['zero_payment_price_calculation'] == -1 && $pC['zero'] == 1) {
 			// Hide completely
-		} else 	if ($p['zero_payment_price_calculation'] == 0 && $pC['zero'] == 1) {
+		} elseif ($p['zero_payment_price_calculation'] == 0 && $pC['zero'] == 1) {
 			// Display blank price field
 			echo '<div class="'.$r.' ph-cart-payment-box">';
 			echo '<div class="'.$cTotE.'"></div>';
 			echo '<div class="'.$cTotT.' ph-cart-payment-txt">'.$pC['title'].'</div>';
 			echo '<div class="'.$cTotB.' ph-checkout-total-amount ph-right ph-cart-payment"></div>';
 			echo '</div>';// end row
-		} else if ($p['zero_payment_price_calculation'] == 2 && $pC['zero'] == 1) {
+		} elseif ($p['zero_payment_price_calculation'] == 2 && $pC['zero'] == 1) {
 			// Display free text
 			echo '<div class="'.$r.' ph-cart-payment-box">';
 			echo '<div class="'.$cTotE.'"></div>';
@@ -648,7 +648,7 @@ if (!empty($d['fullitems'][1])) {
 		echo '<div class="'.$cTotT.' ph-cart-rounding-currency-txt">'.JText::_('COM_PHOCACART_ROUNDING_CURRENCY').'</div>';
 		echo '<div class="'.$cTotB.' ph-right ph-cart-rounding-currency">'.$price->getPriceFormat($d['total'][0]['rounding_currency'], 0, 1).'</div>';
 		echo '</div>';// end row
-	} else if ($d['total'][0]['rounding'] !== 0) {
+	} elseif ($d['total'][0]['rounding'] !== 0) {
 
 		echo '<div class="'.$r.' ph-cart-currency-box">';
 		echo '<div class="'.$cTotE.'"></div>';
@@ -666,7 +666,7 @@ if (!empty($d['fullitems'][1])) {
 		echo '<div class="'.$cTotB.' ph-checkout-total-amount ph-cart-total ph-right ph-cart-brutto-currency">'.$price->getPriceFormat($d['total'][0]['brutto_currency'], 0, 1).'</div>';
 		echo '</div>';// end row
 	//} else if (!($price->roundPrice($d['total'][0]['brutto']) > -0.01 && $price->roundPrice($d['total'][0]['brutto'] < 0.01)) == 1) {
-	} else if ($d['total'][0]['brutto'] !== 0 || ($d['total'][0]['brutto'] === 0 && $p['display_zero_total'] == 1)) {
+	} elseif ($d['total'][0]['brutto'] !== 0 || ($d['total'][0]['brutto'] === 0 && $p['display_zero_total'] == 1)) {
 		echo '<div class="'.$r.' ph-cart-total-box">';
 		echo '<div class="'.$cTotE.'"></div>';
 		echo '<div class="'.$cTotT.' ph-cart-total-txt">'.JText::_('COM_PHOCACART_TOTAL').'</div>';

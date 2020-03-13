@@ -12,47 +12,47 @@ $displayData 	= null;
 $dParamAttr		= str_replace(array('[',']'), '', $d['param']);
 
 if ($d['params']['open_filter_panel'] == 0) {
-    $d['collapse_class'] = $d['s']['c']['panel-collapse.collapse'];
-    $d['triangle_class'] = $d['s']['i']['triangle-right'];
-} else if ($d['params']['open_filter_panel'] == 2) {
-    $d['collapse_class'] = $d['s']['c']['panel-collapse.collapse'];// closed as default and wait if there is some active item to open it
-    $d['triangle_class'] = $d['s']['i']['triangle-right'];
+	$d['collapse_class'] = $d['s']['c']['panel-collapse.collapse'];
+	$d['triangle_class'] = $d['s']['i']['triangle-right'];
+} elseif ($d['params']['open_filter_panel'] == 2) {
+	$d['collapse_class'] = $d['s']['c']['panel-collapse.collapse'];// closed as default and wait if there is some active item to open it
+	$d['triangle_class'] = $d['s']['i']['triangle-right'];
 } else {
-    $d['collapse_class'] = $d['s']['c']['panel-collapse.collapse.in'];
-    $d['triangle_class'] = $d['s']['i']['triangle-bottom'];
+	$d['collapse_class'] = $d['s']['c']['panel-collapse.collapse.in'];
+	$d['triangle_class'] = $d['s']['i']['triangle-bottom'];
 }
 
 $output = '';
 foreach ($d['items'] as $k => $v) {
 
-    $checked 	= '';
-    $value		= htmlspecialchars($v->alias);
-    if (isset($d['nrinalias']) && $d['nrinalias'] == 1) {
-        $value 		= (int)$v->id .'-'. htmlspecialchars($v->alias);
-    }
+	$checked 	= '';
+	$value		= htmlspecialchars($v->alias);
+	if (isset($d['nrinalias']) && $d['nrinalias'] == 1) {
+		$value 		= (int) $v->id .'-'. htmlspecialchars($v->alias);
+	}
 
-    if (in_array($value, $d['getparams'])) {
-        $checked 	= 'checked';
-        $d['collapse_class'] = $d['s']['c']['panel-collapse.collapse.in'];
-    }
-
-
-    $jsSet = '';
-    if (isset($d['forcecategory']['idalias']) && $d['forcecategory']['idalias']  != '') {
-        // Category View - force the category parameter if set in parameters
-        $jsSet .= 'phChangeFilter(\'c\', \''.$d['forcecategory']['idalias'].'\', 1, \'text\', 0, 1, 1);';
-    }
-    $jsSet .= 'phChangeFilter(\''.$d['param'].'\', \''. $value.'\', this, \''.$d['formtype'].'\',\''.$d['uniquevalue'].'\', 0, 1);';
-
-    $count = '';
-    if (isset($v->count_products) && isset($d['params']['display_count']) && $d['params']['display_count'] == 1 ) {
-        $count = ' <span class="ph-filter-count">'.(int)$v->count_products.'</span>';
-    }
+	if (in_array($value, $d['getparams'])) {
+		$checked 	= 'checked';
+		$d['collapse_class'] = $d['s']['c']['panel-collapse.collapse.in'];
+	}
 
 
-    $output .= '<div class="checkbox">';
-    $output .= '<label class="ph-checkbox-container"><input type="checkbox" name="tag" value="'.$value.'" '.$checked.' onchange="'.$jsSet.'" />'.$v->title.$count.'<span class="ph-checkbox-checkmark"></span></label>';
-    $output .= '</div>';
+	$jsSet = '';
+	if (isset($d['forcecategory']['idalias']) && $d['forcecategory']['idalias']  != '') {
+		// Category View - force the category parameter if set in parameters
+		$jsSet .= 'phChangeFilter(\'c\', \''.$d['forcecategory']['idalias'].'\', 1, \'text\', 0, 1, 1);';
+	}
+	$jsSet .= 'phChangeFilter(\''.$d['param'].'\', \''. $value.'\', this, \''.$d['formtype'].'\',\''.$d['uniquevalue'].'\', 0, 1);';
+
+	$count = '';
+	if (isset($v->count_products) && isset($d['params']['display_count']) && $d['params']['display_count'] == 1 ) {
+		$count = ' <span class="ph-filter-count">'.(int) $v->count_products.'</span>';
+	}
+
+
+	$output .= '<div class="checkbox">';
+	$output .= '<label class="ph-checkbox-container"><input type="checkbox" name="tag" value="'.$value.'" '.$checked.' onchange="'.$jsSet.'" />'.$v->title.$count.'<span class="ph-checkbox-checkmark"></span></label>';
+	$output .= '</div>';
 
 }
 

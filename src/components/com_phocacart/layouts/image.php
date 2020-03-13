@@ -12,49 +12,49 @@ $d                      = $displayData;
 
 if ($d['t']['display_webp_images'] == 1) {
 
-    echo '<picture>';
-    echo ' <source type="image/webp"';
-    echo isset($d['srcset-webp']) ? ' srcset="'.$d['srcset-webp'].'"' : ' srcset=""';
-    echo isset($d['alt-value']) ? ' alt="'.$d['alt-value'].'"' : ' alt=""';
-    //echo isset($d['class']) && $d['class'] != '' ? ' class="'.$d['class'].'"' : ''; // TEST
-    //echo isset($d['style']) && $d['style'] != '' ? ' style="'.$d['style'].'"' : ''; // TEST
-    echo isset($d['data-image']) && $d['data-image'] != '' ? ' data-image="'.$d['data-image'].'"' : '';
+	echo '<picture>';
+	echo ' <source type="image/webp"';
+	echo isset($d['srcset-webp']) ? ' srcset="'.$d['srcset-webp'].'"' : ' srcset=""';
+	echo isset($d['alt-value']) ? ' alt="'.$d['alt-value'].'"' : ' alt=""';
+	//echo isset($d['class']) && $d['class'] != '' ? ' class="'.$d['class'].'"' : ''; // TEST
+	//echo isset($d['style']) && $d['style'] != '' ? ' style="'.$d['style'].'"' : ''; // TEST
+	echo isset($d['data-image']) && $d['data-image'] != '' ? ' data-image="'.$d['data-image'].'"' : '';
 
-    echo isset($d['data-image-small']) && $d['data-image-small'] != '' ? ' data-image-small="'.$d['data-image-small'].'"' : '';
-    echo isset($d['data-image-medium']) && $d['data-image-medium'] != '' ? ' data-image-medium="'.$d['data-image-medium'].'"' : '';
-    echo isset($d['data-image-large']) && $d['data-image-large'] != '' ? ' data-image-large="'.$d['data-image-large'].'"' : '';
-    echo isset($d['data-image-original']) && $d['data-image-original'] != '' ? ' data-image-original="'.$d['data-image-original'].'"' : '';
-    echo '/>';
+	echo isset($d['data-image-small']) && $d['data-image-small'] != '' ? ' data-image-small="'.$d['data-image-small'].'"' : '';
+	echo isset($d['data-image-medium']) && $d['data-image-medium'] != '' ? ' data-image-medium="'.$d['data-image-medium'].'"' : '';
+	echo isset($d['data-image-large']) && $d['data-image-large'] != '' ? ' data-image-large="'.$d['data-image-large'].'"' : '';
+	echo isset($d['data-image-original']) && $d['data-image-original'] != '' ? ' data-image-original="'.$d['data-image-original'].'"' : '';
+	echo '/>';
 
-    echo ' <img';
-    echo isset($d['src']) ? ' src="'.$d['src'].'"' : ' src=""';
-    //echo isset($d['src']) ? ' srcset="'.$d['src'].'"' : ' srcset=""';
-    echo isset($d['alt-value']) ? ' alt="'.$d['alt-value'].'"' : ' alt=""';
-    echo isset($d['class']) && $d['class'] != '' ? ' class="'.$d['class'].'"' : '';
-    echo isset($d['style']) && $d['style'] != '' ? ' style="'.$d['style'].'"' : '';
-    echo isset($d['data-image']) && $d['data-image'] != '' ? ' data-image="'.$d['data-image'].'"' : '';
+	echo ' <img';
+	echo isset($d['src']) ? ' src="'.$d['src'].'"' : ' src=""';
+	//echo isset($d['src']) ? ' srcset="'.$d['src'].'"' : ' srcset=""';
+	echo isset($d['alt-value']) ? ' alt="'.$d['alt-value'].'"' : ' alt=""';
+	echo isset($d['class']) && $d['class'] != '' ? ' class="'.$d['class'].'"' : '';
+	echo isset($d['style']) && $d['style'] != '' ? ' style="'.$d['style'].'"' : '';
+	echo isset($d['data-image']) && $d['data-image'] != '' ? ' data-image="'.$d['data-image'].'"' : '';
 
-    echo isset($d['data-image-small']) && $d['data-image-small'] != '' ? ' data-image-small="'.$d['data-image-small'].'"' : '';
-    echo isset($d['data-image-medium']) && $d['data-image-medium'] != '' ? ' data-image-medium="'.$d['data-image-medium'].'"' : '';
-    echo isset($d['data-image-large']) && $d['data-image-large'] != '' ? ' data-image-large="'.$d['data-image-large'].'"' : '';
-    echo isset($d['data-image-original']) && $d['data-image-original'] != '' ? ' data-image-original="'.$d['data-image-original'].'"' : '';
-    echo '/>';
+	echo isset($d['data-image-small']) && $d['data-image-small'] != '' ? ' data-image-small="'.$d['data-image-small'].'"' : '';
+	echo isset($d['data-image-medium']) && $d['data-image-medium'] != '' ? ' data-image-medium="'.$d['data-image-medium'].'"' : '';
+	echo isset($d['data-image-large']) && $d['data-image-large'] != '' ? ' data-image-large="'.$d['data-image-large'].'"' : '';
+	echo isset($d['data-image-original']) && $d['data-image-original'] != '' ? ' data-image-original="'.$d['data-image-original'].'"' : '';
+	echo '/>';
 
-    echo '</picture>';
+	echo '</picture>';
 
 
 } else {
-    echo '<img';
-    echo isset($d['src']) ? ' src="'.$d['src'].'"' : ' src=""';
-    echo isset($d['alt-value']) ? ' alt="'.$d['alt-value'].'"' : ' alt=""';
-    echo isset($d['class']) && $d['class'] != '' ? ' class="'.$d['class'].'"' : '';
-    echo isset($d['style']) && $d['style'] != '' ? ' style="'.$d['style'].'"' : '';
-    echo isset($d['data-image']) && $d['data-image'] != '' ? ' data-image="'.$d['data-image'].'"' : '';
+	echo '<img';
+	echo isset($d['src']) ? ' src="'.$d['src'].'"' : ' src=""';
+	echo isset($d['alt-value']) ? ' alt="'.$d['alt-value'].'"' : ' alt=""';
+	echo isset($d['class']) && $d['class'] != '' ? ' class="'.$d['class'].'"' : '';
+	echo isset($d['style']) && $d['style'] != '' ? ' style="'.$d['style'].'"' : '';
+	echo isset($d['data-image']) && $d['data-image'] != '' ? ' data-image="'.$d['data-image'].'"' : '';
 
-    echo isset($d['data-image-small']) && $d['data-image-small'] != '' ? ' data-image-small="'.$d['data-image-small'].'"' : '';
-    echo isset($d['data-image-medium']) && $d['data-image-medium'] != '' ? ' data-image-medium="'.$d['data-image-medium'].'"' : '';
-    echo isset($d['data-image-large']) && $d['data-image-large'] != '' ? ' data-image-large="'.$d['data-image-large'].'"' : '';
-    echo isset($d['data-image-original']) && $d['data-image-original'] != '' ? ' data-image-original="'.$d['data-image-original'].'"' : '';
-    echo '/>';
+	echo isset($d['data-image-small']) && $d['data-image-small'] != '' ? ' data-image-small="'.$d['data-image-small'].'"' : '';
+	echo isset($d['data-image-medium']) && $d['data-image-medium'] != '' ? ' data-image-medium="'.$d['data-image-medium'].'"' : '';
+	echo isset($d['data-image-large']) && $d['data-image-large'] != '' ? ' data-image-large="'.$d['data-image-large'].'"' : '';
+	echo isset($d['data-image-original']) && $d['data-image-original'] != '' ? ' data-image-original="'.$d['data-image-original'].'"' : '';
+	echo '/>';
 }
 ?>

@@ -10,79 +10,84 @@
  */
 defined('_JEXEC') or die();
 
-class PhocacartSubmit {
+class PhocacartSubmit
+{
 
 
-	public static function isAllowedToSubmit() {
+	public static function isAllowedToSubmit()
+	{
 
-	    $paramsC 			            = JComponentHelper::getParams('com_phocacart') ;
-        $submit_item_registered_only 	= $paramsC->get( 'submit_item_registered_only', 1 );
+		$paramsC 			            = JComponentHelper::getParams('com_phocacart');
+		$submit_item_registered_only 	= $paramsC->get('submit_item_registered_only', 1);
 
-        $user				= PhocacartUser::getUser();
-
-
+		$user				= PhocacartUser::getUser();
 
 		$allowed = false;
-		if ($submit_item_registered_only == 0) {
-			$allowed =  true;
-		} else if ($submit_item_registered_only == 1 && (int)$user->id > 0) {
-		    $allowed =  true;
-        }
+
+		if ($submit_item_registered_only == 0)
+		{
+			$allowed = true;
+		}
+		elseif ($submit_item_registered_only == 1 && (int) $user->id > 0)
+		{
+			$allowed = true;
+		}
 
 		return $allowed;
 
-    }
+	}
 
 
-    /* Product item form fields:
-    title,
-    alias,
-    sku,
-    upc,
-    ean,
-    jan,
-    isbn,
-    mpn,
-    serial_number,
-    registration_key,
-    external_id,
-    external_key,
-    external_link,
-    external_text,
-    external_link2,
-    external_text2,
-    price,
-    price_original,
-    tax_id,
-    catid_multiple,
-    manufacturer_id,
-    description,
-    description_long,
-    features,
-    image,
-    video,
-    type,
-    unit_amount,
-    unit_unit,
-    length,
-    width,
-    height,
-    weight,
-    volume,
-    condition,
-    type_feed,
-    type_category_feed,
-    delivery_date,
-    metatitle,
-    metakey,
-    metadesc,
-    date,
-    date_update,
-    tags,
-    taglabels
+	/*
+	 Product item form fields:
+	title,
+	alias,
+	sku,
+	upc,
+	ean,
+	jan,
+	isbn,
+	mpn,
+	serial_number,
+	registration_key,
+	external_id,
+	external_key,
+	external_link,
+	external_text,
+	external_link2,
+	external_text2,
+	price,
+	price_original,
+	tax_id,
+	catid_multiple,
+	manufacturer_id,
+	description,
+	description_long,
+	features,
+	image,
+	video,
+	type,
+	unit_amount,
+	unit_unit,
+	length,
+	width,
+	height,
+	weight,
+	volume,
+	condition,
+	type_feed,
+	type_category_feed,
+	delivery_date,
+	metatitle,
+	metakey,
+	metadesc,
+	date,
+	date_update,
+	tags,
+	taglabels
 
-    Contact item form fields:
+	Contact item form fields:
 
-    name*, email, phone, message
-    */
+	name*, email, phone, message
+	*/
 }

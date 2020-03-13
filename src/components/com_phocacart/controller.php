@@ -45,4 +45,3 @@ class PhocaCartController extends JControllerLegacy
 		return $this;
 	}
 }
-?>

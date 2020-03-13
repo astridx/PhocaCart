@@ -15,8 +15,8 @@ use Mike42\Escpos\CapabilityProfile;
 
 class EposTepCapabilityProfile
 {
-    public static function getInstance()
-    {
-        return CapabilityProfile::load('TEP-200M');
-    }
+	public static function getInstance()
+	{
+		return CapabilityProfile::load('TEP-200M');
+	}
 }

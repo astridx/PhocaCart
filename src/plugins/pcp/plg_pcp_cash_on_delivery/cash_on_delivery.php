@@ -1,0 +1,41 @@
+<?php
+/* @package Joomla
+ * @copyright Copyright (C) Open Source Matters. All rights reserved.
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
+ * @extension Phoca Extension
+ * @copyright Copyright (C) Jan Pavelka www.phoca.cz
+ * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ */
+
+defined('_JEXEC') or die;
+jimport( 'joomla.plugin.plugin' );
+jimport( 'joomla.filesystem.file');
+jimport( 'joomla.html.parameter' );
+
+JLoader::registerPrefix('Phocacart', JPATH_ADMINISTRATOR . '/components/com_phocacart/libraries/phocacart');
+
+class plgPCPCash_On_Delivery extends JPlugin
+{
+	function __construct(& $subject, $config) {
+		parent :: __construct($subject, $config);
+	}
+	
+	/**
+	 * Proceed to payment - some method do not have proceed to payment gateway like e.g. cash on delivery
+	 *
+	 * @param   integer	$proceed  Proceed or not proceed to payment gateway
+	 * @param   string	$message  Custom message array set by plugin to override standard messages made by component
+	 *
+	 * @return  boolean  True
+	 */
+	
+	function PCPbeforeProceedToPayment(&$proceed, &$message) {
+		
+		$proceed = 0;
+		$message = array();
+		
+		return true;
+	}
+	
+}
+?>

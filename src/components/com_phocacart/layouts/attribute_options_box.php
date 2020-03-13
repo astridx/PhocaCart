@@ -29,7 +29,7 @@ if (!empty($d['attr_options']) && $d['hide_attributes'] != 1) {
 		// If the attribute is required, return different required parts (attribute - html5, class - jquery, span - heading)
 		// Set jquery required validation, which should help to html 5 in case of checkboxes (see more info in the funtion)
 		// TYPES SET for JQUERY require control: 4 5 6
-		$req = PhocacartRenderJs::renderRequiredParts((int)$v->id, (int)$v->required );
+		$req = PhocacartRenderJs::renderRequiredParts((int) $v->id, (int) $v->required );
 
 		// OBSOLETE
 		// HTML5 does not know to check checkboxes - if some value is set
@@ -57,9 +57,9 @@ if (!empty($d['attr_options']) && $d['hide_attributes'] != 1) {
 
 			if ($v->type == 1 || $v->type == 2 || $v->type == 3) {
 				echo $layoutAtOS->render($d2);// SELECTBOX, SELECTBOX COLOR, SELECTBOX IMAGE
-			} else if ($v->type == 4 || $v->type == 5 || $v->type == 6) {
+			} elseif ($v->type == 4 || $v->type == 5 || $v->type == 6) {
 				echo $layoutAtOC->render($d2);// CHECKBOX, CHECKBOX COLOR, CHECKBOX COLOR
-			} else if ($v->type == 7 || $v->type == 8 || $v->type == 9 || $v->type == 10 || $v->type == 11) {
+			} elseif ($v->type == 7 || $v->type == 8 || $v->type == 9 || $v->type == 10 || $v->type == 11) {
 				echo $layoutAtOT->render($d2);// TEXT
 			}
 		}

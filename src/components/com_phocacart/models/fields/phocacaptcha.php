@@ -11,23 +11,26 @@ class JFormFieldPhocacaptcha extends JFormField
 {
 	protected $type 		= 'phocacaptcha';
 
-	protected function getInput() {
+	protected function getInput()
+	{
 
 		$document	= JFactory::getDocument();
 		$session 	= JFactory::getSession();
 		$params     = PhocacartUtils::getComponentParameters();
 		$string 	= bin2hex(openssl_random_pseudo_bytes(10));
-		$namespace	= 'pc'.$params->get('session_suffix', $string);
+		$namespace	= 'pc' . $params->get('session_suffix', $string);
 		$captchaCnt = $session->get('captcha_cnt',  0, $namespace) + 1;
 
 		// Possible extension of different captcha
 		$id = $session->get('captcha_id', '', $namespace);
 
-		switch ($id){
+		switch ($id)
+		{
 			default:
 			case 1:
 				$retval = PhocacartCaptchaRecaptcha::render();
-				//$session->set('captcha_cnt', $captchaCnt, $namespace);
+
+				// $session->set('captcha_cnt', $captchaCnt, $namespace);
 			break;
 		}
 
@@ -36,4 +39,4 @@ class JFormFieldPhocacaptcha extends JFormField
 
 
 }
-?>
+

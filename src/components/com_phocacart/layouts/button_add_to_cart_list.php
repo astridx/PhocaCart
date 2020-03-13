@@ -30,7 +30,7 @@ if ($d['selectoptions'] == 1) {
 		echo JText::_('COM_PHOCACART_CHOOSE_VARIANT'); // JText::_('COM_PHOCACART_SELECT_OPTIONS');
 		echo '</a>';
 
-	} else if ($d['addtocart'] == 4) {
+	} elseif ($d['addtocart'] == 4) {
 
 		echo '<a href="'.$d['link'].'" class="'.$d['s']['c']['btn.btn-primary.btn-sm'].' ph-btn phProductAddToCart'.$d['typeview'].$d['id'].' '.$d['class_btn'].'" role="button" title="'.JText::_('COM_PHOCACART_CHOOSE_VARIANT') /* JText::_('COM_PHOCACART_SELECT_OPTIONS') */.'" data-toggle="tooltip" data-placement="top">';
 		echo '<span class="'.$d['s']['i']['shopping-cart'].'"></span>';
@@ -55,7 +55,7 @@ if ($d['selectoptions'] == 1) {
 		echo JText::_('COM_PHOCACART_ADD_TO_CART');
 		echo '</button>';
 
-	} else if ($d['addtocart'] == 4) { // Icon Only
+	} elseif ($d['addtocart'] == 4) { // Icon Only
 		echo '<button type="submit" class="'.$d['s']['c']['btn.btn-primary.btn-sm'].' ph-btn phProductAddToCart'.$d['typeview'].$d['id'].' '.$d['class_btn'].'" title="'.JText::_('COM_PHOCACART_ADD_TO_CART').'" data-toggle="tooltip" data-placement="top" '.$onClick.'>';
 		echo '<span class="'.$d['s']['i']['shopping-cart'].'"></span>';
 		echo '</button>';

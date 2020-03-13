@@ -52,8 +52,8 @@ abstract class JHtmlPhocacartcategory
 				->select('pi.id, pi.title as title')
 				->select('l.sef as lang_sef, lang_code')
 				->from('#__phocacart_categories as pi')
-				//->select('cat.title as category_title')
-				//->join('LEFT', '#__categories as cat ON cat.id=c.catid')
+				// ->select('cat.title as category_title')
+				// ->join('LEFT', '#__categories as cat ON cat.id=c.catid')
 				->where('pi.id IN (' . implode(',', array_values($associations)) . ')')
 				->where('pi.id != ' . $productId)
 				->join('LEFT', '#__languages as l ON pi.language=l.lang_code')
@@ -90,7 +90,6 @@ abstract class JHtmlPhocacartcategory
 
 			$html = JLayoutHelper::render('joomla.content.associations', $items);
 		}
-
 
 		return $html;
 	}

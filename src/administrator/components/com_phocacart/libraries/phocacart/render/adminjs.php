@@ -11,20 +11,24 @@
 defined('_JEXEC') or die();
 final class PhocacartRenderAdminjs
 {
-	private function __construct(){}
+	private function __construct()
+	{
+	}
 
 
 	// =======
 	// AJAX
 	// =======
-	/*public static function phEventCreateImageThumbnail($url, $msg, $manager = 'product', $value = 'imageCreateThumbs') {
+	/*
+	public static function phEventCreateImageThumbnail($url, $msg, $manager = 'product', $value = 'imageCreateThumbs') {
 
 		$path = PhocacartPath::getPath($manager);
 		$pathImage = Juri::root() . $path['orig_rel_ds'];
 
 		$s 	= array();
 		$s[] = ' ';
-		$s[] = '/* Event Create Thumbnails *//* ';
+		$s[] = '/* Event Create Thumbnails *//*
+	';
 		$s[] = 'jQuery(document).ready(function() {';
 		$s[] = '   jQuery(document).on("change", \'.'.$value.'\', function() {';
 
@@ -33,10 +37,10 @@ final class PhocacartRenderAdminjs
 		$s[] = '   		data[\'manager\'] = \''.$manager.'\';';
 
 		// Change Preview Image
-        $s[] = '        var image = "";';
-        $s[] = '        if (jQuery(this).val().trim() != "") {';
+		$s[] = '        var image = "";';
+		$s[] = '        if (jQuery(this).val().trim() != "") {';
 		$s[] = '		    var image 	= \''.strip_tags(addslashes($pathImage)).'\' + jQuery(this).val();';
-        $s[] = '		}';
+		$s[] = '		}';
 		$s[] = '		var id 		= jQuery(this).attr(\'id\');';
 		$s[] = '		phChangePreviewImage(id, image);';
 
@@ -52,7 +56,7 @@ final class PhocacartRenderAdminjs
 	/**
 	 * Add value from popup window (file manager mostly) to the list of items - e.g. select image - then thumbnails will be recreated
 	 */
-/*
+	/*
 	public static function phAddValueImage($url, $msg, $manager = 'productimage') {
 
 		$path = PhocacartPath::getPath($manager);
@@ -60,7 +64,8 @@ final class PhocacartRenderAdminjs
 
 		$s 	= array();
 		$s[] = ' ';
-		$s[] = '/* Function phAddValueImage *//* ';
+		$s[] = '/* Function phAddValueImage *//*
+	';
 		$s[] = 'function phAddValueImage(id, title, request) {alert("test");';
 		$s[] = '   document.getElementById(id).value = title;';
 		//$s[] = '   SqueezeBox.close();';// close
@@ -72,10 +77,10 @@ final class PhocacartRenderAdminjs
 		$s[] = '   		data[\'manager\'] = \''.$manager.'\';';
 
 		// Change Preview Image
-        $s[] = '        var image = "";';
-        $s[] = '        if (title.trim() != "") {';
+		$s[] = '        var image = "";';
+		$s[] = '        if (title.trim() != "") {';
 		$s[] = '		    image 	= \''.strip_tags(addslashes($pathImage)).'\' + title;';
-        $s[] = '		}';
+		$s[] = '		}';
 		$s[] = '		phChangePreviewImage(id, image);';
 
 
@@ -88,9 +93,10 @@ final class PhocacartRenderAdminjs
 		//});
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}
-*/
+	*/
 
-	/*public static function phAddValueFile() {
+	/*
+	public static function phAddValueFile() {
 
 		//$path = PhocacartPath::getPath($manager);
 		//$pathImage = Juri::root() . $path['orig_rel_ds'];
@@ -111,7 +117,8 @@ final class PhocacartRenderAdminjs
 
 
 
-	public static function renderImportExportItems($url, $messageBox, $formId, $count, $successMessage, $reload = 0) {
+	public static function renderImportExportItems($url, $messageBox, $formId, $count, $successMessage, $reload = 0)
+	{
 
 		$document	= JFactory::getDocument();
 
@@ -128,18 +135,18 @@ final class PhocacartRenderAdminjs
 		$s[] = '   e.stopPropagation();';
 		$s[] = '   e.preventDefault();';
 
-		$s[] = '   var phMaxItems = e.data.a1;';// see the last but one row of this s
+		$s[] = '   var phMaxItems = e.data.a1;';// See the last but one row of this s
 		$s[] = '   var phLastPage = phMaxItems;';
 		$s[] = '   var phItemCount = 1;';
-		$s[] = '   var phMessageBoxId 	= \'#'.$messageBox.'\';';
-		$s[] = '   var formId			= \'#'.$formId.'\';';
+		$s[] = '   var phMessageBoxId 	= \'#' . $messageBox . '\';';
+		$s[] = '   var formId			= \'#' . $formId . '\';';
 
 		$s[] = '   function phGetNextItem() {';
 		$s[] = '      phCurrentItemCount = phItemCount;';
 
 		$s[] = '      if (phItemCount <= phMaxItems) {';
 		$s[] = '          jQuery.ajax({';
-		$s[] = '             url: \''.$url.'\' + \'&p=\' + phItemCount + \'&lp=\' + phLastPage,';
+		$s[] = '             url: \'' . $url . '\' + \'&p=\' + phItemCount + \'&lp=\' + phLastPage,';
 		$s[] = '             method: \'GET\',';
 		$s[] = '             async: true,';
 		$s[] = '             success: function(data) {';
@@ -153,16 +160,17 @@ final class PhocacartRenderAdminjs
 		$s[] = ' ';
 		$s[] = '                if (phMaxItems == phCurrentItemCount) {';
 		$s[] = '                   jQuery(".circle").addClass("circle-active");';
-		$s[] = '                   jQuery(phMessageBoxId).html(\'<div class="alert alert-success"><button class="close" type="button" data-dismiss="alert">×</button>'.$successMessage.'</div>\');';
+		$s[] = '                   jQuery(phMessageBoxId).html(\'<div class="alert alert-success"><button class="close" type="button" data-dismiss="alert">×</button>' . $successMessage . '</div>\');';
 
-		if ($reload == 1) {
+		if ($reload == 1)
+		{
 			// TO DO enable
-			$s[] =	'	           window.setTimeout(function () {document.location.reload();}, 1000);';
+			$s[] = '	           window.setTimeout(function () {document.location.reload();}, 1000);';
 			$s[] = PhocacartRenderJs::renderOverlay();
 		}
 
 		$s[] = '			    }';
-		$s[] = '             }';// end success
+		$s[] = '             }';// End success
 		$s[] = '          });';// end ajax
 		$s[] = '	   }';
 		$s[] = '   }';
@@ -171,7 +179,7 @@ final class PhocacartRenderAdminjs
 
 		$s[] = ' ';
 		$s[] = 'jQuery(document).ready(function(){';
-		$s[] = '	jQuery(\'#'.$formId.'\').on(\'submit\',{a1: '.(int)$count.'}, phImportAllItems);';
+		$s[] = '	jQuery(\'#' . $formId . '\').on(\'submit\',{a1: ' . (int) $count . '}, phImportAllItems);';
 		$s[] = '})';
 
 		$document->addScriptDeclaration(implode("\n", $s));
@@ -185,7 +193,8 @@ final class PhocacartRenderAdminjs
 	 * - start wizard in control panel - modal windows stays unchanged
 	 */
 
-	public static function renderAjaxDoRequestWizardController($url, $id, $closeModal = true) {
+	public static function renderAjaxDoRequestWizardController($url, $id, $closeModal = true)
+	{
 
 		$s 	= array();
 
@@ -208,27 +217,30 @@ final class PhocacartRenderAdminjs
 		// This function is a part of iframe in modal window
 		// We can close whole modal window through global function defined in
 		// modalWindowDynamic in administrator\components\com_phocacart\libraries\phocacart\render\renderadminview.php
-		if ($closeModal == true) {
+		if ($closeModal == true)
+		{
 			$s[] = '  window.parent.phCloseModal();';
 		}
 
 		$s[] = '}';
 
 		$s[] = 'jQuery(document).ready(function() {';
-		$s[] = '   jQuery("#'.$id.'").on("click", function(e) {';
-		$s[] = '      phDoRequestWizardController("'.$url.'");';
+		$s[] = '   jQuery("#' . $id . '").on("click", function(e) {';
+		$s[] = '      phDoRequestWizardController("' . $url . '");';
 		$s[] = '   })';
 		$s[] = '})';
 
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}
 
-	/* When the modal window will be focused, check again the statuses of all the items
+	/*
+	 When the modal window will be focused, check again the statuses of all the items
 	*/
-	public static function renderAjaxDoRequestWizardAfterChange($url, $value = 'phClickBtn') {
+	public static function renderAjaxDoRequestWizardAfterChange($url, $value = 'phClickBtn')
+	{
 		$s 	= array();
 		$s[] = 'jQuery(document).ready(function() {';
-		$s[] = '   phDoRequestWizard(\''.$url.'\');';
+		$s[] = '   phDoRequestWizard(\'' . $url . '\');';
 
 		$s[] = '   jQuery(window).on("blur focus", function(e) {';
 		$s[] = '      var prevType = jQuery(this).data("prevType");';
@@ -238,7 +250,7 @@ final class PhocacartRenderAdminjs
 		$s[] = '		   case "blur":';
 		$s[] = '		   break;';
 		$s[] = '		   case "focus":';
-		$s[] = '              phDoRequestWizard(\''.$url.'\');';
+		$s[] = '              phDoRequestWizard(\'' . $url . '\');';
 		$s[] = '		   break;';
 		$s[] = '	     }';
 		$s[] = '      }';
@@ -250,24 +262,26 @@ final class PhocacartRenderAdminjs
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}
 
-	/* Ask for the changes, if something changes - e.g. category is created
-	 * return this to inform and update status in wizard modal window
+	/*
+	 Ask for the changes, if something changes - e.g. category is created
+				 * Return this to inform and update status in wizard modal window
 	 */
 
-	public static function renderAjaxDoRequestWizard() {
+	public static function renderAjaxDoRequestWizard()
+	{
 
 		$s = PhocacartRenderStyle::getStyles();
 
 		$js 	= array();
 		$js[] = ' function phDoRequestWizard(url) {';
 		$js[] = '   var s = [];';
-		$js[] = '   s["phTrue"] = \'<div class="ph-true"><span class="glyphicon glyphicon-ok icon-ok"></span> '.JText::_('COM_PHOCACART_CREATED').'</div>\';';
-		$js[] = '   s["phTrueAdd"] = \'<div class="ph-true"><span class="glyphicon glyphicon-ok icon-ok"></span> '.JText::_('COM_PHOCACART_ADDED').'</div>\';';
-		$js[] = '   s["phTrueEdit"] = \'<div class="ph-true"><span class="glyphicon glyphicon-ok icon-ok"></span> '.JText::_('COM_PHOCACART_EDITED').'</div>\';';
+		$js[] = '   s["phTrue"] = \'<div class="ph-true"><span class="glyphicon glyphicon-ok icon-ok"></span> ' . JText::_('COM_PHOCACART_CREATED') . '</div>\';';
+		$js[] = '   s["phTrueAdd"] = \'<div class="ph-true"><span class="glyphicon glyphicon-ok icon-ok"></span> ' . JText::_('COM_PHOCACART_ADDED') . '</div>\';';
+		$js[] = '   s["phTrueEdit"] = \'<div class="ph-true"><span class="glyphicon glyphicon-ok icon-ok"></span> ' . JText::_('COM_PHOCACART_EDITED') . '</div>\';';
 		$js[] = '   s["phTrueAll"] = 1';
-		$js[] = '   s["phFalse"] = \'<div class="ph-false"><span class="glyphicon glyphicon-remove icon-remove"></span> '.JText::_('COM_PHOCACART_NOT_CREATED_YET').'</div>\';';
-		$js[] = '   s["phFalseAdd"] = \'<div class="ph-false"><span class="glyphicon glyphicon-remove icon-remove"></span> '.JText::_('COM_PHOCACART_NOT_ADDED_YET').'</div>\';';
-		$js[] = '   s["phFalseEdit"] = \'<div class="ph-false"><span class="glyphicon glyphicon-remove icon-remove"></span> '.JText::_('COM_PHOCACART_NOT_EDITED_YET').'</div>\';';
+		$js[] = '   s["phFalse"] = \'<div class="ph-false"><span class="glyphicon glyphicon-remove icon-remove"></span> ' . JText::_('COM_PHOCACART_NOT_CREATED_YET') . '</div>\';';
+		$js[] = '   s["phFalseAdd"] = \'<div class="ph-false"><span class="glyphicon glyphicon-remove icon-remove"></span> ' . JText::_('COM_PHOCACART_NOT_ADDED_YET') . '</div>\';';
+		$js[] = '   s["phFalseEdit"] = \'<div class="ph-false"><span class="glyphicon glyphicon-remove icon-remove"></span> ' . JText::_('COM_PHOCACART_NOT_EDITED_YET') . '</div>\';';
 		$js[] = '  phDoRequestWizardParent(url, s);';
 		$js[] = '}';
 
@@ -279,7 +293,8 @@ final class PhocacartRenderAdminjs
 	// ROWS
 	// ========
 
-	/*public static function renderJsManageRowImage($i, $newRow) {
+	/*
+	public static function renderJsManageRowImage($i, $newRow) {
 
 		// We have only two modal box - 1. for image, 2. for additinal images (all)
 		// So we need to get info, which additional images we have clicked
@@ -308,7 +323,8 @@ final class PhocacartRenderAdminjs
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}*/
 
-	/*public static function renderJsManageRowAttribute($i, $newRow) {
+	/*
+	public static function renderJsManageRowAttribute($i, $newRow) {
 
 		$url = 'index.php?option=com_phocacart&view=phocacartattributea&format=json&tmpl=component&'. JSession::getFormToken().'=1';
 
@@ -330,11 +346,12 @@ final class PhocacartRenderAdminjs
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}*/
 
-	/*public static function renderJsManageRowOption($j,  $newRow, $newHeader) {
+	/*
+	public static function renderJsManageRowOption($j,  $newRow, $newHeader) {
 
 		$url = 'index.php?option=com_phocacart&view=phocacartattributea&format=json&tmpl=component&'. JSession::getFormToken().'=1';
 
-	    $s 	= array();
+		$s 	= array();
 		$s[] = ' var phRowCountOption = '.$j.';';
 		$s[] = ' function phAddRowOption(attrid) {';
 		$s[] = '   var phNewRow		= 	\'<div></div>'. $newRow .'\';';
@@ -353,7 +370,8 @@ final class PhocacartRenderAdminjs
 		// #phrowboxoption - header created by php/mysql
 	}*/
 
-	/*public static function renderJsManageRowSpecification($i, $newRow, $newHeader) {
+	/*
+	public static function renderJsManageRowSpecification($i, $newRow, $newHeader) {
 		$s 	= array();
 		$s[] = ' var phRowCountSpecification = '.$i.';';
 		$s[] = ' function phAddRowSpecification() {';
@@ -367,7 +385,7 @@ final class PhocacartRenderAdminjs
 	}*/
 
 
-/*
+	/*
 	public static function renderJsManageRowDiscount($i, $newRow, $newHeader) {
 
 		$compatible = PhocacartUtils::isJCompatible('3.7') ? '1' : '0';
@@ -385,7 +403,8 @@ final class PhocacartRenderAdminjs
 	}*/
 
 
-	/*public static function renderJsManageRowPriceHistory($i, $newRow) {
+	/*
+	public static function renderJsManageRowPriceHistory($i, $newRow) {
 
 		$compatible = PhocacartUtils::isJCompatible('3.7') ? '1' : '0';
 		$s 	= array();
@@ -399,30 +418,37 @@ final class PhocacartRenderAdminjs
 		// #phrowboxspecificationheader - header created by php/mysql
 	}*/
 
-	public final function __clone() {
+	public final function __clone()
+	{
 		throw new Exception('Function Error: Cannot clone instance of Singleton pattern', 500);
+
 		return false;
 	}
 
-	public static function renderHtmlAfterChange($changeElement, $targetElement) {
+	public static function renderHtmlAfterChange($changeElement, $targetElement)
+	{
 		$s 	= array();
 		$s[] = 'jQuery(document).ready(function() {';
-		$s[] = '   jQuery("'.$changeElement.'").on("change", function(e) {';
-		$s[] = '      jQuery("'.$targetElement.'").show();';
+		$s[] = '   jQuery("' . $changeElement . '").on("change", function(e) {';
+		$s[] = '      jQuery("' . $targetElement . '").show();';
 		$s[] = '   })';
 		$s[] = '})';
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}
 
-	/* Really not nice way to move the system messages from bootstrap2 (Joomla) to bootstrap3 (Phoca)
+	/*
+	 Really not nice way to move the system messages from bootstrap2 (Joomla) to bootstrap3 (Phoca)
 	 * Don't add it phocacart.js as it should be run only in some views, not everywhere
 	*/
-	public static function moveSystemMessageFromJoomlaToPhoca() {
+	public static function moveSystemMessageFromJoomlaToPhoca()
+	{
 
 		$s = array();
-		//$s[] = 'document.getElementById("system-message-container").style.display = "none";';
+
+		// $s[] = 'document.getElementById("system-message-container").style.display = "none";';
 		$s[] = 'jQuery(document).ready(function() {';
-		//$s[] = '   jQuery("#system-message-container").removeClass("j-toggle-main");';
+
+		// $s[] = '   jQuery("#system-message-container").removeClass("j-toggle-main");';
 		$s[] = '   jQuery("#system-message-container").css("display", "none");';
 		$s[] = '   var phSystemMsg = jQuery("#system-message-container").html();';
 		$s[] = '   jQuery("#ph-system-message-container").html(phSystemMsg);';
@@ -450,7 +476,8 @@ final class PhocacartRenderAdminjs
 
 		$s 	= array();
 		$s[] = ' ';
-		$s[] = '/* Function phDoRequest *//*';
+		$s[] = '/* Function phDoRequest *//*
+	';
 		$s[] = 'function phDoRequest(url, manager, value) {';
 		$s[] = '   var phAjaxTop = \'<div id="ph-ajaxtop-message"><div class="ph-loader-top"></div> \' + \''. strip_tags(addslashes($text)).'\' + \'</div>\';';
 		$s[] = '   jQuery("#ph-ajaxtop").html(phAjaxTop);';
@@ -489,4 +516,4 @@ final class PhocacartRenderAdminjs
 	}
 	*/
 }
-?>
+

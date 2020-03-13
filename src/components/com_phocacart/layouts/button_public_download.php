@@ -9,8 +9,8 @@
 defined('_JEXEC') or die();
 $d = $displayData;
 ?>
-<form action="<?php echo $d['linkdownload']; ?>" method="post" id="phPublicDownload<?php echo (int)$d['id']; ?>" class="phItemPublicDownloadBoxForm">
-	<input type="hidden" name="id" value="<?php echo (int)$d['id']; ?>" />
+<form action="<?php echo $d['linkdownload']; ?>" method="post" id="phPublicDownload<?php echo (int) $d['id']; ?>" class="phItemPublicDownloadBoxForm">
+	<input type="hidden" name="id" value="<?php echo (int) $d['id']; ?>" />
 	<input type="hidden" name="task" value="download.downloadpublic" />
 	<input type="hidden" name="tmpl" value="component" />
 	<input type="hidden" name="option" value="com_phocacart" />

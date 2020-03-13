@@ -11,59 +11,64 @@
 defined('_JEXEC') or die();
 final class PhocacartRenderJs
 {
-	private function __construct(){}
+	private function __construct()
+	{
+	}
 
 
 
-	public static function renderAjaxAddToCart() {
+	public static function renderAjaxAddToCart()
+	{
 
 		$app					= JFactory::getApplication();
 		$paramsC 				= PhocacartUtils::getComponentParameters();
-		$add_cart_method		= $paramsC->get( 'add_cart_method', 0 );
-		$theme 					= $paramsC->get( 'theme', 'bs3' );
-
+		$add_cart_method		= $paramsC->get('add_cart_method', 0);
+		$theme 					= $paramsC->get('theme', 'bs3');
 
 		// We need to refresh checkout site when AJAX used for removing or adding products to cart
 		$app 		= JFactory::getApplication();
 
 		$task 		= 'checkout.add';
 		$class		= '.phItemCartBox';
-		if (PhocacartUtils::isView('checkout')) {
+
+		if (PhocacartUtils::isView('checkout'))
+		{
 			$cView = 1;
-		} else {
+		}
+		else
+		{
 			$cView = 0;
 		}
 
-
 		// POS
-		if (PhocacartUtils::isView('pos')) {
+		if (PhocacartUtils::isView('pos'))
+		{
 			$task 				= 'pos.add';
 			$add_cart_method	= 1;// POS has always 1 (ajax and no popup)
 			$cView 				= 0;
 			$class		= '.phPosCartBox';
 		}
 
-
-		if ($add_cart_method == 0) {
+		if ($add_cart_method == 0)
+		{
 			return false;
 		}
 
-
-		if ($add_cart_method == 2 && $theme == 'bs3') {
-			JHtml::stylesheet( 'media/com_phocacart/bootstrap/css/bs_modal_transition.css');
+		if ($add_cart_method == 2 && $theme == 'bs3')
+		{
+			JHtml::stylesheet('media/com_phocacart/bootstrap/css/bs_modal_transition.css');
 		}
 
-		if ($add_cart_method > 0) {
-
-			$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&task='.$task.'&format=json&'. JSession::getFormToken().'=1&checkoutview='.(int)$cView;
-
+		if ($add_cart_method > 0)
+		{
+			$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&task=' . $task . '&format=json&' . JSession::getFormToken() . '=1&checkoutview=' . (int) $cView;
 
 			// ::ACTION - Ajax the form
 			$s[] = ' ';
 			$s[] = '/* Function phDoSubmitFormAddToCart */ ';
 			$s[] = 'function phDoSubmitFormAddToCart(sFormData) {';
-			$s[] = '   var phUrl 	= "'. $urlAjax.'";';
-			$s[] = '   var phCheckoutView = '.(int)$cView.'';
+			$s[] = '   var phUrl 	= "' . $urlAjax . '";';
+			$s[] = '   var phCheckoutView = ' . (int) $cView . '';
 			$s[] = '   ';
 			$s[] = '   phRequest = jQuery.ajax({';
 			$s[] = '      type: "POST",';
@@ -74,43 +79,52 @@ final class PhocacartRenderJs
 			$s[] = '      dataType:"JSON",';
 			$s[] = '      success: function(data){';
 			$s[] = '         if (data.status == 1){';
-			$s[] = '            jQuery("'.$class.'").html(data.item);';
-			$s[] = '            jQuery("'.$class.'Count").html(data.count);';
-			$s[] = '            jQuery("'.$class.'Total").html(data.total); ';
-
+			$s[] = '            jQuery("' . $class . '").html(data.item);';
+			$s[] = '            jQuery("' . $class . 'Count").html(data.count);';
+			$s[] = '            jQuery("' . $class . 'Total").html(data.total); ';
 
 			// POS update message box (clean) and input box (when product added or changed - shipping and payment method must be cleaned)
-			if (PhocacartUtils::isView('pos')) {
+			if (PhocacartUtils::isView('pos'))
+			{
 				$s[] = '    		var phUrlPos 	= phAddSuffixToUrl(window.location.href, \'format=raw\');';
 				$s[] = '			var phDataInput = phPosCurrentData("main.input");';
-				$s[] = '			phDoSubmitFormUpdateInputBox(phDataInput, phUrlPos);';// refresh input box
+				$s[] = '			phDoSubmitFormUpdateInputBox(phDataInput, phUrlPos);';// Refresh input box
 				$s[] = '			jQuery(".ph-pos-message-box").html(data.message);';// clear message box
 				$s[] = '			phPosManagePage();';
 			}
 
-			if ($add_cart_method == 2) {
+			if ($add_cart_method == 2)
+			{
 				$s[] = ' 			jQuery("body").append(jQuery("#phContainer"));';
 				$s[] = '            jQuery("#phContainer").html(data.popup);';
 				$s[] = '            jQuery("#phAddToCartPopup").modal();';
 			}
-			if ($add_cart_method == 1) {
+
+			if ($add_cart_method == 1)
+			{
 				// If no popup is displayed we can relaod the page when we are in comparison page
 				// If popup, this will be done when clicking continue or comparison list
 				$s[] = '            if (phCheckoutView == 1) {';
 				$s[] = '               setTimeout(function() {location.reload();}, 0001);';
 				$s[] = '            }';
 			}
+
 			$s[] = '         } else if (data.status == 0){';
 
-			if ($add_cart_method != 2) {
+			if ($add_cart_method != 2)
+			{
 				$s[] = '            jQuery(".phItemCartBox").html(data.error);';
 			}
-			if ($add_cart_method == 2) {
+
+			if ($add_cart_method == 2)
+			{
 				$s[] = ' 			jQuery("body").append(jQuery("#phContainer"));';
 				$s[] = '            jQuery("#phContainer").html(data.popup);';
 				$s[] = '            jQuery("#phAddToCartPopup").modal();';
 			}
-			if ($add_cart_method == 1) {
+
+			if ($add_cart_method == 1)
+			{
 				// If no popup is displayed we can relaod the page when we are in comparison page
 				// If popup, this will be done when clicking continue or comparison list
 				$s[] = '            if (phCheckoutView == 1) {';
@@ -118,24 +132,23 @@ final class PhocacartRenderJs
 				$s[] = '            }';
 			}
 
-
 			// POS update message box (clean) and input box (when product added or changed - shipping and payment method must be cleaned)
-			if (PhocacartUtils::isView('pos')) {
-				//$s[] = '    		var phUrlPos 	= phAddSuffixToUrl(window.location.href, \'format=raw\');';
-				//$s[] = '			var phDataInput = phPosCurrentData("main.input");';
-				//$s[] = '			phDoSubmitFormUpdateInputBox(phDataInput, phUrlPos);';// refresh input box
+			if (PhocacartUtils::isView('pos'))
+			{
+				// $s[] = '          var phUrlPos    = phAddSuffixToUrl(window.location.href, \'format=raw\');';
+				// $s[] = '          var phDataInput = phPosCurrentData("main.input");';
+				// $s[] = '          phDoSubmitFormUpdateInputBox(phDataInput, phUrlPos);';// refresh input box
 				$s[] = '			jQuery(".ph-pos-message-box").html(data.error);';// clear message box
 				$s[] = '			phPosManagePage();';
 			}
 
-
-
-
 			$s[] = '         } else {';
-			//$s[] = '					// Don\'t change the price box';
+
+			// $s[] = '                  // Don\'t change the price box';
 			$s[] = '         }';
 			$s[] = '      },';
-		//	$s[] = '      error: function(data){}';
+
+			//	$s[] = '      error: function(data){}';
 			$s[] = '   })';
 			$s[] = '   return false;';
 			$s[] = '}';
@@ -143,7 +156,8 @@ final class PhocacartRenderJs
 			$s[] = ' ';
 
 			// :: EVENT (CLICK) Category/Items View (icon/button - ajax/standard)
-		/*	$s[] = 'function phEventClickFormAddToCart(phFormId) {';
+			/*
+			$s[] = 'function phEventClickFormAddToCart(phFormId) {';
 			$s[] = '   var phForm = \'#\' + phFormId;';
 			//$s[] = '   var sForm 	= jQuery(this).closest("form");';// Find in which form the right button was clicked
 			$s[] = '   var sFormData = jQuery(phForm).serialize();';
@@ -151,7 +165,8 @@ final class PhocacartRenderJs
 			$s[] = '}';*/
 
 			// Set it onclick as it is used in even not ajax submitting
-		/*	$s[] = 'function phEventClickFormAddToCart(phFormId) {';
+			/*
+			$s[] = 'function phEventClickFormAddToCart(phFormId) {';
 			$s[] = '   var phForm = \'#\' + phFormId;';
 			$s[] = '   jQuery(\'phFormId\').find(\':submit\').click();"';
 			$s[] = '   return false;';
@@ -159,11 +174,10 @@ final class PhocacartRenderJs
 
 			$s[] = ' ';
 
-
-
 			// :: EVENT (SUBMIT) Item View
 			$s[] = 'jQuery(document).ready(function(){';
-			//$s[] = '	jQuery(".phItemCartBoxForm").on(\'submit\', function (e) {';// Not working when form is added by ajax
+
+			// $s[] = '  jQuery(".phItemCartBoxForm").on(\'submit\', function (e) {';// Not working when form is added by ajax
 			$s[] = '	jQuery(document).on("submit", "form.phItemCartBoxForm", function (e) {';// Works with forms added by ajax
 			$s[] = '		e.preventDefault();';
 			$s[] = '	    var sFormData = jQuery(this).serialize();';
@@ -176,40 +190,43 @@ final class PhocacartRenderJs
 		}
 	}
 
-	public static function renderAjaxUpdateCart() {
+	public static function renderAjaxUpdateCart()
+	{
 
 		$app					= JFactory::getApplication();
 		$paramsC 				= PhocacartUtils::getComponentParameters();
 
 		// We need to refresh checkout site when AJAX used for removing or adding products to cart
 
-
 		$task 		= 'checkout.update';
 		$class		= '.phCheckoutCartBox';
-		if (PhocacartUtils::isView('checkout')) {
+
+		if (PhocacartUtils::isView('checkout'))
+		{
 			$cView = 1;
-		} else {
+		}
+		else
+		{
 			$cView = 0;
 		}
 
 		// POS
-		if (PhocacartUtils::isView('pos')) {
+		if (PhocacartUtils::isView('pos'))
+		{
 			$task 				= 'pos.update';
 			$add_cart_method	= 1;// POS has always 1 (ajax and no popup)
 			$cView 				= 0;
 			$class		= '.phPosCartBox';
 		}
 
-
-		$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&task='.$task.'&format=json&'. JSession::getFormToken().'=1&checkoutview='.(int)$cView;
-
+		$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&task=' . $task . '&format=json&' . JSession::getFormToken() . '=1&checkoutview=' . (int) $cView;
 
 		// ::ACTION - Ajax the form
 		$s[] = ' ';
 		$s[] = '/* Function phDoSubmitFormUpdateCart */ ';
 		$s[] = 'function phDoSubmitFormUpdateCart(sFormData) {';
-		$s[] = '   var phUrl 	= "'. $urlAjax.'";';
-		$s[] = '   var phCheckoutView = '.(int)$cView.'';
+		$s[] = '   var phUrl 	= "' . $urlAjax . '";';
+		$s[] = '   var phCheckoutView = ' . (int) $cView . '';
 		$s[] = '   phRequest = jQuery.ajax({';
 		$s[] = '      type: "POST",';
 		$s[] = '      url: phUrl,';
@@ -219,33 +236,33 @@ final class PhocacartRenderJs
 		$s[] = '      dataType:"JSON",';
 		$s[] = '      success: function(data){';
 		$s[] = '         if (data.status == 1){';
-		$s[] = '            jQuery("'.$class.'").html(data.item);';
-		$s[] = '            jQuery("'.$class.'Count").html(data.count);';
-		$s[] = '            jQuery("'.$class.'Total").html(data.total); ';
-
+		$s[] = '            jQuery("' . $class . '").html(data.item);';
+		$s[] = '            jQuery("' . $class . 'Count").html(data.count);';
+		$s[] = '            jQuery("' . $class . 'Total").html(data.total); ';
 
 		// POS update message box (clean) and input box (when product added or changed - shipping and payment method must be cleaned)
-		if (PhocacartUtils::isView('pos')) {
+		if (PhocacartUtils::isView('pos'))
+		{
 			$s[] = '    		var phUrlPos 	= phAddSuffixToUrl(window.location.href, \'format=raw\');';
 			$s[] = '			var phDataInput = phPosCurrentData("main.input");';
-			$s[] = '			phDoSubmitFormUpdateInputBox(phDataInput, phUrlPos);';// refresh input box
+			$s[] = '			phDoSubmitFormUpdateInputBox(phDataInput, phUrlPos);';// Refresh input box
 			$s[] = '			jQuery(".ph-pos-message-box").html(data.message);';// clear message box
 			$s[] = '			phPosManagePage();';
 		}
 
 			// If no popup is displayed we can relaod the page when we are in comparison page
 			// If popup, this will be done when clicking continue or comparison list
-		/*	$s[] = '            if (phCheckoutView == 1) {';
+		/*
+		  $s[] = '            if (phCheckoutView == 1) {';
 			$s[] = '               setTimeout(function() {location.reload();}, 0001);';
 			$s[] = '            }';*/
 
 		$s[] = '         } else if (data.status == 0){';
 
-
-
 			// If no popup is displayed we can relaod the page when we are in comparison page
 			// If popup, this will be done when clicking continue or comparison list
-			/*$s[] = '            if (phCheckoutView == 1) {';
+			/*
+			$s[] = '            if (phCheckoutView == 1) {';
 			$s[] = '               setTimeout(function() {location.reload();}, 0001);';
 			$s[] = '            }';*/
 
@@ -253,20 +270,18 @@ final class PhocacartRenderJs
 		$s[] = ' 				jQuery("#phContainer").html(data.popup);';
 		$s[] = ' 				jQuery("#phAddToCartPopup").modal();';
 
-
-
 		$s[] = '         } else {';
-		//$s[] = '					// Don\'t change the price box';
+
+		// $s[] = '                  // Don\'t change the price box';
 		$s[] = '         }';
 		$s[] = '      },';
-	//	$s[] = '      error: function(data){}';
+
+		//	$s[] = '      error: function(data){}';
 		$s[] = '   })';
 		$s[] = '   return false;';
 		$s[] = '}';
 
 		$s[] = ' ';
-
-
 
 		// ::EVENT (CLICK) Change Layout Type Clicking on Grid, Gridlist, List
 		$s[] = 'jQuery(document).ready(function(){';
@@ -285,40 +300,50 @@ final class PhocacartRenderJs
 	}
 
 
-	public static function renderAjaxAddToCompare() {
+	public static function renderAjaxAddToCompare()
+	{
 
 		$app			= JFactory::getApplication();
 		$paramsC 		= PhocacartUtils::getComponentParameters();
-		$add_compare_method	= $paramsC->get( 'add_compare_method', 0 );
-		$theme 				= $paramsC->get( 'theme', 'bs3' );
+		$add_compare_method	= $paramsC->get('add_compare_method', 0);
+		$theme 				= $paramsC->get('theme', 'bs3');
 
 		// We need to refresh comparison site when AJAX used for removing or adding products to comparison list
 		$app 		= JFactory::getApplication();
 		$view 		= $app->input->get('view', '');
 		$option 	= $app->input->get('option', '');
-		if ($option == 'com_phocacart' && $view == 'comparison') {
+
+		if ($option == 'com_phocacart' && $view == 'comparison')
+		{
 			$cView = 1;
-		} else {
+		}
+		else
+		{
 			$cView = 0;
 		}
 
-		if ($add_compare_method == 0) {
+		if ($add_compare_method == 0)
+		{
 			return false;
 		}
-		if ($add_compare_method == 2 && $theme == 'bs3') {
-			JHtml::stylesheet( 'media/com_phocacart/bootstrap/css/bs_modal_transition.css');
+
+		if ($add_compare_method == 2 && $theme == 'bs3')
+		{
+			JHtml::stylesheet('media/com_phocacart/bootstrap/css/bs_modal_transition.css');
 		}
 
-		if ($add_compare_method > 0) {
-			$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&task=comparison.add&format=json&'. JSession::getFormToken().'=1&comparisonview='.(int)$cView;
-			//$s[] = 'jQuery(document).ready(function(){';
-			//$s[] = '	jQuery(".phItemCompareBoxForm").on(\'submit\', function (e) {';
+		if ($add_compare_method > 0)
+		{
+			$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&task=comparison.add&format=json&' . JSession::getFormToken() . '=1&comparisonview=' . (int) $cView;
+
+			// $s[] = 'jQuery(document).ready(function(){';
+			// $s[] = '  jQuery(".phItemCompareBoxForm").on(\'submit\', function (e) {';
 			$s[] = ' ';
 			$s[] = '/* Function phItemCompareBoxFormAjax */ ';
 			$s[] = 'function phItemCompareBoxFormAjax(phItemId) {';
-			$s[] = '	var phUrl 	= "'. $urlAjax.'";';
+			$s[] = '	var phUrl 	= "' . $urlAjax . '";';
 			$s[] = '	var phItem = \'#\' + phItemId;';
-			$s[] = '	var phComparisonView = '.(int)$cView.'';
+			$s[] = '	var phComparisonView = ' . (int) $cView . '';
 			$s[] = '	var phData = jQuery(phItem).serialize();';
 			$s[] = ' ';
 			$s[] = '	phRequest = jQuery.ajax({';
@@ -332,12 +357,16 @@ final class PhocacartRenderJs
 			$s[] = '			if (data.status == 1){';
 			$s[] = '				jQuery(".phItemCompareBox").html(data.item);';
 			$s[] = '				jQuery(".phItemCompareBoxCount").html(data.count);';
-			if ($add_compare_method == 2) {
+
+			if ($add_compare_method == 2)
+			{
 				$s[] = ' 				jQuery("body").append(jQuery("#phContainer"));';
 				$s[] = ' 				jQuery("#phContainer").html(data.popup);';
 				$s[] = ' 				jQuery("#phAddToComparePopup").modal();';
 			}
-			if ($add_compare_method == 1) {
+
+			if ($add_compare_method == 1)
+			{
 				// If no popup is displayed we can relaod the page when we are in comparison page
 				// If popup, this will be done when clicking continue or comparison list
 				$s[] = '					if (phComparisonView == 1) {';
@@ -345,55 +374,68 @@ final class PhocacartRenderJs
 				$s[] = '						setTimeout(function() {location.reload();}, 0001);';
 				$s[] = '			  			}';
 			}
+
 			$s[] = '		   } else {';
-			//$s[] = '					// Don\'t change the price box';
+
+			// $s[] = '                  // Don\'t change the price box';
 			$s[] = '		   }';
 			$s[] = '		}';
 			$s[] = '	})';
-			//$s[] = '		e.preventDefault();';
-			//$s[] = '       return false;';
+
+			// $s[] = '      e.preventDefault();';
+			// $s[] = '       return false;';
 			$s[] = '}';
-			//$s[] = '})';
+
+			// $s[] = '})';
 			$s[] = ' ';
 			JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 		}
 	}
 
-	public static function renderAjaxRemoveFromCompare() {
+	public static function renderAjaxRemoveFromCompare()
+	{
 
 		$app				= JFactory::getApplication();
 		$paramsC 			= PhocacartUtils::getComponentParameters();
-		$add_compare_method	= $paramsC->get( 'add_compare_method', 0 );
-		$theme 				= $paramsC->get( 'theme', 'bs3' );
+		$add_compare_method	= $paramsC->get('add_compare_method', 0);
+		$theme 				= $paramsC->get('theme', 'bs3');
 
 		// We need to refresh comparison site when AJAX used for removing or adding products to comparison list
 		$app 		= JFactory::getApplication();
 		$view 		= $app->input->get('view', '');
 		$option 	= $app->input->get('option', '');
-		if ($option == 'com_phocacart' && $view == 'comparison') {
+
+		if ($option == 'com_phocacart' && $view == 'comparison')
+		{
 			$cView = 1;
-		} else {
+		}
+		else
+		{
 			$cView = 0;
 		}
 
-
-		if ($add_compare_method == 0) {
+		if ($add_compare_method == 0)
+		{
 			return false;
 		}
-		if ($add_compare_method == 2 && $theme == 'bs3') {
-			JHtml::stylesheet( 'media/com_phocacart/bootstrap/css/bs_modal_transition.css');
+
+		if ($add_compare_method == 2 && $theme == 'bs3')
+		{
+			JHtml::stylesheet('media/com_phocacart/bootstrap/css/bs_modal_transition.css');
 		}
 
-		if ($add_compare_method > 0) {
-			$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&task=comparison.remove&format=json&'. JSession::getFormToken().'=1&comparisonview='.(int)$cView;
-			//$s[] = 'jQuery(document).ready(function(){';
-			//$s[] = '	jQuery(".phItemCompareBoxForm").on(\'submit\', function (e) {';
+		if ($add_compare_method > 0)
+		{
+			$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&task=comparison.remove&format=json&' . JSession::getFormToken() . '=1&comparisonview=' . (int) $cView;
+
+			// $s[] = 'jQuery(document).ready(function(){';
+			// $s[] = '  jQuery(".phItemCompareBoxForm").on(\'submit\', function (e) {';
 			$s[] = ' ';
 			$s[] = '/* Function phItemRemoveCompareFormAjax */ ';
 			$s[] = 'function phItemRemoveCompareFormAjax(phItemId) {';
-			$s[] = '	var phUrl 	= "'. $urlAjax.'";';
+			$s[] = '	var phUrl 	= "' . $urlAjax . '";';
 			$s[] = '	var phItem = \'#\' + phItemId;';
-			$s[] = '	var phComparisonView = '.(int)$cView.'';
+			$s[] = '	var phComparisonView = ' . (int) $cView . '';
 			$s[] = '	var phData = jQuery(phItem).serialize();';
 			$s[] = ' ';
 			$s[] = '	phRequest = jQuery.ajax({';
@@ -407,12 +449,16 @@ final class PhocacartRenderJs
 			$s[] = '			if (data.status == 1){';
 			$s[] = '				jQuery(".phItemCompareBox").html(data.item);';
 			$s[] = '				jQuery(".phItemCompareBoxCount").html(data.count);';
-			if ($add_compare_method == 2) {
+
+			if ($add_compare_method == 2)
+			{
 				// Display the popup
 				$s[] = ' 				jQuery("#phContainerModuleCompare").html(data.popup);';
 				$s[] = ' 				jQuery("#phRemoveFromComparePopup").modal();';
 			}
-			if ($add_compare_method == 1) {
+
+			if ($add_compare_method == 1)
+			{
 				// If no popup is displayed we can relaod the page when we are in comparison page
 				// If popup, this will be done when clicking continue or comparison list
 				$s[] = '					if (phComparisonView == 1) {';
@@ -420,15 +466,19 @@ final class PhocacartRenderJs
 				$s[] = '						setTimeout(function() {location.reload();}, 0001);';
 				$s[] = '			  			}';
 			}
+
 			$s[] = '			  } else {';
-			//$s[] = '					// Don\'t change the price box';
+
+			// $s[] = '                  // Don\'t change the price box';
 			$s[] = '			  }';
 			$s[] = '		}';
 			$s[] = '	})';
-			//$s[] = '		e.preventDefault();';
-			//$s[] = '       return false;';
+
+			// $s[] = '      e.preventDefault();';
+			// $s[] = '       return false;';
 			$s[] = '}';
-			//$s[] = '})';
+
+			// $s[] = '})';
 			$s[] = ' ';
 			JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 		}
@@ -436,40 +486,50 @@ final class PhocacartRenderJs
 
 
 
-	public static function renderAjaxAddToWishList() {
+	public static function renderAjaxAddToWishList()
+	{
 
 		$app					= JFactory::getApplication();
 		$paramsC 				= PhocacartUtils::getComponentParameters();
-		$add_wishlist_method	= $paramsC->get( 'add_wishlist_method', 0 );
-		$theme 					= $paramsC->get( 'theme', 'bs3' );
+		$add_wishlist_method	= $paramsC->get('add_wishlist_method', 0);
+		$theme 					= $paramsC->get('theme', 'bs3');
 
 		// We need to refresh wishlist site when AJAX used for removing or adding products to wishlist list
 		$app 		= JFactory::getApplication();
 		$view 		= $app->input->get('view', '');
 		$option 	= $app->input->get('option', '');
-		if ($option == 'com_phocacart' && $view == 'wishlist') {
+
+		if ($option == 'com_phocacart' && $view == 'wishlist')
+		{
 			$wView = 1;
-		} else {
+		}
+		else
+		{
 			$wView = 0;
 		}
 
-		if ($add_wishlist_method == 0) {
+		if ($add_wishlist_method == 0)
+		{
 			return false;
 		}
-		if ($add_wishlist_method == 2 && $theme == 'bs3') {
-			JHtml::stylesheet( 'media/com_phocacart/bootstrap/css/bs_modal_transition.css');
+
+		if ($add_wishlist_method == 2 && $theme == 'bs3')
+		{
+			JHtml::stylesheet('media/com_phocacart/bootstrap/css/bs_modal_transition.css');
 		}
 
-		if ($add_wishlist_method > 0) {
-			$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&task=wishlist.add&format=json&'. JSession::getFormToken().'=1&wishlistview='.(int)$wView;
-			//$s[] = 'jQuery(document).ready(function(){';
-			//$s[] = '	jQuery(".phItemWishListBoxForm").on(\'submit\', function (e) {';
+		if ($add_wishlist_method > 0)
+		{
+			$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&task=wishlist.add&format=json&' . JSession::getFormToken() . '=1&wishlistview=' . (int) $wView;
+
+			// $s[] = 'jQuery(document).ready(function(){';
+			// $s[] = '  jQuery(".phItemWishListBoxForm").on(\'submit\', function (e) {';
 			$s[] = ' ';
 			$s[] = '/* Function phItemWishListBoxFormAjax */ ';
 			$s[] = 'function phItemWishListBoxFormAjax(phItemId) {';
-			$s[] = '	var phUrl 	= "'. $urlAjax.'";';
+			$s[] = '	var phUrl 	= "' . $urlAjax . '";';
 			$s[] = '	var phItem = \'#\' + phItemId;';
-			$s[] = '	var phWishListView = '.(int)$wView.'';
+			$s[] = '	var phWishListView = ' . (int) $wView . '';
 			$s[] = '	var phData = jQuery(phItem).serialize();';
 			$s[] = ' ';
 			$s[] = '	phRequest = jQuery.ajax({';
@@ -483,12 +543,16 @@ final class PhocacartRenderJs
 			$s[] = '			if (data.status == 1){';
 			$s[] = '				jQuery(".phItemWishListBox").html(data.item);';
 			$s[] = '				jQuery(".phItemWishListBoxCount").html(data.count);';
-			if ($add_wishlist_method == 2) {
+
+			if ($add_wishlist_method == 2)
+			{
 				$s[] = ' 				jQuery("body").append(jQuery("#phContainer"));';
 				$s[] = ' 				jQuery("#phContainer").html(data.popup);';
 				$s[] = ' 				jQuery("#phAddToWishListPopup").modal();';
 			}
-			if ($add_wishlist_method == 1) {
+
+			if ($add_wishlist_method == 1)
+			{
 				// If no popup is displayed we can relaod the page when we are in wishlist page
 				// If popup, this will be done when clicking continue or wishlist list
 				$s[] = '					if (phWishListView == 1) {';
@@ -496,56 +560,68 @@ final class PhocacartRenderJs
 				$s[] = '						setTimeout(function() {location.reload();}, 0001);';
 				$s[] = '			  			}';
 			}
+
 			$s[] = '			  } else {';
-			//$s[] = '					// Don\'t change the price box';
+
+			// $s[] = '                  // Don\'t change the price box';
 			$s[] = '			  }';
 			$s[] = '		}';
 			$s[] = '	})';
-			//$s[] = '		e.preventDefault();';
-			//$s[] = '       return false;';
+
+			// $s[] = '      e.preventDefault();';
+			// $s[] = '       return false;';
 			$s[] = '}';
-			//$s[] = '})';
+
+			// $s[] = '})';
 			$s[] = ' ';
 			JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 		}
 	}
 
-	public static function renderAjaxRemoveFromWishList() {
+	public static function renderAjaxRemoveFromWishList()
+	{
 
 		$app					= JFactory::getApplication();
 		$paramsC 				= PhocacartUtils::getComponentParameters();
-		$add_wishlist_method	= $paramsC->get( 'add_wishlist_method', 0 );
-		$theme 					= $paramsC->get( 'theme', 'bs3' );
+		$add_wishlist_method	= $paramsC->get('add_wishlist_method', 0);
+		$theme 					= $paramsC->get('theme', 'bs3');
 
 		// We need to refresh wishlist site when AJAX used for removing or adding products to wishlist list
 		$app 		= JFactory::getApplication();
 		$view 		= $app->input->get('view', '');
 		$option 	= $app->input->get('option', '');
-		if ($option == 'com_phocacart' && $view == 'wishlist') {
+
+		if ($option == 'com_phocacart' && $view == 'wishlist')
+		{
 			$wView = 1;
-		} else {
+		}
+		else
+		{
 			$wView = 0;
 		}
 
-
-		if ($add_wishlist_method == 0) {
+		if ($add_wishlist_method == 0)
+		{
 			return false;
 		}
-		if ($add_wishlist_method == 2 && $theme == 'bs3') {
-			JHtml::stylesheet( 'media/com_phocacart/bootstrap/css/bs_modal_transition.css');
+
+		if ($add_wishlist_method == 2 && $theme == 'bs3')
+		{
+			JHtml::stylesheet('media/com_phocacart/bootstrap/css/bs_modal_transition.css');
 		}
 
-		if ($add_wishlist_method > 0) {
+		if ($add_wishlist_method > 0)
+		{
+			$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&task=wishlist.remove&format=json&' . JSession::getFormToken() . '=1&wishlistview=' . (int) $wView;
 
-			$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&task=wishlist.remove&format=json&'. JSession::getFormToken().'=1&wishlistview='.(int)$wView;
-			//$s[] = 'jQuery(document).ready(function(){';
-			//$s[] = '	jQuery(".phItemWishListBoxForm").on(\'submit\', function (e) {';
+			// $s[] = 'jQuery(document).ready(function(){';
+			// $s[] = '  jQuery(".phItemWishListBoxForm").on(\'submit\', function (e) {';
 			$s[] = ' ';
 			$s[] = '/* Function phItemRemoveWishListFormAjax */ ';
 			$s[] = 'function phItemRemoveWishListFormAjax(phItemId) {';
-			$s[] = '	var phUrl 	= "'. $urlAjax.'";';
+			$s[] = '	var phUrl 	= "' . $urlAjax . '";';
 			$s[] = '	var phItem = \'#\' + phItemId;';
-			$s[] = '	var phWishListView = '.(int)$wView.'';
+			$s[] = '	var phWishListView = ' . (int) $wView . '';
 			$s[] = '	var phData = jQuery(phItem).serialize();';
 			$s[] = ' ';
 			$s[] = '	phRequest = jQuery.ajax({';
@@ -559,12 +635,16 @@ final class PhocacartRenderJs
 			$s[] = '			if (data.status == 1){';
 			$s[] = '				jQuery(".phItemWishListBox").html(data.item);';
 			$s[] = '				jQuery(".phItemWishListBoxCount").html(data.count);';
-			if ($add_wishlist_method == 2) {
+
+			if ($add_wishlist_method == 2)
+			{
 				// Display the popup
 				$s[] = ' 				jQuery("#phContainerModuleWishList").html(data.popup);';
 				$s[] = ' 				jQuery("#phRemoveFromWishListPopup").modal();';
 			}
-			if ($add_wishlist_method == 1) {
+
+			if ($add_wishlist_method == 1)
+			{
 				// If no popup is displayed we can relaod the page when we are in wishlist page
 				// If popup, this will be done when clicking continue or wishlist list
 				$s[] = '					if (phWishListView == 1) {';
@@ -572,56 +652,63 @@ final class PhocacartRenderJs
 				$s[] = '						setTimeout(function() {location.reload();}, 0001);';
 				$s[] = '			  			}';
 			}
+
 			$s[] = '			  } else {';
-			//$s[] = '					// Don\'t change the price box';
+
+			// $s[] = '                  // Don\'t change the price box';
 			$s[] = '		   }';
 			$s[] = '		}';
 			$s[] = '	})';
-			//$s[] = '		e.preventDefault();';
-			//$s[] = '       return false;';
+
+			// $s[] = '      e.preventDefault();';
+			// $s[] = '       return false;';
 			$s[] = '}';
-			//$s[] = '})';
+
+			// $s[] = '})';
 			$s[] = ' ';
 			JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 		}
 	}
 
-	public static function renderAjaxQuickViewBox($options = array()) {
-
+	public static function renderAjaxQuickViewBox($options = array())
+	{
 
 		$app					= JFactory::getApplication();
 		$paramsC 				= PhocacartUtils::getComponentParameters();
-		$dynamic_change_price 	= $paramsC->get( 'dynamic_change_price', 1 );
-		$load_chosen 			= $paramsC->get( 'load_chosen', 1 );
-		$theme 					= $paramsC->get( 'theme', 'bs3' );
-		$media 					= new PhocacartRenderMedia();
-		self::renderPhocaAttribute();// needed because of phChangeAttributeType()
-
+		$dynamic_change_price 	= $paramsC->get('dynamic_change_price', 1);
+		$load_chosen 			= $paramsC->get('load_chosen', 1);
+		$theme 					= $paramsC->get('theme', 'bs3');
+		$media 					= new PhocacartRenderMedia;
+		self::renderPhocaAttribute();// Needed because of phChangeAttributeType()
 
 		// We need to refresh comparison site when AJAX used for removing or adding products to comparison list
 		$app 		= JFactory::getApplication();
 		$view 		= $app->input->get('view', '');
 		$option 	= $app->input->get('option', '');
-		/*if ($option == 'com_phocacart' && $view == 'comparison') {
+
+		/*
+		if ($option == 'com_phocacart' && $view == 'comparison') {
 			$cView = 1;
 		} else {
 			$cView = 0;
 		}*/
 
-		if ($theme == 'bs3') {
-			JHtml::stylesheet( 'media/com_phocacart/bootstrap/css/bs_modal_transition.css');
+		if ($theme == 'bs3')
+		{
+			JHtml::stylesheet('media/com_phocacart/bootstrap/css/bs_modal_transition.css');
 		}
 
+		$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&view=item&format=json&tmpl=component&' . JSession::getFormToken() . '=1';
 
-		$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&view=item&format=json&tmpl=component&'. JSession::getFormToken().'=1';
-		//$s[] = 'jQuery(document).ready(function(){';
-		//$s[] = '	jQuery(".phItemCompareBoxForm").on(\'submit\', function (e) {';
+		// $s[] = 'jQuery(document).ready(function(){';
+		// $s[] = '  jQuery(".phItemCompareBoxForm").on(\'submit\', function (e) {';
 		$s[] = ' ';
 		$s[] = '/* Function phItemQuickViewBoxFormAjax */ ';
 		$s[] = 'function phItemQuickViewBoxFormAjax(phItemId) {';
-		$s[] = '	var phUrl 	= "'. $urlAjax.'";';
+		$s[] = '	var phUrl 	= "' . $urlAjax . '";';
 		$s[] = '	var phItem = \'#\' + phItemId;';
-		//$s[] = '	var phComparisonView = '.(int)$cView.'';
+
+		// $s[] = '  var phComparisonView = '.(int)$cView.'';
 		$s[] = '	var phData = jQuery(phItem).serialize();';
 		$s[] = ' ';
 		$s[] = '	phRequest = jQuery.ajax({';
@@ -633,49 +720,53 @@ final class PhocacartRenderJs
 		$s[] = '		dataType:"JSON",';
 		$s[] = '		success: function(data){';
 		$s[] = '			if (data.status == 1){';
-		//$s[] = '					jQuery("#phItemCompareBox").html(data.item);';
 
+		// $s[] = '                  jQuery("#phItemCompareBox").html(data.item);';
 
-
-		//$s[] = ' 				jQuery("#phQuickViewPopupBody").html(data.popup);'; added in ajax
-		/////$s[] = ' 			jQuery("#phContainer").html(data.popup); ';
+		// $s[] = '              jQuery("#phQuickViewPopupBody").html(data.popup);'; added in ajax
+		// $s[] = '           jQuery("#phContainer").html(data.popup); ';
 		$s[] = ' 				jQuery(".phjItemQuick.phjProductAttribute").remove(); ';// Clear attributes from dom when ajax reload
 		$s[] = ' 				jQuery("body").append(jQuery("#phContainer"));';
 		$s[] = ' 				jQuery("#phContainer").html(data.popup); ';
 
-		/////$s[] = ' 			jQuery("#phQuickViewPopup").modal();';
+		// $s[] = '           jQuery("#phQuickViewPopup").modal();';
 		$s[] = ' 				jQuery("body").append(jQuery("#phQuickViewPopup"));';
 		$s[] = ' 				jQuery("#phQuickViewPopup").modal();';
-		if ($load_chosen > 0) {
 
+		if ($load_chosen > 0)
+		{
 			// TO DO
 			// Chosen cannot be dynamically recreated in case
 			// we want to add support for mobiles and have support for html required forms (browser checks for html required forms)
 			// Now choosen is disables on mobile devices so when we reload choosen for standard devices
 			// we lost the select boxes on mobiles
-			//$s[] = '	  				jQuery(\'select\').chosen({disable_search_threshold : 10,allow_single_deselect : true});';//Reload Chosen
+			// $s[] = '                  jQuery(\'select\').chosen({disable_search_threshold : 10,allow_single_deselect : true});';//Reload Chosen
 			// This seems to work
-			//$s[] = '	 jQuery(\'select\').chosen({disable_search_threshold : 10,allow_single_deselect : true});';
+			// $s[] = '   jQuery(\'select\').chosen({disable_search_threshold : 10,allow_single_deselect : true});';
 			$s[] = '	 jQuery(\'select\').chosen(\'destroy\').chosen({disable_search_threshold : 10,allow_single_deselect : true});';
 		}
 
-		if ($dynamic_change_price == 1) {
-			//$s[] = '					phAjaxChangePrice();';
+		if ($dynamic_change_price == 1)
+		{
+			// $s[] = '                  phAjaxChangePrice();';
 		}
 
 		$s[] = 'phChangeAttributeType(\'ItemQuick\');';// Recreate the select attribute (color, image) after AJAX
 
-		$s[] = '		'. $options['touchspin'];// Touch spin for input
+		$s[] = '		' . $options['touchspin'];// Touch spin for input
 
 		$s[] = '			  } else {';
-		//$s[] = '					// Don\'t change the price box';
+
+		// $s[] = '                  // Don\'t change the price box';
 		$s[] = '			  }';
 		$s[] = '		}';
 		$s[] = '	})';
-		//$s[] = '		e.preventDefault();';
-		//$s[] = '       return false;';
+
+		// $s[] = '      e.preventDefault();';
+		// $s[] = '       return false;';
 		$s[] = '}';
-		//$s[] = '})';
+
+		// $s[] = '})';
 		$s[] = ' ';
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}
@@ -687,39 +778,41 @@ final class PhocacartRenderJs
 	 * check box
 	 */
 
-	public static function renderAjaxChangeProductPriceByOptions($id = 0, $typeView = '', $class = '') {
+	public static function renderAjaxChangeProductPriceByOptions($id = 0, $typeView = '', $class = '')
+	{
 
 		$app			= JFactory::getApplication();
 		$paramsC 		= PhocacartUtils::getComponentParameters();
-		$dynamic_change_price = $paramsC->get( 'dynamic_change_price', 0 );
+		$dynamic_change_price = $paramsC->get('dynamic_change_price', 0);
 
 		$app			= JFactory::getApplication();
-		$option			= $app->input->get( 'option', '', 'string' );
-		$view			= $app->input->get( 'view', '', 'string' );
+		$option			= $app->input->get('option', '', 'string');
+		$view			= $app->input->get('view', '', 'string');
 
-
-		if ($dynamic_change_price == 0) {
+		if ($dynamic_change_price == 0)
+		{
 			return false;
 		}
-		//if ($id == 0) {
+
+		// If ($id == 0) {
 		//	$idJs = 'var phId = phProductId;'. "\n";
 		//	$idJs .= 'var phIdItem = "#phItemPriceBox'.$typeView.'" + phProductId;';
-	/*	} else {
+		/*
+		} else {
 			$idJs = 'var phId = '.(int)$id.';'. "\n";
 			$idJs .= 'var phIdItem = "#phItemPriceBox'.(int)$id.'";';
 		}*/
 
-		$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&task=checkout.changepricebox&format=json&'. JSession::getFormToken().'=1';
-
+		$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&task=checkout.changepricebox&format=json&' . JSession::getFormToken() . '=1';
 
 		$s[] = ' ';
 		$s[] = '/* Function phAjaxChangePrice */ ';
-		$s[] = 'function phAjaxChangePrice'.$typeView.'(phProductId, phDataA1, phDataA2){';
-		$s[] = '	var phUrl 		= "'. $urlAjax.'";';
-		$s[] = '	var phId 		= phProductId;'. "\n";
-		$s[] = '	var phIdItem 	= "#phItemPriceBox'.$typeView.'" + phProductId;';
-		$s[] = '	var phClass 	= "'.$class.'";';
-		$s[] = '	var phTypeView 	= "'.$typeView.'";';
+		$s[] = 'function phAjaxChangePrice' . $typeView . '(phProductId, phDataA1, phDataA2){';
+		$s[] = '	var phUrl 		= "' . $urlAjax . '";';
+		$s[] = '	var phId 		= phProductId;' . "\n";
+		$s[] = '	var phIdItem 	= "#phItemPriceBox' . $typeView . '" + phProductId;';
+		$s[] = '	var phClass 	= "' . $class . '";';
+		$s[] = '	var phTypeView 	= "' . $typeView . '";';
 
 		$s[] = '	var phData 	= \'id=\'+phId+\'&\'+phDataA1+\'&\'+phDataA2+\'&\'+\'class=\'+phClass+\'&\'+\'typeview=\'+phTypeView;';
 		$s[] = '	jQuery.ajax({';
@@ -733,7 +826,8 @@ final class PhocacartRenderJs
 		$s[] = '			if (data.status == 1){';
 		$s[] = '				jQuery(phIdItem).html(data.item);';
 		$s[] = '		   } else {';
-		//$s[] = '				// Don\'t change the price box, don't render any error message
+
+		// $s[] = '              // Don\'t change the price box, don't render any error message
 		$s[] = '			  }';
 		$s[] = '		}';
 		$s[] = '	})';
@@ -742,18 +836,20 @@ final class PhocacartRenderJs
 
 		$s[] = 'jQuery(document).ready(function(){';
 
-
 		// Select Box
-		$s[] = '	jQuery(document).on(\'change\', \'select.phj'.$typeView.'.phjProductAttribute\', function(){';
-		//$s[] = '		jQuery(this).off("change");';
+		$s[] = '	jQuery(document).on(\'change\', \'select.phj' . $typeView . '.phjProductAttribute\', function(){';
+
+		// $s[] = '      jQuery(this).off("change");';
 		$s[] = '		var phProductId = jQuery(this).data(\'product-id\');';
-		$s[] = '		var phProductGroup = \'.phjAddToCartV'.$typeView.'P\' + phProductId;';
+		$s[] = '		var phProductGroup = \'.phjAddToCartV' . $typeView . 'P\' + phProductId;';
+
 		// All Selects
 		$s[] = '		var phDataA1 = jQuery(phProductGroup).find(\'select\').serialize();';
+
 		// All Checkboxes
 		$s[] = '		var phDataA2 = jQuery(phProductGroup).find(\':checkbox\').serialize();';
 
-		$s[] = '		phAjaxChangePrice'.$typeView.'(phProductId, phDataA1, phDataA2);';
+		$s[] = '		phAjaxChangePrice' . $typeView . '(phProductId, phDataA1, phDataA2);';
 
 		$s[] = '	})';
 
@@ -762,34 +858,36 @@ final class PhocacartRenderJs
 		// 1. CHANGE - because of Bootstrap toogle button, this will run 3x ajax (checkbox is hidden and changes when clicking on button)
 		// 2. CLICK directly on checkbox as if Bootstrap toogle button is use, clicked will be icon not the checkbox
 		// So we run click on div box over the checkbox which works and don't run ajax 3x
-		//$s[] = '	jQuery(document).on(\'change\', \'.ph-checkbox-attribute.phj'.$typeView.'.phjProductAttribute :checkbox\', function(){';
-		//$s[] = '	jQuery(document).on(\'click\', \'#phItemPriceBoxForm .ph-checkbox-attribute.ph-item-input-set-attributes\', function(){';
-		$s[] = '	jQuery(document).on(\'click\', \'.ph-checkbox-attribute.phj'.$typeView.'.phjProductAttribute\', function(e){';
+		// $s[] = '  jQuery(document).on(\'change\', \'.ph-checkbox-attribute.phj'.$typeView.'.phjProductAttribute :checkbox\', function(){';
+		// $s[] = '  jQuery(document).on(\'click\', \'#phItemPriceBoxForm .ph-checkbox-attribute.ph-item-input-set-attributes\', function(){';
+		$s[] = '	jQuery(document).on(\'click\', \'.ph-checkbox-attribute.phj' . $typeView . '.phjProductAttribute\', function(e){';
 
 		// Prevent from twice running
 		$s[] = '        if (e.target.tagName.toUpperCase() === "LABEL") { return;}';
 
 		$s[] = '		var phProductId = jQuery(this).data(\'product-id\');';
-		$s[] = '		var phProductGroup = \'.phjAddToCartV'.$typeView.'P\' + phProductId;';
+		$s[] = '		var phProductGroup = \'.phjAddToCartV' . $typeView . 'P\' + phProductId;';
+
 		// All Selects
 		$s[] = '		var phDataA1 = jQuery(phProductGroup).find(\'select\').serialize();';
+
 		// All Checkboxes
 		$s[] = '		var phDataA2 = jQuery(phProductGroup).find(\':checkbox\').serialize();';
 
-		$s[] = '		phAjaxChangePrice'.$typeView.'(phProductId, phDataA1, phDataA2);';
+		$s[] = '		phAjaxChangePrice' . $typeView . '(phProductId, phDataA1, phDataA2);';
 		$s[] = '	})';
 
 		// Change the price on time view when site is initialized
 		// Because some parameters can be selected as default
 		// Automatically start only in item view, not in category or another view
-		/*if ($option == 'com_phocacart' && $view == 'item') {
+		/*
+		if ($option == 'com_phocacart' && $view == 'item') {
 			//$s[] = '		var phProductId = jQuery(\'.phjItemAttribute\').data(\'product-id\')';
 			$s[] = '		var phDataA1 = jQuery("select.phjItemAttribute").serialize();';
 			$s[] = '		var phDataA2 = jQuery(".ph-checkbox-attribute.phjItemAttribute :checkbox").serialize();';
 			$s[] = '		var phpDataA = phDataA1 +\'&\'+ phDataA2;';
 			$s[] = '		phAjaxChangePrice'.$typeView.'('.(int)$id.');';
 		}*/
-
 
 		$s[] = '})';
 		$s[] = ' ';
@@ -803,34 +901,35 @@ final class PhocacartRenderJs
 	 * check box
 	 */
 
-	public static function renderAjaxChangeProductStockByOptions($id = 0, $typeView = '', $class = '') {
+	public static function renderAjaxChangeProductStockByOptions($id = 0, $typeView = '', $class = '')
+	{
 
 		$app					= JFactory::getApplication();
 		$paramsC 				= PhocacartUtils::getComponentParameters();
-		$dynamic_change_stock 	= $paramsC->get( 'dynamic_change_stock', 0 );
-		$hide_add_to_cart_stock = $paramsC->get( 'hide_add_to_cart_stock', 0 );
+		$dynamic_change_stock 	= $paramsC->get('dynamic_change_stock', 0);
+		$hide_add_to_cart_stock = $paramsC->get('hide_add_to_cart_stock', 0);
 
 		$app					= JFactory::getApplication();
-		$option					= $app->input->get( 'option', '', 'string' );
-		$view					= $app->input->get( 'view', '', 'string' );
+		$option					= $app->input->get('option', '', 'string');
+		$view					= $app->input->get('view', '', 'string');
 
-
-		if ($dynamic_change_stock == 0) {
+		if ($dynamic_change_stock == 0)
+		{
 			return false;
 		}
 
-		$urlAjax = JURI::base(true).'/index.php?option=com_phocacart&task=checkout.changestockbox&format=json&'. JSession::getFormToken().'=1';
+		$urlAjax = JURI::base(true) . '/index.php?option=com_phocacart&task=checkout.changestockbox&format=json&' . JSession::getFormToken() . '=1';
 
 		$s[] = ' ';
 		$s[] = '/* Function phAjaxChangeStock */ ';
-		$s[] = 'function phAjaxChangeStock'.$typeView.'(phProductId, phDataA1, phDataA2){';
-		$s[] = '	var phUrl 					= "'. $urlAjax.'";';
-		$s[] = '	var phId 					= phProductId;'. "\n";
-		$s[] = '	var phIdItem 				= "#phItemStockBox'.$typeView.'" + phProductId;';
-		$s[] = '	var phProductAddToCart 		= ".phProductAddToCart'.$typeView.'" + phProductId;';// display or hide add to cart button
-		$s[] = '	var phProductAddToCartIcon 	= ".phProductAddToCartIcon'.$typeView.'" + phProductId;';// display or hide add to cart icon
-		$s[] = '	var phClass 				= "'.$class.'";';
-		$s[] = '	var phTypeView 				= "'.$typeView.'";';
+		$s[] = 'function phAjaxChangeStock' . $typeView . '(phProductId, phDataA1, phDataA2){';
+		$s[] = '	var phUrl 					= "' . $urlAjax . '";';
+		$s[] = '	var phId 					= phProductId;' . "\n";
+		$s[] = '	var phIdItem 				= "#phItemStockBox' . $typeView . '" + phProductId;';
+		$s[] = '	var phProductAddToCart 		= ".phProductAddToCart' . $typeView . '" + phProductId;';// Display or hide add to cart button
+		$s[] = '	var phProductAddToCartIcon 	= ".phProductAddToCartIcon' . $typeView . '" + phProductId;';// display or hide add to cart icon
+		$s[] = '	var phClass 				= "' . $class . '";';
+		$s[] = '	var phTypeView 				= "' . $typeView . '";';
 
 		$s[] = '	var phData 	= \'id=\'+phId+\'&\'+phDataA1+\'&\'+phDataA2+\'&\'+\'class=\'+phClass+\'&\'+\'typeview=\'+phTypeView;';
 		$s[] = '	jQuery.ajax({';
@@ -843,14 +942,17 @@ final class PhocacartRenderJs
 		$s[] = '		success: function(data){';
 		$s[] = '			if (data.status == 1){';
 
-		if ($hide_add_to_cart_stock == 1) {
+		if ($hide_add_to_cart_stock == 1)
+		{
 			$s[] = '				if (data.stock < 1) {';
-			//$s[] = '					jQuery(phProductAddToCart).hide();';
+
+			// $s[] = '                  jQuery(phProductAddToCart).hide();';
 			$s[] = '					jQuery(phProductAddToCart).css(\'visibility\', \'hidden\');';
 			$s[] = '					jQuery(phProductAddToCartIcon).css(\'display\', \'none\');';
 
 			$s[] = '				} else {';
-			//$s[] = '					jQuery(phProductAddToCart).show();';
+
+			// $s[] = '                  jQuery(phProductAddToCart).show();';
 			$s[] = '					jQuery(phProductAddToCart).css(\'visibility\', \'visible\');';
 			$s[] = '					jQuery(phProductAddToCartIcon).css(\'display\', \'block\');';
 			$s[] = '				}';
@@ -858,7 +960,8 @@ final class PhocacartRenderJs
 
 		$s[] = '				jQuery(phIdItem).html(data.item);';
 		$s[] = '			  } else {';
-		//$s[] = '					// Don\'t change the price box, don't render any error message
+
+		// $s[] = '                  // Don\'t change the price box, don't render any error message
 		$s[] = '			  }';
 		$s[] = '		}';
 		$s[] = '	})';
@@ -867,33 +970,37 @@ final class PhocacartRenderJs
 
 		$s[] = 'jQuery(document).ready(function(){';
 
-
 		// Select Box
-		$s[] = '	jQuery(document).on(\'change\', \'select.phj'.$typeView.'.phjProductAttribute\', function(){';
-		//$s[] = '		jQuery(this).off("change");';
+		$s[] = '	jQuery(document).on(\'change\', \'select.phj' . $typeView . '.phjProductAttribute\', function(){';
+
+		// $s[] = '      jQuery(this).off("change");';
 		$s[] = '		var phProductId = jQuery(this).data(\'product-id\');';
-		$s[] = '		var phProductGroup = \'.phjAddToCartV'.$typeView.'P\' + phProductId;';
+		$s[] = '		var phProductGroup = \'.phjAddToCartV' . $typeView . 'P\' + phProductId;';
+
 		// All Selects
 		$s[] = '		var phDataA1 = jQuery(phProductGroup).find(\'select\').serialize();';
+
 		// All Checkboxes
 		$s[] = '		var phDataA2 = jQuery(phProductGroup).find(\':checkbox\').serialize();';
 
-		$s[] = '		phAjaxChangeStock'.$typeView.'(phProductId, phDataA1, phDataA2);';
+		$s[] = '		phAjaxChangeStock' . $typeView . '(phProductId, phDataA1, phDataA2);';
 		$s[] = '	})';
 
-		$s[] = '	jQuery(document).on(\'click\', \'.ph-checkbox-attribute.phj'.$typeView.'.phjProductAttribute\', function(e){';
+		$s[] = '	jQuery(document).on(\'click\', \'.ph-checkbox-attribute.phj' . $typeView . '.phjProductAttribute\', function(e){';
 
 		// Prevent from twice running
 		$s[] = '        if (e.target.tagName.toUpperCase() === "LABEL") { return;}';
 
 		$s[] = '		var phProductId = jQuery(this).data(\'product-id\');';
-		$s[] = '		var phProductGroup = \'.phjAddToCartV'.$typeView.'P\' + phProductId;';
+		$s[] = '		var phProductGroup = \'.phjAddToCartV' . $typeView . 'P\' + phProductId;';
+
 		// All Selects
 		$s[] = '		var phDataA1 = jQuery(phProductGroup).find(\'select\').serialize();';
+
 		// All Checkboxes
 		$s[] = '		var phDataA2 = jQuery(phProductGroup).find(\':checkbox\').serialize();';
 
-		$s[] = '		phAjaxChangeStock'.$typeView.'(phProductId, phDataA1, phDataA2);';
+		$s[] = '		phAjaxChangeStock' . $typeView . '(phProductId, phDataA1, phDataA2);';
 		$s[] = '	})';
 
 		$s[] = '})';
@@ -1064,7 +1171,7 @@ final class PhocacartRenderJs
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 
 	}
-*/
+	*/
 
 
 
@@ -1078,10 +1185,10 @@ final class PhocacartRenderJs
 	 * JS equivalent to PhocacartPrice::getPriceFormat();
 	 */
 
-	public static function getPriceFormatJavascript($price_decimals, $price_dec_symbol, $price_thousands_sep, $price_currency_symbol, $price_prefix, $price_suffix, $price_format) {
+	public static function getPriceFormatJavascript($price_decimals, $price_dec_symbol, $price_thousands_sep, $price_currency_symbol, $price_prefix, $price_suffix, $price_format)
+	{
 
-
-		//JFactory::getDocument()->addScript(JURI::root(true).'/media/com_phocacart/js/number_format.js');
+		// JFactory::getDocument()->addScript(JURI::root(true).'/media/com_phocacart/js/number_format.js');
 
 		$s 	= array();
 		$s[] = ' ';
@@ -1096,31 +1203,32 @@ final class PhocacartRenderJs
 		$s[] = ' 		$price = Math.abs($price);';
 		$s[] = ' 	}';
 
-		$s[] = ' 	$price = number_format($price, "'.$price_decimals.'", "'.$price_dec_symbol.'", "'.$price_thousands_sep.'");';
+		$s[] = ' 	$price = number_format($price, "' . $price_decimals . '", "' . $price_dec_symbol . '", "' . $price_thousands_sep . '");';
 
-		switch($price_format) {
+		switch ($price_format)
+		{
 			case 1:
-				$s[] = '	$price = $price + "'.$price_currency_symbol.'";';
+				$s[] = '	$price = $price + "' . $price_currency_symbol . '";';
 			break;
 
 			case 2:
-				$s[] = '	$price = "'.$price_currency_symbol.'" + $price;';
+				$s[] = '	$price = "' . $price_currency_symbol . '" + $price;';
 			break;
 
 			case 3:
-				$s[] = '	$price = "'.$price_currency_symbol.'" + " " + $price;';
+				$s[] = '	$price = "' . $price_currency_symbol . '" + " " + $price;';
 			break;
 
 			case 0:
 			default:
-				$s[] = '	$price = $price + " " + "'.$price_currency_symbol.'";';
+				$s[] = '	$price = $price + " " + "' . $price_currency_symbol . '";';
 			break;
 		}
 
 		$s[] = '	if ($negative == 1) {';
-		$s[] = '		return "- " + "'.addslashes($price_prefix).'" + $price + "'.addslashes($price_suffix).'";';
+		$s[] = '		return "- " + "' . addslashes($price_prefix) . '" + $price + "' . addslashes($price_suffix) . '";';
 		$s[] = '	} else {';
-		$s[] = '		return "'.addslashes($price_prefix).'" + $price + "'.addslashes($price_suffix).'";';
+		$s[] = '		return "' . addslashes($price_prefix) . '" + $price + "' . addslashes($price_suffix) . '";';
 		$s[] = '	}';
 		$s[] = '}';
 		$s[] = ' ';
@@ -1128,7 +1236,7 @@ final class PhocacartRenderJs
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}
 
-/*
+	/*
 	public static function renderFilterRange($min, $max, $priceFrom, $priceTo) {
 
 
@@ -1176,7 +1284,7 @@ final class PhocacartRenderJs
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 
 	}
-*/
+	*/
 
 
 
@@ -1185,7 +1293,8 @@ final class PhocacartRenderJs
 	// HELPERS
 	// ========
 
-	/*	public static function renderBillingAndShippingSame() {
+	/*
+	  public static function renderBillingAndShippingSame() {
 
 		$app			= JFactory::getApplication();
 		$paramsC 		= PhocacartUtils::getComponentParameters();
@@ -1254,17 +1363,23 @@ final class PhocacartRenderJs
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
 	}*/
 
-	public static function renderAjaxTopHtml($text = '') {
+	public static function renderAjaxTopHtml($text = '')
+	{
 		$o = '<div id="ph-ajaxtop">';
-		if ($text != '') {
-			$o .= '<div id="ph-ajaxtop-message"><div class="ph-loader-top"></div> '. strip_tags(addslashes($text)) . '</div>';
+
+		if ($text != '')
+		{
+			$o .= '<div id="ph-ajaxtop-message"><div class="ph-loader-top"></div> ' . strip_tags(addslashes($text)) . '</div>';
 		}
+
 		$o .= '</div>';
+
 		return $o;
 	}
 
 	// Singleton - do not load items more times from database
-	/*public static function renderLoaderFullOverlay() {
+	/*
+	public static function renderLoaderFullOverlay() {
 
 		if( self::$fullOverlay == '' ) {
 
@@ -1277,9 +1392,10 @@ final class PhocacartRenderJs
 		return self::$fullOverlay;
 	}*/
 
-	// loading.gif - whole page
+	// Loading.gif - whole page
 	// Singleton - check if loaded - No Singleton, it must be inside each javascript function
-/*	public static function renderLoaderFullOverlay() {
+	/*
+	  public static function renderLoaderFullOverlay() {
 		//static $fullOverlay = 0;
 		//if( $fullOverlay == 0) {
 			$s 	= array();
@@ -1309,7 +1425,7 @@ final class PhocacartRenderJs
 		  });
 
 	}*/
-/*
+	/*
 	public static function renderLoaderDivOverlay($outputDiv) {
 
 		$overlay['start'] = '';
@@ -1327,26 +1443,29 @@ final class PhocacartRenderJs
 
 		return $overlay;
 	}
-*/
-	public static function renderOverlay(){
+	*/
+	public static function renderOverlay()
+	{
 
 		$s	 = array();
 		$s[] = '		var phOverlay = jQuery(\'<div id="phOverlay"><div id="phLoaderFull"> </div></div>\');';
 		$s[] = '		phOverlay.appendTo(document.body);';
 		$s[] = '		jQuery("#phOverlay").fadeIn().css("display","block");';
+
 		return implode("\n", $s);
 	}
 
-	public static function renderMagnific() {
+	public static function renderMagnific()
+	{
 
 		$document	= JFactory::getDocument();
-		$document->addScript(JURI::base(true).'/media/com_phocacart/js/magnific/jquery.magnific-popup.min.js');
-		$document->addStyleSheet(JURI::base(true).'/media/com_phocacart/js/magnific/magnific-popup.css');
+		$document->addScript(JURI::base(true) . '/media/com_phocacart/js/magnific/jquery.magnific-popup.min.js');
+		$document->addStyleSheet(JURI::base(true) . '/media/com_phocacart/js/magnific/magnific-popup.css');
 		$s = array();
 		$s[] = 'jQuery(document).ready(function() {';
 		$s[] = '	jQuery(\'#phImageBox\').magnificPopup({';
-		$s[] = '		tLoading: \''.JText::_('COM_PHOCACART_LOADING').'\',';
-		$s[] = '		tClose: \''.JText::_('COM_PHOCACART_CLOSE').'\',';
+		$s[] = '		tLoading: \'' . JText::_('COM_PHOCACART_LOADING') . '\',';
+		$s[] = '		tClose: \'' . JText::_('COM_PHOCACART_CLOSE') . '\',';
 		$s[] = '		delegate: \'a.magnific\',';
 		$s[] = '		type: \'image\',';
 		$s[] = '		mainClass: \'mfp-img-mobile\',';
@@ -1358,15 +1477,15 @@ final class PhocacartRenderJs
 		$s[] = '		gallery: {';
 		$s[] = '			enabled: true,';
 		$s[] = '			navigateByImgClick: true,';
-		$s[] = '			tPrev: \''.JText::_('COM_PHOCACART_PREVIOUS').'\',';
-		$s[] = '			tNext: \''.JText::_('COM_PHOCACART_NEXT').'\',';
-		$s[] = '			tCounter: \''.JText::_('COM_PHOCACART_MAGNIFIC_CURR_OF_TOTAL').'\'';
+		$s[] = '			tPrev: \'' . JText::_('COM_PHOCACART_PREVIOUS') . '\',';
+		$s[] = '			tNext: \'' . JText::_('COM_PHOCACART_NEXT') . '\',';
+		$s[] = '			tCounter: \'' . JText::_('COM_PHOCACART_MAGNIFIC_CURR_OF_TOTAL') . '\'';
 		$s[] = '		},';
 		$s[] = '		image: {';
 		$s[] = '			titleSrc: function(item) {';
 		$s[] = '				return item.el.attr(\'title\');';
 		$s[] = '			},';
-		$s[] = '			tError: \''.JText::_('COM_PHOCACART_IMAGE_NOT_LOADED').'\'';
+		$s[] = '			tError: \'' . JText::_('COM_PHOCACART_IMAGE_NOT_LOADED') . '\'';
 		$s[] = '		}';
 		$s[] = '	});';
 		$s[] = '});';
@@ -1376,10 +1495,11 @@ final class PhocacartRenderJs
 	}
 
 
-	public static function renderPrettyPhoto() {
+	public static function renderPrettyPhoto()
+	{
 		$document	= JFactory::getDocument();
-		JHtml::stylesheet( 'media/com_phocacart/js/prettyphoto/css/prettyPhoto.css' );
-		$document->addScript(JURI::root(true).'/media/com_phocacart/js/prettyphoto/js/jquery.prettyPhoto.js');
+		JHtml::stylesheet('media/com_phocacart/js/prettyphoto/css/prettyPhoto.css');
+		$document->addScript(JURI::root(true) . '/media/com_phocacart/js/prettyphoto/js/jquery.prettyPhoto.js');
 
 		$s[] = 'jQuery(document).ready(function(){';
 		$s[] = '	jQuery("a[rel^=\'prettyPhoto\']").prettyPhoto({';
@@ -1393,17 +1513,19 @@ final class PhocacartRenderJs
 
 
 
-	public static function renderPhocaAttribute() {
+	public static function renderPhocaAttribute()
+	{
 		$document	= JFactory::getDocument();
-		$document->addScript(JURI::root(true).'/media/com_phocacart/js/phoca/jquery.phocaattribute.js');
+		$document->addScript(JURI::root(true) . '/media/com_phocacart/js/phoca/jquery.phocaattribute.js');
 	}
 
-	public static function renderOverlayOnSubmit($id) {
+	public static function renderOverlayOnSubmit($id)
+	{
 
 		$document	= JFactory::getDocument();
 
 		$s[] = 'jQuery(document).ready(function(){';
-		$s[] = '   jQuery(\'#'.$id.'\').on(\'submit\', function(){';
+		$s[] = '   jQuery(\'#' . $id . '\').on(\'submit\', function(){';
 		$s[] = self::renderOverlay();
 		$s[] = '   })';
 		$s[] = '})';
@@ -1411,10 +1533,12 @@ final class PhocacartRenderJs
 		$document->addScriptDeclaration(implode("\n", $s));
 	}
 
-	/* OBSOLETE
+	/*
+	 OBSOLETE
 	 * Swap large images by attributes
 	 */
-/*	public static function renderPhSwapImageInitialize($formId, $dynamicChangeImage = 0, $ajax = 0, $imgClass = 'ph-item-image-full-box') {
+	/*
+	  public static function renderPhSwapImageInitialize($formId, $dynamicChangeImage = 0, $ajax = 0, $imgClass = 'ph-item-image-full-box') {
 		/*
 		if ($dynamicChangeImage == 1) {
 			$s = array();
@@ -1433,7 +1557,8 @@ final class PhocacartRenderJs
 		}*//*
 	}*/
 
-	/* OBSOLETE
+	/*
+	 OBSOLETE
 	 * Type Color Select Box and Image Select Box - displaying images or colors instead of select box
 	 */
 	/*
@@ -1513,40 +1638,50 @@ final class PhocacartRenderJs
 	 *    Checkboxes cannot be checked by HTML 5, so we need help of jQuery which manage for example:
 	 *    There are 3 checkboxes - one selected, two not (It is OK but not for HTML5)
 	 */
-	public static function renderRequiredParts($id, $required) {
+	public static function renderRequiredParts($id, $required)
+	{
 
 		// If the attribute is required
 		$req['attribute'] 	= '';// Attribute - required field HTML 5
 		$req['span']		= '';// Span - displayed * next to title
 		$req['class']		= '';// Class - Checkboxes cannot be checked per HTML 5,
-								 //jquery used PhocacartRenderJs::renderCheckBoxRequired()
 
-		if($required) {
+								 // Jquery used PhocacartRenderJs::renderCheckBoxRequired()
+
+		if ($required)
+		{
 			$req['attribute'] 	= ' required="" aria-required="true"';
 			$req['span'] 		= ' <span class="ph-req">*</span>';
-			$req['class'] 		= ' checkbox-group-'.(int)$id.' checkbox-group required';
+			$req['class'] 		= ' checkbox-group-' . (int) $id . ' checkbox-group required';
 		}
+
 		return $req;
 	}
 
 
-	public static function renderJsScrollTo($scrollTo = '', $animation = 0) {
-
-
+	public static function renderJsScrollTo($scrollTo = '', $animation = 0)
+	{
 
 		$s[] = 'jQuery(function() {';
 		$s[] = '   if (jQuery("#ph-msg-ns").length > 0){';
 		$s[] = '      jQuery(document).scrollTop( jQuery("#system-message").offset().top );';
-		//$s[] = '      jQuery(\'html,body\').animate({scrollTop: jQuery("#system-message").offset().top}, 1500 );';
 
-		if ($scrollTo != '') {
+		// $s[] = '      jQuery(\'html,body\').animate({scrollTop: jQuery("#system-message").offset().top}, 1500 );';
+
+		if ($scrollTo != '')
+		{
 			$s[] = '   } else {';
-			if ($animation == 1) {
-				$s[] = '	  jQuery(\'html,body\').animate({scrollTop: jQuery("#'.$scrollTo.'").offset().top}, 1500 );';
-			} else {
-				$s[] = '      jQuery(document).scrollTop( jQuery("#'.$scrollTo.'").offset().top );';
+
+			if ($animation == 1)
+			{
+				$s[] = '	  jQuery(\'html,body\').animate({scrollTop: jQuery("#' . $scrollTo . '").offset().top}, 1500 );';
+			}
+			else
+			{
+				$s[] = '      jQuery(document).scrollTop( jQuery("#' . $scrollTo . '").offset().top );';
 			}
 		}
+
 		$s[] = '   }';
 		$s[] = '});';
 
@@ -1559,18 +1694,19 @@ final class PhocacartRenderJs
 	 * @param string $classDestination
 	 */
 
-	public static function renderJsAddTrackingCode($idSource, $classDestination) {
+	public static function renderJsAddTrackingCode($idSource, $classDestination)
+	{
 		$s 	= array();
 		$s[] = 'jQuery(document).ready(function() {';
-		$s[] = '   var destGlobal 	= jQuery( \'.'.$classDestination.'\').text();';
-		$s[] = '   var sourceGlobal	= jQuery(\'#'.$idSource.'\').val();';
+		$s[] = '   var destGlobal 	= jQuery( \'.' . $classDestination . '\').text();';
+		$s[] = '   var sourceGlobal	= jQuery(\'#' . $idSource . '\').val();';
 		$s[] = '   var textGlobal 	= destGlobal + sourceGlobal';
-		$s[] = '   jQuery( \'.'.$classDestination.'\').html(textGlobal);';
+		$s[] = '   jQuery( \'.' . $classDestination . '\').html(textGlobal);';
 
-		$s[] = '   jQuery(\'#'.$idSource.'\').on("input", function() {';
+		$s[] = '   jQuery(\'#' . $idSource . '\').on("input", function() {';
 		$s[] = '       var source	= jQuery(this).val();';
 		$s[] = '       var text = destGlobal + source;';
-		$s[] = '       jQuery( \'.'.$classDestination.'\').html(text);';
+		$s[] = '       jQuery( \'.' . $classDestination . '\').html(text);';
 		$s[] = '   })';
 		$s[] = '})';
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $s));
@@ -1597,34 +1733,37 @@ final class PhocacartRenderJs
 
 
 
-	public static function renderAjaxAskAQuestion($options = array()) {
+	public static function renderAjaxAskAQuestion($options = array())
+	{
 		$paramsC = PhocacartUtils::getComponentParameters();
 		$item_askquestion = $paramsC->get('item_askquestion', 0);
 		$popup_askquestion = $paramsC->get('popup_askquestion', 0);
-		$theme 					= $paramsC->get( 'theme', 'bs3' );
-		//$media 					= new PhocacartRenderMedia();
+		$theme 					= $paramsC->get('theme', 'bs3');
 
+		// $media                    = new PhocacartRenderMedia();
 
-		if ($item_askquestion > 0 && $popup_askquestion == 2) {
-
-			if ($theme == 'bs3') {
-				JHtml::stylesheet( 'media/com_phocacart/bootstrap/css/bs_modal_transition.css');
+		if ($item_askquestion > 0 && $popup_askquestion == 2)
+		{
+			if ($theme == 'bs3')
+			{
+				JHtml::stylesheet('media/com_phocacart/bootstrap/css/bs_modal_transition.css');
 			}
 
-
 			$s[] = ' jQuery(document).ready(function(){';
-			//$s[] = '   jQuery("a.phModalContainerButton").on("click", function(e) {';
+
+			// $s[] = '   jQuery("a.phModalContainerButton").on("click", function(e) {';
 			$s[] = '	jQuery(document).on("click", "a.phModalContainerButton", function (e) {';
 			$s[] = '      var src = jQuery(this).attr("data-src");';
-			$s[] = '      var height = "100%";';//jQuery(this).attr("data-height") || 300;// Does not work and it is solved by CSS
-			$s[] = '      var width = "100%";';//jQuery(this).attr("data-width") || 400;
+			$s[] = '      var height = "100%";';// JQuery(this).attr("data-height") || 300;// Does not work and it is solved by CSS
+			$s[] = '      var width = "100%";';// jQuery(this).attr("data-width") || 400;
 			$s[] = '      var id = "#" + jQuery(this).attr("data-id");';
 			$s[] = '      var idIframe = id + " iframe";';
 
 			// Loaded dynamically to not have previous src in iframe, see: components/com_phocacart/layouts/popup_container_iframe.php
 			$s[] = '      var idBody = id + " .modal-body";';
 			$s[] = '      jQuery(idBody).html(\'<iframe frameborder="0"></iframe>\');';
-			// end iframe could be a past of layout file
+
+			// End iframe could be a past of layout file
 
 			$s[] = '      jQuery(idIframe).attr({"src":src, "height": height, "width": width});';
 
@@ -1636,9 +1775,11 @@ final class PhocacartRenderJs
 		}
 	}
 
-	public final function __clone() {
+	public final function __clone()
+	{
 		throw new Exception('Function Error: Cannot clone instance of Singleton pattern', 500);
+
 		return false;
 	}
 }
-?>
+

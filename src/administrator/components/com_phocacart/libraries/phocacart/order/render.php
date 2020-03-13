@@ -12,24 +12,29 @@ defined('_JEXEC') or die();
 
 class PhocacartOrderRender
 {
-	public function __construct() {}
+	public function __construct()
+	{
+	}
 
-	public function render($id, $type = 1, $format = 'html', $token = '', $pos = 0) {
+	public function render($id, $type = 1, $format = 'html', $token = '', $pos = 0)
+	{
 
 		$paramsC 					= PhocacartUtils::getComponentParameters();
-		$pdf_invoice_qr_code		= $paramsC->get( 'pdf_invoice_qr_code', '' );
+		$pdf_invoice_qr_code		= $paramsC->get('pdf_invoice_qr_code', '');
 
 		// If frontend user orders: user login needed or token
 		// If frontend POS: vendor login needed
 
-		// isPosView - we are directly in POS view
+		// IsPosView - we are directly in POS view
 		// $pos - we are not in POS view but we ask order view from pos view
 
-		if (($pos && !PhocacartPos::isPosEnabled()) && PhocacartPos::isPosView() && !PhocacartPos::isPosEnabled()) {
-			die (JText::_('COM_PHOCACART_POS_IS_DISABLED'));
+		if (($pos && !PhocacartPos::isPosEnabled()) && PhocacartPos::isPosView() && !PhocacartPos::isPosEnabled())
+		{
+			die(JText::_('COM_PHOCACART_POS_IS_DISABLED'));
 		}
 
-		if ($id < 1) {
+		if ($id < 1)
+		{
 			return JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND');
 		}
 
@@ -41,46 +46,49 @@ class PhocacartOrderRender
 		$layout 			= new \Joomla\CMS\Layout\FileLayout('order', null, array('client' => 0));
 		$defaultTemplate 	= PhocacartUtils::getDefaultTemplate();
 
-		if ($defaultTemplate != '') {
-			$layout->addIncludePath(JPATH_SITE . '/templates/'.$defaultTemplate.'/html/layouts/com_phocacart');
+		if ($defaultTemplate != '')
+		{
+			$layout->addIncludePath(JPATH_SITE . '/templates/' . $defaultTemplate . '/html/layouts/com_phocacart');
 		}
 
-		JHtml::stylesheet('media/com_phocacart/css/main.css' );
+		JHtml::stylesheet('media/com_phocacart/css/main.css');
 
 		$app 			= JFactory::getApplication();
-		$order			= new PhocacartOrderView();
+		$order			= new PhocacartOrderView;
 		$d['common']	= $order->getItemCommon($id);
-		$d['price'] 	= new PhocacartPrice();
+		$d['price'] 	= new PhocacartPrice;
 
 		$d['price']->setCurrency($d['common']->currency_id);
 
-
-
-
 		// Access rights actions ignored in administration
-		if (!$app->isClient('administrator')){
-
-			if ($pos || PhocacartPos::isPosView()) {
+		if (!$app->isClient('administrator'))
+		{
+			if ($pos || PhocacartPos::isPosView())
+			{
 				$user	= $vendor = $ticket = $unit = $section = array();
 				$dUser 	= PhocacartUser::defineUser($user, $vendor, $ticket, $unit, $section, 1);
 
-				if ((int)$vendor->id < 1) {
-					PhocacartLog::add(2, 'Render Order - ERROR', (int)$id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Vendor not found (1)');
-					die (JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
-				}
-				if (!isset($d['common']->vendor_id)) {
-					PhocacartLog::add(2, 'Render Order - ERROR', (int)$id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Vendor not found (2)');
-					die (JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
-				}
-				if ($vendor->id != $d['common']->vendor_id) {
-					PhocacartLog::add(2, 'Render Order - ERROR', (int)$id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Vendor doesn\'t match');
-					die (JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
+				if ((int) $vendor->id < 1)
+				{
+					PhocacartLog::add(2, 'Render Order - ERROR', (int) $id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Vendor not found (1)');
+					die(JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
 				}
 
+				if (!isset($d['common']->vendor_id))
+				{
+					PhocacartLog::add(2, 'Render Order - ERROR', (int) $id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Vendor not found (2)');
+					die(JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
+				}
 
-			} else {
+				if ($vendor->id != $d['common']->vendor_id)
+				{
+					PhocacartLog::add(2, 'Render Order - ERROR', (int) $id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Vendor doesn\'t match');
+					die(JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
+				}
+			}
+			else
+			{
 				$user = PhocacartUser::getUser();
-
 
 				// Frontend displaying rules
 				// Frontend, view = orders view or view = order view
@@ -91,40 +99,48 @@ class PhocacartOrderRender
 				$option				= $app->input->get('option', '', 'string');
 
 				$displayInOrderView = true;
-				if ($option == 'com_phocacart' && ($view == 'orders' || $view == 'order')) {
+
+				if ($option == 'com_phocacart' && ($view == 'orders' || $view == 'order'))
+				{
 					$displayDocument = json_decode($d['common']->ordersviewdisplay);
-					if (!in_array($type, $displayDocument)) {
+
+					if (!in_array($type, $displayDocument))
+					{
 						$displayInOrderView = false;
 					}
 				}
 
-
-
-
 				// We are in orders/order view and order status cannot display current document
-				if ($displayInOrderView == false) {
-					PhocacartLog::add(2, 'Render Order - ERROR', (int)$id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Order status does not allow this document to be displayed in Order/Orders View');
-					die (JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
+				if ($displayInOrderView == false)
+				{
+					PhocacartLog::add(2, 'Render Order - ERROR', (int) $id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Order status does not allow this document to be displayed in Order/Orders View');
+					die(JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
 				}
 
-				if ((int)$user->id < 1 && $token == '') {
-					PhocacartLog::add(2, 'Render Order - ERROR', (int)$id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'User not found (1)');
-					die (JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
+				if ((int) $user->id < 1 && $token == '')
+				{
+					PhocacartLog::add(2, 'Render Order - ERROR', (int) $id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'User not found (1)');
+					die(JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
 				}
-				if (!isset($d['common']->user_id) && $token == '') {
-					PhocacartLog::add(2, 'Render Order - ERROR', (int)$id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'User not found (2)');
-					die (JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
+
+				if (!isset($d['common']->user_id) && $token == '')
+				{
+					PhocacartLog::add(2, 'Render Order - ERROR', (int) $id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'User not found (2)');
+					die(JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
 				}
-				if ($user->id != $d['common']->user_id && $token == '') {
-					PhocacartLog::add(2, 'Render Order - ERROR', (int)$id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'User doesn\'t match');
-					die (JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
+
+				if ($user->id != $d['common']->user_id && $token == '')
+				{
+							PhocacartLog::add(2, 'Render Order - ERROR', (int) $id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'User doesn\'t match');
+							die(JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
 				}
-				if ((int)$user->id < 1 && $token != '' && ($token != $d['common']->order_token)) {
-					PhocacartLog::add(2, 'Render Order - ERROR', (int)$id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Token doesn\'t match');
-					die (JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
+
+				if ((int) $user->id < 1 && $token != '' && ($token != $d['common']->order_token))
+				{
+							PhocacartLog::add(2, 'Render Order - ERROR', (int) $id, JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND') . 'Token doesn\'t match');
+							die(JText::_('COM_PHOCACART_ERROR_NO_ORDER_FOUND'));
 				}
 			}
-
 		}
 
 		$d['bas']				= $order->getItemBaS($id, 1);
@@ -134,33 +150,33 @@ class PhocacartOrderRender
 		$d['taxrecapitulation'] = $order->getItemTaxRecapitulation($id);
 
 		// Prepare variables for possible replace in different text parts, e.g.:
-        // - QR code on invoice
-        // - TOP, BOTTOM, MIDDLE Description
-        // user per function: PhocacartText::completeText($pdf_invoice_qr_code, $d['preparereplace'], 1);
+		// - QR code on invoice
+		// - TOP, BOTTOM, MIDDLE Description
+		// user per function: PhocacartText::completeText($pdf_invoice_qr_code, $d['preparereplace'], 1);
 		$d['preparereplace']    = PhocacartText::prepareReplaceText($order, $id, $d['common'], $d['bas']);
 
 		// QR CODE IN PDF
 		$d['qrcode']	= '';
-		if ($type == 2 && $format == 'pdf') {
+
+		if ($type == 2 && $format == 'pdf')
+		{
 			$d['qrcode'] 	= PhocacartText::completeText($pdf_invoice_qr_code, $d['preparereplace'], 1);
 			$d['qrcode'] 	= PhocacartText::completeTextFormFields($d['qrcode'], $d['bas']['b'], 1);
 			$d['qrcode'] 	= PhocacartText::completeTextFormFields($d['qrcode'], $d['bas']['s'], 2);
-
-
 		}
-		//if ($type == 4 && $format == 'raw') {
+
+		// If ($type == 4 && $format == 'raw') {
 			// POS RECEIPT IS MANAGED BY SPECIFIC RULES
 			// array instead of output will be returned
-			//return $layout->render($d);
+			// return $layout->render($d);
 
-		//} else {
-
+		// } else {
 
 			return $layout->render($d);
-		//}
 
+		// }
 
 	}
 }
 
-?>
+

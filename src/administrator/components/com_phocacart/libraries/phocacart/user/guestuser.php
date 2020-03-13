@@ -12,128 +12,179 @@ defined('_JEXEC') or die();
 
 class PhocacartUserGuestuser
 {
-	public static function getGuestUser() {
+	public static function getGuestUser()
+	{
 		$p 				= PhocacartUtils::getComponentParameters();
-		$guestCheckout	= $p->get( 'guest_checkout', 0 );
+		$guestCheckout	= $p->get('guest_checkout', 0);
 		$session 		= JFactory::getSession();
 		$user			= PhocacartUser::getUser();
-		if ((int)$user->id > 0 || $guestCheckout == 0) {
+
+		if ((int) $user->id > 0 || $guestCheckout == 0)
+		{
 			self::cancelGuestUser();
+
 			return false;
-		} else {
+		}
+		else
+		{
 			return $session->get('guest', false, 'phocaCart');
 		}
 	}
 
-	public static function setGuestUser($guest = false) {
+	public static function setGuestUser($guest = false)
+	{
 		$p 				= PhocacartUtils::getComponentParameters();
-		$guestCheckout	= $p->get( 'guest_checkout', 0 );
+		$guestCheckout	= $p->get('guest_checkout', 0);
 		$session 		= JFactory::getSession();
-		if ($guest && $guestCheckout == 1) {
+
+		if ($guest && $guestCheckout == 1)
+		{
 			$session->set('guest', true, 'phocaCart');
-		} else {
+		}
+		else
+		{
 			self::cancelGuestUser();
 		}
+
 		return true;
 	}
 
-	public static function storeAddress($data) {
+	public static function storeAddress($data)
+	{
 		$session = JFactory::getSession();
-		if (!empty($data)) {
+
+		if (!empty($data))
+		{
 			$session->set('guestaddress', $data, 'phocaCart');
+
 			return true;
 		}
+
 		return false;
 	}
 
-	public static function getAddress() {
+	public static function getAddress()
+	{
 		$session = JFactory::getSession();
 		$address = $session->get('guestaddress', false, 'phocaCart');
+
 		return $address;
 	}
 
-	public static function storeShipping($shippingId) {
+	public static function storeShipping($shippingId)
+	{
 		$session = JFactory::getSession();
-		if ((int)$shippingId > 0) {
+
+		if ((int) $shippingId > 0)
+		{
 			$session->set('guestshipping', $shippingId, 'phocaCart');
+
 			return true;
 		}
+
 		return false;
 	}
 
-	public static function getShipping() {
+	public static function getShipping()
+	{
 		$session = JFactory::getSession();
 		$shipping = $session->get('guestshipping', false, 'phocaCart');
+
 		return $shipping;
 	}
 
-	public static function storePayment($paymentId) {
+	public static function storePayment($paymentId)
+	{
 		$session = JFactory::getSession();
 
-		if ((int)$paymentId > 0) {
+		if ((int) $paymentId > 0)
+		{
 			$session->set('guestpayment', $paymentId, 'phocaCart');
+
 			return true;
 		}
+
 		return false;
 	}
 
-	public static function getPayment() {
+	public static function getPayment()
+	{
 		$session = JFactory::getSession();
 		$payment = $session->get('guestpayment', false, 'phocaCart');
+
 		return $payment;
 	}
 
-	public static function storeLoyaltyCardNumber($number) {
+	public static function storeLoyaltyCardNumber($number)
+	{
 		$session = JFactory::getSession();
 
-		if ($number != '') {
+		if ($number != '')
+		{
 			$session->set('guestloyaltycardnumber', $number, 'phocaCart');
+
 			return true;
 		}
+
 		return false;
 	}
 
-	public static function getLoyaltyCardNumber() {
+	public static function getLoyaltyCardNumber()
+	{
 		$session = JFactory::getSession();
 		$loyaltyCardNumber = $session->get('guestloyaltycardnumber', false, 'phocaCart');
+
 		return $loyaltyCardNumber;
 	}
-	public static function storeCoupon($couponId) {
+	public static function storeCoupon($couponId)
+	{
 		$session = JFactory::getSession();
-		if ((int)$couponId > 0) {
+
+		if ((int) $couponId > 0)
+		{
 			$session->set('guestcoupon', $couponId, 'phocaCart');
-			return true;
-		} else {
-			$session->set('guestcoupon', false, 'phocaCart');
+
 			return true;
 		}
+		else
+		{
+			$session->set('guestcoupon', false, 'phocaCart');
+
+			return true;
+		}
+
 		return false;
 	}
 
-	public static function getCoupon() {
+	public static function getCoupon()
+	{
 		$session = JFactory::getSession();
 		$couponId = $session->get('guestcoupon', false, 'phocaCart');
+
 		return $couponId;
 	}
 
-	public static function getUserAddressGuest() {
+	public static function getUserAddressGuest()
+	{
 		$session = JFactory::getSession();
 		$address = $session->get('guestaddress', false, 'phocaCart');
 		$data = array();
 		$data = PhocacartUser::convertAddressTwo($address, 0);
+
 		return $data;
 	}
 
-	public static function cancelGuestUser() {
-
+	public static function cancelGuestUser()
+	{
 
 		$session 		= JFactory::getSession();
 		$session->set('guest', false, 'phocaCart');
 		$session->set('guestaddress', false, 'phocaCart');
 		$session->set('guestshipping', false, 'phocaCart');
 		$session->set('guestpayment', false, 'phocaCart');
-		//$session->set('guestcoupon', false, 'phocaCart');// COUPONMOVE - it is possible to use coupon even user is still not logged in or user still didn't enable guest checkout
+
+		// $session->set('guestcoupon', false, 'phocaCart');// COUPONMOVE - it is possible to use coupon even user is still not logged in or user still didn't enable guest checkout
 		$session->set('guestloyaltycardnumber', false, 'phocaCart');
 	}
 }
-?>
+

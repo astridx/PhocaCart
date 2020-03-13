@@ -8,7 +8,7 @@
  */
 defined('_JEXEC') or die();
 $d 		= $displayData;
-$price 	= new PhocacartPrice();
+$price 	= new PhocacartPrice;
 $taxes 	= PhocacartTax::getAllTaxesIncludingCountryRegion();
 
 $p = array();
@@ -195,7 +195,7 @@ foreach($d['items'] as $k => $v) {
 			}
 			echo '</td>';
 
-		} else if ($p['report_calculation'] == 2) {
+		} elseif ($p['report_calculation'] == 2) {
 
 			// TRC NETTO
 			echo '<td '.$cRNetto.'>';
@@ -223,14 +223,14 @@ foreach($d['items'] as $k => $v) {
 			if (!empty($v->tax)) {
 				foreach($v->tax as $kT => $vT) {
 					echo isset($taxes[$kT]['title']) ? $taxes[$kT]['title'] . ' ' : '';
-					echo isset($taxes[$kT]['tax_rate']) && isset($taxes[$kT]['calculation_type']) ? '('.$price->getTaxFormat($taxes[$kT]['tax_rate'], (int)$taxes[$kT]['calculation_type']).') ' : '';
+					echo isset($taxes[$kT]['tax_rate']) && isset($taxes[$kT]['calculation_type']) ? '('.$price->getTaxFormat($taxes[$kT]['tax_rate'], (int) $taxes[$kT]['calculation_type']).') ' : '';
 					echo ': ';
-					echo $price->getPriceFormat($vT,0,1) . '<br>';
+					echo $price->getPriceFormat($vT, 0, 1) . '<br>';
 				}
 			}
 			echo '</td>';
 
-		} else if ($p['report_calculation'] == 2) {
+		} elseif ($p['report_calculation'] == 2) {
 
 			// TRC TAX
 			echo '<td '.$cRTax.'>';
@@ -238,9 +238,9 @@ foreach($d['items'] as $k => $v) {
 			if (!empty($v->trctax)) {
 				foreach($v->trctax as $kT => $vT) {
 					echo isset($taxes[$kT]['title']) ? $taxes[$kT]['title'] . ' ' : '';
-					echo isset($taxes[$kT]['tax_rate']) && isset($taxes[$kT]['calculation_type']) ? '('.$price->getTaxFormat($taxes[$kT]['tax_rate'], (int)$taxes[$kT]['calculation_type']).') ' : '';
+					echo isset($taxes[$kT]['tax_rate']) && isset($taxes[$kT]['calculation_type']) ? '('.$price->getTaxFormat($taxes[$kT]['tax_rate'], (int) $taxes[$kT]['calculation_type']).') ' : '';
 					echo ': ';
-					echo $price->getPriceFormat($vT,0,1) . '<br>';
+					echo $price->getPriceFormat($vT, 0, 1) . '<br>';
 				}
 			}
 			echo '</td>';
@@ -255,7 +255,7 @@ foreach($d['items'] as $k => $v) {
 			echo '<td '.$cRRounding.'>';
 			echo isset($v->rounding) ? $price->getPriceFormat($v->rounding, 0, 1): '';
 			echo '</td>';
-		} else if ($p['report_calculation'] == 2) {
+		} elseif ($p['report_calculation'] == 2) {
 			// TRC ROUNDING
 			echo '<td '.$cRRounding.'>';
 			echo isset($v->trcrounding) ? $price->getPriceFormat($v->trcrounding, 0, 1): '';
@@ -322,9 +322,9 @@ if (!empty($d['total'])) {
 				foreach($v['tax'] as $kT => $vT) {
 					$tax	+= $price->roundPrice($vT);
 					$taxTxt .= isset($taxes[$kT]['title']) ? $taxes[$kT]['title'] . ' ' : '';
-					$taxTxt .= isset($taxes[$kT]['tax_rate']) && isset($taxes[$kT]['calculation_type']) ? '('.$price->getTaxFormat($taxes[$kT]['tax_rate'], (int)$taxes[$kT]['calculation_type']).') ' : '';
+					$taxTxt .= isset($taxes[$kT]['tax_rate']) && isset($taxes[$kT]['calculation_type']) ? '('.$price->getTaxFormat($taxes[$kT]['tax_rate'], (int) $taxes[$kT]['calculation_type']).') ' : '';
 					$taxTxt .= ': ';
-					$taxTxt .= $price->getPriceFormat($vT,0,1) . '<br>';
+					$taxTxt .= $price->getPriceFormat($vT, 0, 1) . '<br>';
 				}
 			}
 
@@ -333,9 +333,9 @@ if (!empty($d['total'])) {
 				foreach($v['trctax'] as $kT => $vT) {
 					$taxTRC	+= $price->roundPrice($vT);
 					$taxTRCTxt .= isset($taxes[$kT]['title']) ? $taxes[$kT]['title'] . ' ' : '';
-					$taxTRCTxt .= isset($taxes[$kT]['tax_rate']) && isset($taxes[$kT]['calculation_type']) ? '('.$price->getTaxFormat($taxes[$kT]['tax_rate'], (int)$taxes[$kT]['calculation_type']).') ' : '';
+					$taxTRCTxt .= isset($taxes[$kT]['tax_rate']) && isset($taxes[$kT]['calculation_type']) ? '('.$price->getTaxFormat($taxes[$kT]['tax_rate'], (int) $taxes[$kT]['calculation_type']).') ' : '';
 					$taxTRCTxt .= ': ';
-					$taxTRCTxt .= $price->getPriceFormat($vT,0,1) . '<br>';
+					$taxTRCTxt .= $price->getPriceFormat($vT, 0, 1) . '<br>';
 				}
 			}
 
@@ -356,7 +356,7 @@ if (!empty($d['total'])) {
 				if ($p['report_calculation'] == 1) {
 					echo '<td '.$cRTotalC2.'>'.$nettoTxt.'</td>';// C
 					echo '<td '.$cRTotalC2.'>'.$taxTxt.'</td>';
-				} else if ($p['report_calculation'] == 2) {
+				} elseif ($p['report_calculation'] == 2) {
 					echo '<td '.$cRTotalC2.'>'.$nettoTRCTxt.'</td>';// TRC
 					echo '<td '.$cRTotalC2.'>'.$taxTRCTxt.'</td>';
 				}
@@ -366,7 +366,7 @@ if (!empty($d['total'])) {
 
 				if ($p['report_calculation'] == 1) {
 					echo '<td '.$cRTotalC2.'>'.$roundingTxt.'</td>';// C
-				} else if ($p['report_calculation'] == 2) {
+				} elseif ($p['report_calculation'] == 2) {
 					echo '<td '.$cRTotalC2.'>'.$roundingTRCTxt.'</td>';// TRC
 				}
 			}

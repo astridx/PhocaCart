@@ -10,16 +10,16 @@ defined('_JEXEC') or die();
 $d 					= $displayData;
 $displayData 		= null;
 $v 					= $d['attribute'];
-$attributeIdName	= 'V'.$d['typeview'].'P'.(int)$d['product_id'].'A'.(int)$v->id;
-$productIdName		= 'V'.$d['typeview'].'P'.(int)$d['product_id'];
+$attributeIdName	= 'V'.$d['typeview'].'P'.(int) $d['product_id'].'A'.(int) $v->id;
+$productIdName		= 'V'.$d['typeview'].'P'.(int) $d['product_id'];
 $iconType			= $d['s']['i']['icon-type'];
-$price				= new PhocacartPrice();
+$price				= new PhocacartPrice;
 
 $attr				= array();
 $attr[]				= 'id="phItemAttribute'.$attributeIdName.'"';// ID
 $attr[]				= 'class="form-control chosen-select ph-item-input-set-attributes phj'. $d['typeview'].' phjProductAttribute"';// CLASS
 $attr[]				= $d['required']['attribute'];
-$attr[]				= 'name="attribute['.(int)$v->id.']"';
+$attr[]				= 'name="attribute['.(int) $v->id.']"';
 $attr[]				= 'data-product-id="'. $d['product_id'].'"';// Product ID
 $attr[]				= 'data-product-id-name="'. $productIdName.'"';// Product ID - Unique name between different views
 $attr[]				= 'data-attribute-type="'. $v->type.'"';// Type of attribute (select, checkbox, color, image)
@@ -45,7 +45,7 @@ foreach ($v->options as $k2 => $v2) {
 	if ($d['dynamic_change_image'] == 1) {
 		if ($d['image_size'] == 'large' && isset($v2->image) && $v2->image != '') {
 			$imageO 	= PhocacartImage::getThumbnailName($d['pathitem'], $v2->image, $d['image_size']);
-		} else if ($d['image_size'] == 'medium' && isset($v2->image) && $v2->image != '') {
+		} elseif ($d['image_size'] == 'medium' && isset($v2->image) && $v2->image != '') {
 			$imageO 	= PhocacartImage::getThumbnailName($d['pathitem'], $v2->image, $d['image_size']);
 		}
 
@@ -78,7 +78,7 @@ foreach ($v->options as $k2 => $v2) {
 	$suffix =  ' ('.$operator.' '.$amount.')';
 	if (isset($d['zero_attribute_price']) && $d['zero_attribute_price'] == 0 && $price->roundPrice($v2->amount) < 0.01 && $price->roundPrice($v2->amount) > -0.01) {
 		$suffix = '';
-	} else if (isset($d['zero_attribute_price']) && $d['zero_attribute_price'] == 2) {
+	} elseif (isset($d['zero_attribute_price']) && $d['zero_attribute_price'] == 2) {
 		$suffix = '';// hide always
 	}
 

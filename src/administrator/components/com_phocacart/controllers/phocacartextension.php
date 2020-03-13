@@ -68,4 +68,3 @@ class PhocaCartCpControllerPhocacartExtension extends PhocaCartCpControllerPhoca
 		$app->redirect('index.php?option=com_phocacart&view=phocacartextensions');
 	}
 }
-?>

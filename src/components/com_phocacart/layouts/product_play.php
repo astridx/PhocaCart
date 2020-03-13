@@ -11,38 +11,38 @@ $d = $displayData;
 
 if (isset($d['publicplayfile']) && $d['publicplayfile'] != '') {
 
-    $ext = \Joomla\CMS\Filesystem\File::getExt($d['publicplayfile']);
+	$ext = \Joomla\CMS\Filesystem\File::getExt($d['publicplayfile']);
 
-    echo '<div class="ph-item-play-file">';
-    if (isset($d['title']) && $d['title'] != '') {
-        echo '<div class="ph-item-play-title">'.$d['title'].'</div>';
-    }
-    switch($ext) {
+	echo '<div class="ph-item-play-file">';
+	if (isset($d['title']) && $d['title'] != '') {
+		echo '<div class="ph-item-play-title">'.$d['title'].'</div>';
+	}
+	switch($ext) {
 
-        case 'mp3':
-        case 'm4a':
-            echo '<audio controls><source src="'.$d['pathpublicfile']['orig_rel_path_ds'].$d['publicplayfile'].'" type="audio/mpeg"></audio>';
-        break;
+		case 'mp3':
+		case 'm4a':
+			echo '<audio controls><source src="'.$d['pathpublicfile']['orig_rel_path_ds'].$d['publicplayfile'].'" type="audio/mpeg"></audio>';
+		break;
 
-        case 'ogg':
-        case 'oga':
-            echo '<audio controls><source src="'.$d['pathpublicfile']['orig_rel_path_ds'].$d['publicplayfile'].'" type="audio/ogg"></audio>';
-        break;
+		case 'ogg':
+		case 'oga':
+			echo '<audio controls><source src="'.$d['pathpublicfile']['orig_rel_path_ds'].$d['publicplayfile'].'" type="audio/ogg"></audio>';
+		break;
 
-        case 'mp4':
-        case 'm4v':
-            echo '<video controls><source src="'.$d['pathpublicfile']['orig_rel_path_ds'].$d['publicplayfile'].'" type="video/mp4"></video>';
-        break;
+		case 'mp4':
+		case 'm4v':
+			echo '<video controls><source src="'.$d['pathpublicfile']['orig_rel_path_ds'].$d['publicplayfile'].'" type="video/mp4"></video>';
+		break;
 
-        case 'ogv':
-            echo '<video controls><source src="'.$d['pathpublicfile']['orig_rel_path_ds'].$d['publicplayfile'].'" type="video/ogg"></video>';
-        break;
+		case 'ogv':
+			echo '<video controls><source src="'.$d['pathpublicfile']['orig_rel_path_ds'].$d['publicplayfile'].'" type="video/ogg"></video>';
+		break;
 
-        default:
+		default:
 
 
-        break;
+		break;
 
-    }
-    echo '</div>';
+	}
+	echo '</div>';
 }

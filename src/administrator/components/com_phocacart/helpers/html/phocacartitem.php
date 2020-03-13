@@ -32,15 +32,17 @@ abstract class JHtmlPhocacartitem
 	 * @throws  Exception
 	 */
 
-	
+
 	public static function association($productId)
 	{
 		// Defaults
 		$html = '';
 
 		// Get the associations
-		if ($associations = JLanguageAssociations::getAssociations('com_phocacart', '#__phocacart_products', 'com_phocacart.item', $productId, 'id', 'alias', false)) {
-			foreach ($associations as $tag => $associated) {
+		if ($associations = JLanguageAssociations::getAssociations('com_phocacart', '#__phocacart_products', 'com_phocacart.item', $productId, 'id', 'alias', false))
+		{
+			foreach ($associations as $tag => $associated)
+			{
 				$associations[$tag] = (int) $associated->id;
 			}
 
@@ -50,8 +52,8 @@ abstract class JHtmlPhocacartitem
 				->select('pi.id, pi.title as title')
 				->select('l.sef as lang_sef, lang_code')
 				->from('#__phocacart_products as pi')
-				//->select('cat.title as category_title')
-				//->join('LEFT', '#__categories as cat ON cat.id=c.catid')
+				// ->select('cat.title as category_title')
+				// ->join('LEFT', '#__categories as cat ON cat.id=c.catid')
 				->where('pi.id IN (' . implode(',', array_values($associations)) . ')')
 				->where('pi.id != ' . $productId)
 				->join('LEFT', '#__languages as l ON pi.language=l.lang_code')
@@ -59,14 +61,19 @@ abstract class JHtmlPhocacartitem
 				->select('l.title as language_title');
 			$db->setQuery($query);
 
-			try {
+			try
+			{
 				$items = $db->loadObjectList('id');
-			} catch (RuntimeException $e) {
+			}
+			catch (RuntimeException $e)
+			{
 				throw new Exception($e->getMessage(), 500, $e);
 			}
 
-			if ($items) {
-				foreach ($items as &$item) {
+			if ($items)
+			{
+				foreach ($items as &$item)
+				{
 					$text = strtoupper($item->lang_sef);
 					$url = JRoute::_('index.php?option=com_phocacart&task=phocacartitem.edit&id=' . (int) $item->id);
 
@@ -83,7 +90,6 @@ abstract class JHtmlPhocacartitem
 
 			$html = JLayoutHelper::render('joomla.content.associations', $items);
 		}
-
 
 		return $html;
 	}

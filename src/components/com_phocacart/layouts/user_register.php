@@ -13,7 +13,7 @@ JHtml::_('bootstrap.tooltip');
 require_once JPATH_SITE.'/components/com_users/helpers/route.php';
 jimport( 'joomla.application.module.helper' );
 $module = JModuleHelper::getModule('mod_login');
-$mP 	= new JRegistry();
+$mP 	= new JRegistry;
 $mP->loadString($module->params);
 
 $lang = JFactory::getLanguage();

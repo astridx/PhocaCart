@@ -12,181 +12,219 @@ defined('_JEXEC') or die();
 
 class PhocacartRegion
 {
-	public static function getRegionById($regionId) {
-		
-		$db =JFactory::getDBO();
-		$query = 'SELECT title FROM #__phocacart_regions WHERE id = '.(int) $regionId. ' ORDER BY title LIMIT 1';
+	public static function getRegionById($regionId)
+	{
+
+		$db = JFactory::getDBO();
+		$query = 'SELECT title FROM #__phocacart_regions WHERE id = ' . (int) $regionId . ' ORDER BY title LIMIT 1';
 		$db->setQuery($query);
 		$region = $db->loadColumn();
-		if(isset($region[0])) {
-			return (string)$region[0];
+
+		if (isset($region[0]))
+		{
+			return (string) $region[0];
 		}
+
 		return '';
 	}
-	
-	public static function getRegionsByCountry($countryId) {
-	
-		$db =JFactory::getDBO();
-		
+
+	public static function getRegionsByCountry($countryId)
+	{
+
+		$db = JFactory::getDBO();
+
 		$query = 'SELECT a.id, a.title FROM #__phocacart_regions AS a'
-			    .' WHERE a.country_Id = '.(int) $countryId
-				.' ORDER BY a.id';
+				. ' WHERE a.country_Id = ' . (int) $countryId
+				. ' ORDER BY a.id';
 		$db->setQuery($query);
 		$regions = $db->loadObjectList();
-	
+
 		return $regions;
 	}
-	
-	
 
-	
-	
-	public static function getRegions($id, $select = 0, $table = 'shipping') {
-	
-		if ($table == 'shipping') {
+
+
+
+
+	public static function getRegions($id, $select = 0, $table = 'shipping')
+	{
+
+		if ($table == 'shipping')
+		{
 			$t = '#__phocacart_shipping_method_regions';
 			$c = 'shipping_id';
-		} else if ($table == 'payment') {
+		}
+		elseif ($table == 'payment')
+		{
 			$t = '#__phocacart_payment_method_regions';
 			$c = 'payment_id';
-		}  else if ($table == 'zone') {
+		}
+		elseif ($table == 'zone')
+		{
 			$t = '#__phocacart_zone_regions';
 			$c = 'zone_id';
 		}
-		
-		$db =JFactory::getDBO();
-		
-		if ($select == 1) {
+
+		$db = JFactory::getDBO();
+
+		if ($select == 1)
+		{
 			$query = 'SELECT r.region_id';
-		} else {
+		}
+		else
+		{
 			$query = 'SELECT a.*';
 		}
+
 		$query .= ' FROM #__phocacart_regions AS a'
-				.' LEFT JOIN '.$t.' AS r ON a.id = r.region_id'
-			    .' WHERE r.'.$c.' = '.(int) $id;
+				. ' LEFT JOIN ' . $t . ' AS r ON a.id = r.region_id'
+				. ' WHERE r.' . $c . ' = ' . (int) $id;
 		$db->setQuery($query);
-		if ($select == 1) {
+
+		if ($select == 1)
+		{
 			$items = $db->loadColumn();
-		} else {
+		}
+		else
+		{
 			$items = $db->loadObjectList();
-		}	
+		}
 
 		return $items;
 	}
-	
-	public static function storeRegions($regionsArray, $id, $table = 'shipping') {
-	
-		if ($table == 'shipping') {
+
+	public static function storeRegions($regionsArray, $id, $table = 'shipping')
+	{
+
+		if ($table == 'shipping')
+		{
 			$t = '#__phocacart_shipping_method_regions';
 			$c = 'shipping_id';
-		} else if ($table == 'payment') {
+		}
+		elseif ($table == 'payment')
+		{
 			$t = '#__phocacart_payment_method_regions';
 			$c = 'payment_id';
-		}  else if ($table == 'zone') {
+		}
+		elseif ($table == 'zone')
+		{
 			$t = '#__phocacart_zone_regions';
 			$c = 'zone_id';
 		}
-	
-		if ((int)$id > 0) {
-			$db =JFactory::getDBO();
+
+		if ((int) $id > 0)
+		{
+			$db = JFactory::getDBO();
 			$query = ' DELETE '
-					.' FROM '.$t
-					. ' WHERE '.$c.' = '. (int)$id;
+					. ' FROM ' . $t
+					. ' WHERE ' . $c . ' = ' . (int) $id;
 			$db->setQuery($query);
 			$db->execute();
-			
-			if (!empty($regionsArray)) {
-				
+
+			if (!empty($regionsArray))
+			{
 				$values 		= array();
 				$valuesString 	= '';
-				
-				foreach($regionsArray as $k => $v) {
-					$values[] = ' ('.(int)$id.', '.(int)$v[0].')';
+
+				foreach ($regionsArray as $k => $v)
+				{
+					$values[] = ' (' . (int) $id . ', ' . (int) $v[0] . ')';
 				}
-				
-				if (!empty($values)) {
+
+				if (!empty($values))
+				{
 					$valuesString = implode($values, ',');
-	
-					$query = ' INSERT INTO '.$t.' ('.$c.', region_id)'
-								.' VALUES '.(string)$valuesString;
+
+					$query = ' INSERT INTO ' . $t . ' (' . $c . ', region_id)'
+								. ' VALUES ' . (string) $valuesString;
 
 					$db->setQuery($query);
 					$db->execute();
 				}
 			}
 		}
-	
+
 	}
-	
-	public static function getAllRegionsSelectBox($name, $id, $activeArray, $javascript = NULL, $order = 'id' ) {
-	
-		$db =JFactory::getDBO();
-		/*$query = 'SELECT a.id AS value, a.title AS text'
+
+	public static function getAllRegionsSelectBox($name, $id, $activeArray, $javascript = null, $order = 'id' )
+	{
+
+		$db = JFactory::getDBO();
+
+		/*
+		$query = 'SELECT a.id AS value, a.title AS text'
 				.' FROM #__phocacart_countries AS a'
 				. ' ORDER BY '. $order;
 		$query = 'SELECT a.id AS value, a.title AS text, a.country_id as countrid'
 				.' FROM #__phocacart_regions AS a'
 				. ' ORDER BY '. $order;*/
-				
+
 		$query = 'SELECT a.id AS value, a.title AS text, a.country_id as cid, c.title as countrytext'
-				.' FROM #__phocacart_regions AS a'
-				.' LEFT JOIN #__phocacart_countries AS c ON c.id = a.country_id'
-				.' ORDER BY c.id, a.'. $order;
+				. ' FROM #__phocacart_regions AS a'
+				. ' LEFT JOIN #__phocacart_countries AS c ON c.id = a.country_id'
+				. ' ORDER BY c.id, a.' . $order;
 		$db->setQuery($query);
 		$regions = $db->loadObjectList();
-		
-		
-		//$regionsO = JHtml::_('select.genericlist', $regions, $name, 'class="inputbox" size="4" multiple="multiple"'. $javascript, 'value', 'text', $activeArray, $id);
-		
-		
+
+		// $regionsO = JHtml::_('select.genericlist', $regions, $name, 'class="inputbox" size="4" multiple="multiple"'. $javascript, 'value', 'text', $activeArray, $id);
+
 		// Try to do 1 SQL Query and 1 Foreach
 		$prev = 0;// the id of previous item
 		$usedFirst = 0;// first time opened the optgroup, so we can close it next time when cid is differnt to prev
 		$open = 0;// if we reach the end of foreach, we discover if the tag is open, if yet, close it.
-		
+
 		$countRegions = count($regions);
-		
+
 		$regionsO	= '';
-		$regionsO .= '<select id="'.$id.'" name="'.$name.'" class="inputbox" size="4" multiple="multiple">';
-		
-		
+		$regionsO .= '<select id="' . $id . '" name="' . $name . '" class="inputbox" size="4" multiple="multiple">';
+
 		$i = 0;
-		foreach($regions as $k => $v) {
+
+		foreach ($regions as $k => $v)
+		{
 			$selected = '';
-			if (in_array((int)$v->value, $activeArray)) {
+
+			if (in_array((int) $v->value, $activeArray))
+			{
 				$selected = 'selected="selected"';
 			}
-			
+
 			// Groups
-			if ((int)$v->cid > 0 && $v->cid != $prev) {
-				if ($usedFirst == 1) {
+			if ((int) $v->cid > 0 && $v->cid != $prev)
+			{
+				if ($usedFirst == 1)
+				{
 					$regionsO .= '</optgroup>';
 					$open		= 0;
 				}
-				
-				$regionsO .= '<optgroup label="'.$v->countrytext.'">';
-				$prev 		= (int)$v->cid;// we prepare previous version
+
+				$regionsO .= '<optgroup label="' . $v->countrytext . '">';
+				$prev 		= (int) $v->cid;// We prepare previous version
 				$usedFirst	= 1;// we have used the optgroup first time
 				$open		= 1;
 			}
-			$regionsO .= '<option value="'.(int)$v->value.'" '.$selected.'>'.$v->text.'</option>';
-			
+
+			$regionsO .= '<option value="' . (int) $v->value . '" ' . $selected . '>' . $v->text . '</option>';
+
 			$i++;
-			if ((int)$v->cid > 0 && $i == $countRegions && $open == 1) {
+
+			if ((int) $v->cid > 0 && $i == $countRegions && $open == 1)
+			{
 				$regionsO .= '</optgroup>';
 			}
 		}
+
 		$regionsO .= '</select>';
-		
+
 		return $regionsO;
 	}
 	/*
 	public static function displayRegions($shippingId, $popupLink = 0) {
-	
+
 		$o 		= '';
 		$db 	= JFactory::getDBO();
 		$params = PhocacartUtils::getComponentParameters() ;
-				
+
 		$query = 'SELECT a.id, a.title, a.link_ext, a.link_cat'
 		.' FROM #__phocacart_regions AS a'
 		.' LEFT JOIN #__phocacart_shipping_method_regions AS r ON r.region_id = a.id'
@@ -194,19 +232,19 @@ class PhocacartRegion
 
 		$db->setQuery($query);
 		$imgObject = $db->loadObjectList();
-		
+
 		if (!$db->query()) {
 			echo PhocacartUtilsException::renderErrorInfo($db->getErrorMsg());
 			return false;
 		}
-		
+
 		/*
 		if ($popupLink == 1) {
 			$tl	= 0;
 		} else  {
 			$tl	= $params->get( 'tags_links', 0 );
 		}*/
-/*		
+	/*
 		$targetO = '';
 		if ($popupLink == 1) {
 			$targetO = 'target="_parent"';
@@ -224,7 +262,7 @@ class PhocacartRegion
 					$o .= $v->title;
 				}
 			} else if ($tl == 2) {
-				
+
 				if ($v->link_cat != '') {
 					$query = 'SELECT a.id, a.alias'
 					.' FROM #__phocacart_categories AS a'
@@ -232,7 +270,7 @@ class PhocacartRegion
 
 					$db->setQuery($query, 0, 1);
 					$category = $db->loadObject();
-					
+
 					if (!$db->query()) {
 						echo PhocacartUtilsException::renderErrorInfo($db->getErrorMsg());
 						return false;
@@ -250,11 +288,11 @@ class PhocacartRegion
 				$link = PhocacartRoute::getCategoryRouteByTag($v->id);
 				$o .= '<a href="'.$link.'" '.$targetO.'>'.$v->title.'</a>';
 			}
-			
+
 			$o .= '</span> ';
 		}
 
 		return $o;
 	}*/
 }
-?>
+

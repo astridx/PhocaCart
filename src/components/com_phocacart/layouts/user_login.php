@@ -13,7 +13,7 @@ JHtml::_('bootstrap.tooltip');
 require_once JPATH_SITE.'/components/com_users/helpers/route.php';
 jimport( 'joomla.application.module.helper' );
 $module = JModuleHelper::getModule('mod_login');
-$mP 	= new JRegistry();
+$mP 	= new JRegistry;
 $mP->loadString($module->params);
 
 $lang = JFactory::getLanguage();
@@ -36,9 +36,9 @@ echo '<input id="ph-modlgn-passwd" type="password" name="password" class="form-c
 echo ' </div>'. "\n";
 
 if (JPluginHelper::isEnabled('system', 'remember')) {
-    echo '<div id="ph-form-login-remember" class="checkbox">'. "\n";
-    echo '<label for="modlgn-remember" class="control-label">'. JText::_('MOD_LOGIN_REMEMBER_ME') .'</label> <input id="modlgn-remember" type="checkbox" name="remember" class="inputbox" value="yes"/>'. "\n";
-    echo '</div>'. "\n";
+	echo '<div id="ph-form-login-remember" class="checkbox">'. "\n";
+	echo '<label for="modlgn-remember" class="control-label">'. JText::_('MOD_LOGIN_REMEMBER_ME') .'</label> <input id="modlgn-remember" type="checkbox" name="remember" class="inputbox" value="yes"/>'. "\n";
+	echo '</div>'. "\n";
 }
 echo '<button type="submit" tabindex="0" name="Submit" class="'.$d['s']['c']['btn.btn-primary'].' ph-btn">'. JText::_('JLOGIN') .'</button>'. "\n";
 echo '</div>'. "\n";// end form inline

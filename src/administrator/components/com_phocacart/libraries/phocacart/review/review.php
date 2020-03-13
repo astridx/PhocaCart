@@ -12,69 +12,83 @@ defined('_JEXEC') or die();
 
 class PhocacartReview
 {
-	public static function getReviewsByProduct($productId) {
+	public static function getReviewsByProduct($productId)
+	{
 		$db = JFactory::getDBO();
-		if ((int)$productId > 0) {
 
+		if ((int) $productId > 0)
+		{
 			$columns		= 'a.id, a.product_id, a.user_id, a.name, a.rating, a.review, a.date, a.published';
 			$groupsFull		= $columns;
 			$groupsFast		= 'a.id';
 			$groups			= PhocacartUtilsSettings::isFullGroupBy() ? $groupsFull : $groupsFast;
 
-
-			$query = 'SELECT '.$columns
-					   .' FROM #__phocacart_reviews AS a'
-					   .' WHERE a.product_id = '.(int) $productId
-					   .' AND a.published = 1'
-					   .' GROUP BY '.$groups;
+			$query = 'SELECT ' . $columns
+					   . ' FROM #__phocacart_reviews AS a'
+					   . ' WHERE a.product_id = ' . (int) $productId
+					   . ' AND a.published = 1'
+					   . ' GROUP BY ' . $groups;
 			$db->setQuery($query);
 
 			$reviews = $db->loadObjectList();
 
 			return $reviews;
 		}
+
 		return false;
 	}
 
-	public static function addReview( &$error, $approveReview, $productId, $userId, $userName, $rating, $review) {
+	public static function addReview( &$error, $approveReview, $productId, $userId, $userName, $rating, $review)
+	{
 
-		if ((int)$productId > 0 && (int)$userId > 0 && $userName != '' && (int)$rating > 0 && $review != '') {
+		if ((int) $productId > 0 && (int) $userId > 0 && $userName != '' && (int) $rating > 0 && $review != '')
+		{
 			$db = JFactory::getDBO();
 
 			$published		= 0;
-			if ($approveReview == 0) {
+
+			if ($approveReview == 0)
+			{
 				$published = 1;
 			}
 
 			// Check if user added some review to the product
 			$query = 'SELECT a.id FROM #__phocacart_reviews AS a'
-				   .' WHERE a.product_id = '.(int) $productId
-				   .' AND a.user_id = '.(int)$userId
-				   .' ORDER BY a.id';
+				   . ' WHERE a.product_id = ' . (int) $productId
+				   . ' AND a.user_id = ' . (int) $userId
+				   . ' ORDER BY a.id';
 			$db->setQuery($query);
 			$reviewed = $db->loadColumn();
-			if (!empty($reviewed)) {
+
+			if (!empty($reviewed))
+			{
 				$error = 1;
+
 				return false;
 			}
-            $date = JFactory::getDate()->toSql();
+
+			$date = JFactory::getDate()->toSql();
 
 			$query = ' INSERT INTO #__phocacart_reviews (product_id, user_id, name, rating, review, published, date)'
-			.' VALUES ('
-			.(int)$productId.', '
-			.(int)$userId.', '
-			.$db->quote(strip_tags($userName)).', '
-			.(int)$rating.', '
-			.$db->quote(strip_tags($review)).', '
-			.(int)$published.', '
-            .$db->quote($date)
-            .')';
+			. ' VALUES ('
+			. (int) $productId . ', '
+			. (int) $userId . ', '
+			. $db->quote(strip_tags($userName)) . ', '
+			. (int) $rating . ', '
+			. $db->quote(strip_tags($review)) . ', '
+			. (int) $published . ', '
+			. $db->quote($date)
+			. ')';
 
 			$db->setQuery($query);
 			$db->execute();
+
 			return true;
-		} else {
+		}
+		else
+		{
 			$error = 2;
+
 			return false;
 		}
 	}

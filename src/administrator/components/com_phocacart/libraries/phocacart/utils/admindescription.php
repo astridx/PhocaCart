@@ -8,36 +8,44 @@
  * @copyright Copyright (C) Open Source Matters. All rights reserved.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
  */
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
 use Joomla\String\StringHelper;
 
 class PhocacartUtilsAdmindescription
 {
-    public $display_admin_description;
+	public $display_admin_description;
 
-    public function __construct() {
-        $pC							        = PhocacartUtils::getComponentParameters();
-        $this->display_admin_description	= $pC->get( 'display_admin_description', 35 );
-    }
+	public function __construct()
+	{
+		$pC							        = PhocacartUtils::getComponentParameters();
+		$this->display_admin_description	= $pC->get('display_admin_description', 35);
+	}
 
-    public function isActive() {
+	public function isActive()
+	{
 
-	    if ((int)$this->display_admin_description > 0) {
-	        return true;
-        }
-	    return false;
-    }
+		if ((int) $this->display_admin_description > 0)
+		{
+			return true;
+		}
 
-    public function getAdminDescription($description) {
+		return false;
+	}
 
-        $description = strip_tags($description);
+	public function getAdminDescription($description)
+	{
 
-        if (StringHelper::strlen($description) < $this->display_admin_description || StringHelper::strlen($description) == $this->display_admin_description) {
-            return $description;
-        } else {
-            return StringHelper::substr($description, 0, $this->display_admin_description) . ' ...';
-        }
-    }
+		$description = strip_tags($description);
+
+		if (StringHelper::strlen($description) < $this->display_admin_description || StringHelper::strlen($description) == $this->display_admin_description)
+		{
+			return $description;
+		}
+		else
+		{
+			return StringHelper::substr($description, 0, $this->display_admin_description) . ' ...';
+		}
+	}
 }
-?>
+

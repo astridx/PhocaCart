@@ -86,4 +86,4 @@ class phocaCartCpController extends JControllerLegacy
 		parent::display($cachable, $urlparams);
 	}
 }
-?>
+

@@ -9,11 +9,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
  */
 defined('_JEXEC') or die();
-if (! class_exists('JHtmlGrid')) {
-	require_once( JPATH_SITE.'/libraries/joomla/html/html/grid.php' );
+
+if (! class_exists('JHtmlGrid'))
+{
+	require_once JPATH_SITE . '/libraries/joomla/html/html/grid.php';
 }
-//jimport('joomla.html.html.jgrid'); 
+
+// Jimport('joomla.html.html.jgrid');
 class PhocacartHtmlGrid extends JHtmlJGrid
 {
-	
+
 }

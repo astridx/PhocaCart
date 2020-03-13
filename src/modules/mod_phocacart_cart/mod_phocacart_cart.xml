@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade" version="3">
+	<name>mod_phocacart_cart</name>
+	<author>Jan Pavelka (www.phoca.cz) changed from Astrid Günther</author>
+	<creationDate>##DATE##</creationDate>
+	<copyright>(C) ##YEAR## Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later;</license>
+	<authorEmail>info@astrid-guenther.de</authorEmail>
+	<authorUrl>www.astrid-guenther.de</authorUrl>
+	<version>##VERSION##</version>
+	<description>MOD_PHOCACART_CART_DESCRIPTION</description>
+
+	<!-- Front-end files -->
+	<files>
+		<file module="mod_phocacart_cart">mod_phocacart_cart.php</file>
+		##MODULE_FILES##
+	</files>
+	<languages folder="language">
+		##LANGUAGE_FILES##
+	</languages>
+	
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+			
+				<field name="display_image" type="radio" class="btn-group btn-group-yesno" default="0" label="MOD_PHOCACART_CART_FIELD_DISPLAY_IMAGE_LABEL" description="MOD_PHOCACART_CART_FIELD_DISPLAY_IMAGE_DESC">
+					<option value="1">MOD_PHOCACART_CART_YES</option>
+					<option value="0">MOD_PHOCACART_CART_NO</option>
+				</field>
+
+				<field name="display_checkout_link" type="list" default="1" label="MOD_PHOCACART_CART_FIELD_DISPLAY_CHECKOUT_LINK_LABEL" description="MOD_PHOCACART_CART_FIELD_DISPLAY_CHECKOUT_LINK_DESC">
+					<option value="1">MOD_PHOCACART_CART_YES</option>
+					<option value="2">MOD_PHOCACART_CART_YES_ONLY_WHEN_CART_INCLUDES_PRODUCTS</option>
+					<option value="0">MOD_PHOCACART_CART_NO</option>
+				</field>
+			
+				<field name="moduleclass_sfx" type="textarea" rows="3" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+
+				<field name="load_component_media" type="radio" class="btn-group btn-group-yesno" default="0" label="MOD_PHOCACART_CART_FIELD_LOAD_COMPONENT_MEDIA_LABEL" description="MOD_PHOCACART_CART_FIELD_LOAD_COMPONENT_MEDIA_DESC">
+					<option value="1">MOD_PHOCACART_CART_YES</option>
+					<option value="0">MOD_PHOCACART_CART_NO</option>
+				</field>
+			</fieldset>	
+		</fields>
+	</config>
+</extension>

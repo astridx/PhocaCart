@@ -17,12 +17,12 @@ if (isset($d['param2']) && $d['param2'] != '') {
 if (isset($d['param2']) && $d['param2'] != '') {
 	// We have second parameter, so in first we define that the javascript should wait with re-direct
 
-    $jsSet = '';
-    if (isset($d['forcecategory']['idalias']) && $d['forcecategory']['idalias']  != '') {
-        // Category View - force the category parameter if set in parameters
-        $jsSet .= 'phChangeFilter(\'c\', \''.$d['forcecategory']['idalias'].'\', 1, \'text\', 0, 1, 1);';
-    }
-    $jsSet	.= 'phChangeFilter(\''.$d['param'].'\', jQuery(\'#'. $d['id'].' input[name=&quot;'.$d['paramname'].'&quot;]\').val(), 1, \'text\', 1, 1, 1);';
+	$jsSet = '';
+	if (isset($d['forcecategory']['idalias']) && $d['forcecategory']['idalias']  != '') {
+		// Category View - force the category parameter if set in parameters
+		$jsSet .= 'phChangeFilter(\'c\', \''.$d['forcecategory']['idalias'].'\', 1, \'text\', 0, 1, 1);';
+	}
+	$jsSet	.= 'phChangeFilter(\''.$d['param'].'\', jQuery(\'#'. $d['id'].' input[name=&quot;'.$d['paramname'].'&quot;]\').val(), 1, \'text\', 1, 1, 1);';
 	$jsSet	.= 'phChangeFilter(\''.$d['param2'].'\', jQuery(\'#'. $d['id'].' input[name=&quot;'.$d['param2name'].'&quot;]\').val(), 1, \'text\', 1, 0, 1);';
 
 	$jsClear		 = 'phClearField(\'#'.$d['id'].$d['paramname'].'\');';
@@ -31,11 +31,11 @@ if (isset($d['param2']) && $d['param2'] != '') {
 	$jsClear		.= 'phChangeFilter(\''.$d['param2'].'\', \'\', 0, \'text\', 1, 0, 1);';
 } else {
 	// We have only one parameter so we don't need define wait and the site is reloaded immediately
-    $jsSet = '';
-    if (isset($d['forcecategory']['idalias']) && $d['forcecategory']['idalias']  != '') {
-        // Category View - force the category parameter if set in parameters
-        $jsSet .= 'phChangeFilter(\'c\', \''.$d['forcecategory']['idalias'].'\', 1, \'text\', 0, 1, 1);';
-    }
+	$jsSet = '';
+	if (isset($d['forcecategory']['idalias']) && $d['forcecategory']['idalias']  != '') {
+		// Category View - force the category parameter if set in parameters
+		$jsSet .= 'phChangeFilter(\'c\', \''.$d['forcecategory']['idalias'].'\', 1, \'text\', 0, 1, 1);';
+	}
 	$jsSet	.= 'phChangeFilter(\''.$d['param'].'\', jQuery(\'#'. $d['id'].' input[name=&quot;'.$d['paramname'].'&quot;]\').val(), 1, \'text\', 1, 0, 1);';
 	$jsClear= 'phChangeFilter(\''.$d['param'].'\', \'\', 0, \'text\', 1, 0 , 1);';
 }
@@ -82,15 +82,15 @@ $displayData 	= null;
 			<?php
 			// Display filter price range (graphic range)
 			if (isset($d['filterprice']) && ($d['filterprice'] == 2 || $d['filterprice'] == 3)) { ?>
-            <div class="<?php echo $d['s']['c']['row'] ?>">
+			<div class="<?php echo $d['s']['c']['row'] ?>">
 			<div class="<?php echo $d['s']['c']['col.xs12.sm12.md12'] ?> ph-price-filter-box">
 				<div id="phPriceFilterRange"></div>
 				<div id="phPriceFilterPrice"></div>
 			</div>
-            </div>
+			</div>
 			<?php } ?>
 
-            <div class="<?php echo $d['s']['c']['row'] ?>">
+			<div class="<?php echo $d['s']['c']['row'] ?>">
 			<div class="<?php echo $d['s']['c']['col.xs12.sm5.md5'] ?>"></div>
 			<div class="<?php echo $d['s']['c']['col.xs12.sm7.md7'] ?>">
 				<div class="<?php echo $d['s']['c']['pull-right'] ?> <?php echo $d['s']['c']['btn-group'] ?> ph-zero ph-right-zero">
@@ -98,7 +98,7 @@ $displayData 	= null;
 					<button class="<?php echo $d['s']['c']['btn.btn-danger'] ?> tip hasTooltip <?php echo $d['s']['c']['pull-right'] ?>" type="button" onclick="<?php echo $jsClear; ?>" title="<?php echo $d['titleclear']; ?>"><span class="<?php echo $d['s']['i']['clear'] ?>"></span></button>
 				</div>
 			</div>
-            </div>
+			</div>
 			<?php
 			/*
 
@@ -119,7 +119,7 @@ $displayData 	= null;
 
 			}*/
 		?>
-            <div class="ph-cb"></div>
+			<div class="ph-cb"></div>
 		</div>
 	</div>
 </div>

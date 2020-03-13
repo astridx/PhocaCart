@@ -13,7 +13,8 @@ defined('_JEXEC') or die();
 class PhocacartUser
 {
 
-	/*protected $guest = array();
+	/*
+	protected $guest = array();
 
 	protected $user 	= array();
 	protected $vendor	= array();
@@ -21,7 +22,8 @@ class PhocacartUser
 	protected $pos		= false;*/
 
 
-	/*public function __construct($pos) {
+	/*
+	public function __construct($pos) {
 
 
 		$this->user		= JFactory::getUser();
@@ -29,118 +31,145 @@ class PhocacartUser
 	}*/
 
 
-	public static function getUser($id = 0) {
+	public static function getUser($id = 0)
+	{
 
 		$pUser		= $vendor = $ticket = $unit	= $section = array();
 		$isVendor	= false;
 
-		if ((int)$id > 0) {
+		if ((int) $id > 0)
+		{
 			$jUser = JFactory::getUser($id);
+
 			return $jUser;
-		} else {
-			if (PhocacartPos::isPos()) {
+		}
+		else
+		{
+			if (PhocacartPos::isPos())
+			{
 				$isVendor = self::defineUser($pUser, $vendor, $ticket, $unit, $section);
-				if ($isVendor) {
+
+				if ($isVendor)
+				{
 					// Current Joomla! User is Vendor (in POS)
 					// Check if this vendor has selected some customer
 					// If yes: switch the selected user as current Joomla! user
 					//         for example to check access rights: Vendor selected User A
 					//         so we must check the rights of User A and not of Vendor
-					if (!empty($pUser)) {
+					if (!empty($pUser))
+					{
 						// ======= LOGGED JOOMLA! USER IS VENDOR - CUSTOMER SELECTED
 						return $pUser;
-					} else {
+					}
+					else
+					{
 						// ======= LOGGED JOOMLA! USER IS VENDOR - NO CUSTOMER SELECTED
 						return false;// Joomla! User is vendor and he/she didn't select any customer
 					}
-				} else {
+				}
+				else
+				{
 					// ======= LOGGED JOOMLA! USER IS NOT VENDOR - BUT IN POS WE NEED VENDOR
 					return false;
 				}
-			} else {
+			}
+			else
+			{
 				// ======= LOGGED JOOMLA! USER IS CUSTOMER
 				// No POS, return standard Joomla! User
 				$jUser = JFactory::getUser();
+
 				return $jUser;
 			}
 		}
+
 		// ======= NO LOGGED JOOMLA! USER
 		return false;
 	}
 
-	public static function defineUser(&$user, &$vendor, &$ticket, &$unit, &$section, $forcePos = 0) {
+	public static function defineUser(&$user, &$vendor, &$ticket, &$unit, &$section, $forcePos = 0)
+	{
 
 		$pos		= PhocacartPos::isPos($forcePos);
 
 		$user		= JFactory::getUser();
 		$vendor 	= array();
-		$vendor		= new stdClass();
+		$vendor		= new stdClass;
 		$vendor->id = 0;
 
 		$ticket 	= array();
-		$ticket		= new stdClass();
+		$ticket		= new stdClass;
 		$ticket->id = 0;
 
 		$unit 	= array();
-		$unit		= new stdClass();
+		$unit		= new stdClass;
 		$unit->id = 0;
 
 		$section 	= array();
-		$section	= new stdClass();
+		$section	= new stdClass;
 		$section->id = 0;
 
-		if ($pos == 1) {
-
+		if ($pos == 1)
+		{
 			// Is logged in user a vendor?
-			if (!empty($user) && (int)$user->id > 0) {
-
+			if (!empty($user) && (int) $user->id > 0)
+			{
 				$vendor 	= clone $user;
 				$isVendor	= PhocacartVendor::isVendor($vendor);
 
-				if ($isVendor) {
-					//unset($user); cannot unset $user as we lost it for reference
+				if ($isVendor)
+				{
+					// Unset($user); cannot unset $user as we lost it for reference
 					$user 			= array();
-					$user 			= new stdClass();
+					$user 			= new stdClass;
 					$ticketA		= PhocacartTicket::getTicket($vendor->id);
 					$ticket->id 	= $ticketA['ticketid'];
 					$unit->id 		= $ticketA['unitid'];
 					$section->id 	= $ticketA['sectionid'];
 					$userId 		= PhocacartPos::getUserIdByVendorAndTicket($vendor->id, $ticket->id, $unit->id, $section->id);
 					$user			= JFactory::getUser($userId);
+
 					return true;
-				} else {
+				}
+				else
+				{
 					$vendor = array();
-					$vendor	= new stdClass();
+					$vendor	= new stdClass;
 					$vendor->id = 0;
+
 					return false;
 				}
+
 				return false;
 			}
+
 			return false;
 		}
+
 		return false;
 	}
 
 
-	public static function getUserIdByCard($card) {
+	public static function getUserIdByCard($card)
+	{
 
 		$db = JFactory::getDBO();
 
 		$query = ' SELECT a.user_id FROM #__phocacart_users AS a'
-			    .' WHERE a.loyalty_card_number = '.$db->quote($card)
-				.' AND a.type = 0'
-				.' LIMIT 1';
-
+				. ' WHERE a.loyalty_card_number = ' . $db->quote($card)
+				. ' AND a.type = 0'
+				. ' LIMIT 1';
 
 		$db->setQuery($query);
 		$id = $db->loadResult();
-		return $id;
 
+		return $id;
 
 	}
 
 
-	public static function getAddressDataForm($form, $fields, $user, $billingSuffix = '', $shippingSuffix = '_phs', $guestUser = 0) {
+	public static function getAddressDataForm($form, $fields, $user, $billingSuffix = '', $shippingSuffix = '_phs', $guestUser = 0)
+	{
 
 		$o['b']			= '';// Output Billing
 		$o['s'] 		= '';// Output Shipping
@@ -153,67 +182,78 @@ class PhocacartUser
 
 		$baSa = $form->getValue('ba_sa');
 
-
-		if ($baSa == 1) {
+		if ($baSa == 1)
+		{
 			$o['bsch'] = 'checked="checked"';
 		}
 
-
-		if (!empty($fields)) {
-			foreach($fields as $k => $v) {
-
-				if ($v->display_billing == 1 || ($app->isClient('administrator') && $v->title == 'id')){
-
+		if (!empty($fields))
+		{
+			foreach ($fields as $k => $v)
+			{
+				if ($v->display_billing == 1 || ($app->isClient('administrator') && $v->title == 'id'))
+				{
 					$value = $form->getValue($v->title);// If form input is required but it is empty, this is wrong
 
-					if ($v->required == 1 && $value == '') {
+					if ($v->required == 1 && $value == '')
+					{
 						$o['filled'] = 0;
 					}
 
-					if ($v->title == 'email' && $guestUser == 0) {
-						$form->setValue($v->title, null, $user->email );
+					if ($v->title == 'email' && $guestUser == 0)
+					{
+						$form->setValue($v->title, null, $user->email);
 					}
 
-					if (!$app->isClient('administrator')) {
-						$o['b'] .= '<div class="'.$s['c']['row'].' '.$s['c']['form-group'].'">';
-						$o['b'] .= '<div class="'.$s['c']['col.xs12.sm5.md5'].' '.$s['c']['control-label'].'">'.$form->getLabel($v->title . $billingSuffix).'</div>';
-						$o['b'] .= '<div class="'.$s['c']['col.xs12.sm7.md7'].'">'.$form->getInput($v->title . $billingSuffix).'</div>';
+					if (!$app->isClient('administrator'))
+					{
+						$o['b'] .= '<div class="' . $s['c']['row'] . ' ' . $s['c']['form-group'] . '">';
+						$o['b'] .= '<div class="' . $s['c']['col.xs12.sm5.md5'] . ' ' . $s['c']['control-label'] . '">' . $form->getLabel($v->title . $billingSuffix) . '</div>';
+						$o['b'] .= '<div class="' . $s['c']['col.xs12.sm7.md7'] . '">' . $form->getInput($v->title . $billingSuffix) . '</div>';
 						$o['b'] .= '</div>' . "\n";
-
-					} else {
+					}
+					else
+					{
 						// Admin uses obsolete bootstrap
 						$o['b'] .= '<div class="control-group">';
-						$o['b'] .= '<div class="control-label"><label>'.$form->getLabel($v->title . $billingSuffix).'</label></div>';
-						$o['b'] .= '<div class="controls">'.$form->getInput($v->title . $billingSuffix).'</div>';
+						$o['b'] .= '<div class="control-label"><label>' . $form->getLabel($v->title . $billingSuffix) . '</label></div>';
+						$o['b'] .= '<div class="controls">' . $form->getInput($v->title . $billingSuffix) . '</div>';
 						$o['b'] .= '</div>' . "\n";
 					}
-
 				}
 
-				if ($v->display_shipping == 1 || ($app->isClient('administrator') && $v->title == 'id')) {
+				if ($v->display_shipping == 1 || ($app->isClient('administrator') && $v->title == 'id'))
+				{
+					$value = $form->getValue($v->title);
 
-					$value = $form->getValue($v->title);				    // Form input value is required but it is empty
-					if ($v->required == 1 && $value == '' && $baSa == 0) {  // and we have set that the shipping address
+					// Form input value is required but it is empty
+
+					if ($v->required == 1 && $value == '' && $baSa == 0)
+					{
+						// And we have set that the shipping address
 						$o['filled'] = 0;									// is other than billing
 					}
 
-					if ($v->title == 'email' && $guestUser == 0) {
-						$form->setValue($v->title, null, $user->email );
+					if ($v->title == 'email' && $guestUser == 0)
+					{
+						$form->setValue($v->title, null, $user->email);
 					}
 
-					if (!$app->isClient('administrator')) {
-						$o['s'] .= '<div class="'.$s['c']['row'].' '.$s['c']['form-group'].'">';
-						$o['s'] .= '<div class="'.$s['c']['col.xs12.sm5.md5'].' '.$s['c']['control-label'].'">'.$form->getLabel($v->title . $shippingSuffix).'</div>';
-						$o['s'] .= '<div class="'.$s['c']['col.xs12.sm7.md7'].'">'.$form->getInput($v->title . $shippingSuffix).'</div>';
+					if (!$app->isClient('administrator'))
+					{
+						$o['s'] .= '<div class="' . $s['c']['row'] . ' ' . $s['c']['form-group'] . '">';
+						$o['s'] .= '<div class="' . $s['c']['col.xs12.sm5.md5'] . ' ' . $s['c']['control-label'] . '">' . $form->getLabel($v->title . $shippingSuffix) . '</div>';
+						$o['s'] .= '<div class="' . $s['c']['col.xs12.sm7.md7'] . '">' . $form->getInput($v->title . $shippingSuffix) . '</div>';
 						$o['s'] .= '</div>' . "\n";
-					} else {
+					}
+					else
+					{
 						// Admin uses obsolete bootstrap
 						$o['s'] .= '<div class="control-group">';
-						$o['s'] .= '<div class="control-label"><label>'.$form->getLabel($v->title . $shippingSuffix).'</label></div>';
-						$o['s'] .= '<div class="controls">'.$form->getInput($v->title . $shippingSuffix).'</div>';
+						$o['s'] .= '<div class="control-label"><label>' . $form->getLabel($v->title . $shippingSuffix) . '</label></div>';
+						$o['s'] .= '<div class="controls">' . $form->getInput($v->title . $shippingSuffix) . '</div>';
 						$o['s'] .= '</div>' . "\n";
 					}
-
 				}
 			}
 		}
@@ -221,31 +261,35 @@ class PhocacartUser
 		return $o;
 	}
 
-	public static function getAddressDataOutput($data, $fields, $user, $guestUser = 0) {
+	public static function getAddressDataOutput($data, $fields, $user, $guestUser = 0)
+	{
 
 		$s = PhocacartRenderStyle::getStyles();
 
 		$o['b']		= '';// Output Billing
 		$o['s'] 	= '';// Output Shipping
 		$o['bsch']	= '';// B S Checked? Is the billing address the same like shipping address
-		$o['filled']= 1; // Is every form input filled out
+		$o['filled'] = 1; // Is every form input filled out
 		$bNameO		= '';// join first, middle, last name and degree
 		$sNameO		= '';// join first, middle, last name and degree
 		$o['bregion'] 	= '';// Return for shipping method (save database query)
 		$o['bcountry']	= '';// Return for shipping method (save database query)
 
-		// ba_sa = 0: billing and shipping addresses are NOT the same
+		// Ba_sa = 0: billing and shipping addresses are NOT the same
 		// ba_sa = 1: billing and shipping addresses are same (don't check shipping fields)
 
-		if (empty($data[0])) {
-			// no billing return false
+		if (empty($data[0]))
+		{
+			// No billing return false
 			$o['filled'] = 0;
 
 			return $o;
-		} else if (!empty($data[0])
-					&& isset($data[0]->ba_sa) && $data[0]->ba_sa == 0
-					&& isset($data[0]->type) && $data[0]->type == 0
-					&& empty($data[1])){
+		}
+		elseif (!empty($data[0])
+			&& isset($data[0]->ba_sa) && $data[0]->ba_sa == 0
+			&& isset($data[0]->type) && $data[0]->type == 0
+			&& empty($data[1]))
+		{
 			// In words - we have billing data, so we check if billing data are the same like shipping (ba_sa = 1)
 			// If not then we check if we have shipping data, if not return false
 			// And check if array 0 is really billing - array 0 (first array) cannot be shpping as we order it by type ASC in db query
@@ -254,164 +298,217 @@ class PhocacartUser
 			return $o;
 		}
 
-
 		// Billing the same like shipping
-		if (isset($data[0]->ba_sa) && $data[0]->ba_sa == 1){
+		if (isset($data[0]->ba_sa) && $data[0]->ba_sa == 1)
+		{
 			$o['bsch'] = 1;
 		}
 
-		if (!empty($fields)) {
-			foreach($fields as $k => $v) {
+		if (!empty($fields))
+		{
+			foreach ($fields as $k => $v)
+			{
+				if ($v->display_billing == 1)
+				{
+					$field  = (string) $v->title;
 
-				if ($v->display_billing == 1){
-
-					$field  = (string)$v->title;
-					if (isset($data[0]->$field)) {
+					if (isset($data[0]->$field))
+					{
 						$value = $data[0]->$field;
 
-						if ($v->required == 1 && $value == '') {
+						if ($v->required == 1 && $value == '')
+						{
 							$o['filled'] = 0;
-							return $o;//Don't check and list any other, form it not complete
+
+							return $o;// Don't check and list any other, form it not complete
 						}
 
-						if ($v->title == 'email' && $guestUser == 0) {
+						if ($v->title == 'email' && $guestUser == 0)
+						{
 							$value = $user->email;
 						}
 
-
-						if ($v->title == 'name_first' || $v->title == 'name_middle' || $v->title == 'name_last' || $v->title == 'name_degree' ) {
+						if ($v->title == 'name_first' || $v->title == 'name_middle' || $v->title == 'name_last' || $v->title == 'name_degree')
+						{
 							$bNameO .= $value . ' ';
-						} else if ($v->title == 'country') {
-							$o['bcountry']	= (int)$value;// Return region and country
-                            $countryTitle = isset($data[0]->countrytitle) ? $data[0]->countrytitle : PhocacartCountry::getCountryById((int)$value);
-							$o['b'] .= '<div class="'.$s['c']['col.xs12.sm12.md12'].'">'.$countryTitle.'</div>';
-						} else if ($v->title == 'region') {
-							$o['bregion']	= (int)$value;// Return region and country
-                            $regionTitle = isset($data[0]->regiontitle) ? $data[0]->regiontitle : PhocacartRegion::getRegionById((int)$value);
-							$o['b'] .= '<div class="'.$s['c']['col.xs12.sm12.md12'].'">'.$regionTitle.'</div>';
-						} else {
-							$o['b'] .= '<div class="'.$s['c']['col.xs12.sm12.md12'].'">'.$value.'</div>';
+						}
+						elseif ($v->title == 'country')
+						{
+							$o['bcountry']	= (int) $value;// Return region and country
+							$countryTitle = isset($data[0]->countrytitle) ? $data[0]->countrytitle : PhocacartCountry::getCountryById((int) $value);
+							$o['b'] .= '<div class="' . $s['c']['col.xs12.sm12.md12'] . '">' . $countryTitle . '</div>';
+						}
+						elseif ($v->title == 'region')
+						{
+							$o['bregion']	= (int) $value;// Return region and country
+							$regionTitle = isset($data[0]->regiontitle) ? $data[0]->regiontitle : PhocacartRegion::getRegionById((int) $value);
+							$o['b'] .= '<div class="' . $s['c']['col.xs12.sm12.md12'] . '">' . $regionTitle . '</div>';
+						}
+						else
+						{
+									$o['b'] .= '<div class="' . $s['c']['col.xs12.sm12.md12'] . '">' . $value . '</div>';
 						}
 					}
 				}
 
-				if ($v->display_shipping == 1) {
+				if ($v->display_shipping == 1)
+				{
+					$field  = (string) $v->title;
 
-					$field  = (string)$v->title;
-					if (isset($data[1]->$field)) {
+					if (isset($data[1]->$field))
+					{
 						$value = $data[1]->$field;
 
-						if ($v->required == 1 && $value == '' && $data[0]->ba_sa == 0 && $data[1]->ba_sa == 0) {
+						if ($v->required == 1 && $value == '' && $data[0]->ba_sa == 0 && $data[1]->ba_sa == 0)
+						{
 							$o['filled'] = 0;
-							return $o;//Don't check and list any other, form it not complete
+
+							return $o;// Don't check and list any other, form it not complete
 						}
 
-						if ($v->title == 'email' && $guestUser == 0) {
+						if ($v->title == 'email' && $guestUser == 0)
+						{
 							$value = $user->email;
 						}
 
-
-						if ($v->title == 'name_first' || $v->title == 'name_middle' || $v->title == 'name_last' || $v->title == 'name_degree' ) {
+						if ($v->title == 'name_first' || $v->title == 'name_middle' || $v->title == 'name_last' || $v->title == 'name_degree')
+						{
 							$sNameO .= $value . ' ';
-						} else if ($v->title == 'country') {
-                            $countryTitle = isset($data[1]->countrytitle) ? $data[1]->countrytitle : PhocacartCountry::getCountryById((int)$value);
-							$o['s'] .= '<div class="'.$s['c']['col.xs12.sm12.md12'].'">'.$countryTitle.'</div>';
-						} else if ($v->title == 'region') {
-                            $regionTitle = isset($data[1]->regiontitle) ? $data[1]->regiontitle : PhocacartRegion::getRegionById((int)$value);
-							$o['s'] .= '<div class="'.$s['c']['col.xs12.sm12.md12'].'">'.$regionTitle.'</div>';
-						} else {
-							$o['s'] .= '<div class="'.$s['c']['col.xs12.sm12.md12'].'">'.$value.'</div>';
+						}
+						elseif ($v->title == 'country')
+						{
+							$countryTitle = isset($data[1]->countrytitle) ? $data[1]->countrytitle : PhocacartCountry::getCountryById((int) $value);
+							$o['s'] .= '<div class="' . $s['c']['col.xs12.sm12.md12'] . '">' . $countryTitle . '</div>';
+						}
+						elseif ($v->title == 'region')
+						{
+							$regionTitle = isset($data[1]->regiontitle) ? $data[1]->regiontitle : PhocacartRegion::getRegionById((int) $value);
+							$o['s'] .= '<div class="' . $s['c']['col.xs12.sm12.md12'] . '">' . $regionTitle . '</div>';
+						}
+						else
+						{
+									$o['s'] .= '<div class="' . $s['c']['col.xs12.sm12.md12'] . '">' . $value . '</div>';
 						}
 					}
-
 				}
 			}
 
-			if ($bNameO != '' && $o['b'] != '') {
-				$o['b'] = '<div class="'.$s['c']['col.xs12.sm12.md12'].'">'.$bNameO.'</div>' . $o['b'];
+			if ($bNameO != '' && $o['b'] != '')
+			{
+				$o['b'] = '<div class="' . $s['c']['col.xs12.sm12.md12'] . '">' . $bNameO . '</div>' . $o['b'];
 			}
-			if ($sNameO != '' && $o['s'] != '') {
-				$o['s'] = '<div class="'.$s['c']['col.xs12.sm12.md12'].'">'.$sNameO.'</div>' . $o['s'];
+
+			if ($sNameO != '' && $o['s'] != '')
+			{
+				$o['s'] = '<div class="' . $s['c']['col.xs12.sm12.md12'] . '">' . $sNameO . '</div>' . $o['s'];
 			}
 		}
 
 		return $o;
 	}
 
-	public static function getUserAddress($userId) {
+	public static function getUserAddress($userId)
+	{
 
 		$db = JFactory::getDBO();
 
 		$query = ' (SELECT * FROM #__phocacart_users AS a'
-			    .' WHERE a.user_id = '.(int) $userId
-				.' AND a.type = 0'
-				.' LIMIT 1)'
-				.' UNION ALL'
-				.' (SELECT * FROM #__phocacart_users AS a'
-			    .' WHERE a.user_id = '.(int) $userId
-				.' AND a.type = 1'
-				.' LIMIT 1)';
+				. ' WHERE a.user_id = ' . (int) $userId
+				. ' AND a.type = 0'
+				. ' LIMIT 1)'
+				. ' UNION ALL'
+				. ' (SELECT * FROM #__phocacart_users AS a'
+				. ' WHERE a.user_id = ' . (int) $userId
+				. ' AND a.type = 1'
+				. ' LIMIT 1)';
 
 		$db->setQuery($query);
 		$address = $db->loadObjectList();
+
 		return $address;
 
 	}
 
-	public static function convertAddressTwo($data, $array = 1) {
+	public static function convertAddressTwo($data, $array = 1)
+	{
 		$dataNew	= array();
-		if ($array == 1) {
+
+		if ($array == 1)
+		{
 			$dataNew[0] = array();
 			$dataNew[1]	= array();
-		} else {
-			$dataNew[0]= new StdClass();
-			$dataNew[1]= new StdClass();
+		}
+		else
+		{
+			$dataNew[0] = new StdClass;
+			$dataNew[1] = new StdClass;
 		}
 
-		if (!empty($data)) {
-			foreach($data as $k => $v) {
+		if (!empty($data))
+		{
+			foreach ($data as $k => $v)
+			{
 				$pos = strpos($k, '_phs');
-				if ($pos === false) {
-					if ($array == 1) {
+
+				if ($pos === false)
+				{
+					if ($array == 1)
+					{
 						$dataNew[0][$k] = $v;
-					} else {
+					}
+					else
+					{
 						$dataNew[0]->$k = $v;
 					}
-				} else {
+				}
+				else
+				{
 					$k = str_replace('_phs', '', $k);
-					if ($array == 1) {
+
+					if ($array == 1)
+					{
 						$dataNew[1][$k] = $v;
-					} else {
+					}
+					else
+					{
 						$dataNew[1]->$k = $v;
 					}
 				}
 			}
 		}
 
-		if (!empty($dataNew[1])) {
+		if (!empty($dataNew[1]))
+		{
 			// Set right type for shipping address
-			if ($array == 1) {
+			if ($array == 1)
+			{
 				$dataNew[1]['type'] = 1;
-			} else {
+			}
+			else
+			{
 				$dataNew[1]->type = 1;
 			}
 		}
+
 		return $dataNew;
 	}
 
-	public static function getUserInfo() {
+	public static function getUserInfo()
+	{
 
 		$u				= array();
-		$user 			= PhocacartUser::getUser();
+		$user 			= self::getUser();
 		$u['username']	= '';
 		$u['id']		= 0;
 		$u['ip']		= '';
 
-		if (isset($user->id)) {
+		if (isset($user->id))
+		{
 			$u['id'] = $user->id;
 		}
 
-		if (isset($user->username)) {
+		if (isset($user->username))
+		{
 			$u['username'] = $user->username;
 		}
 
@@ -421,91 +518,113 @@ class PhocacartUser
 	}
 
 
-	public static function getUserOrderSum($userId) {
+	public static function getUserOrderSum($userId)
+	{
 
 		$total = 0;
-		if ($userId > 0) {
+
+		if ($userId > 0)
+		{
 			$db = JFactory::getDBO();
 
 			$query = 'SELECT SUM(a.amount) FROM #__phocacart_order_total AS a'
-				.' LEFT JOIN #__phocacart_orders AS o ON a.order_id = o.id'
-				.' WHERE o.user_id = '.(int) $userId
-				.' AND a.type = '.$db->quote('brutto');
+				. ' LEFT JOIN #__phocacart_orders AS o ON a.order_id = o.id'
+				. ' WHERE o.user_id = ' . (int) $userId
+				. ' AND a.type = ' . $db->quote('brutto');
 			$db->setQuery($query);
-
 
 			$total = $db->loadResult();
 
-			if (!$total) {
+			if (!$total)
+			{
 				$total = 0;
 			}
 		}
+
 		return $total;
 	}
 
-	public static function getUserData($userId = 0) {
+	public static function getUserData($userId = 0)
+	{
 
 		$db = JFactory::getDBO();
 
-		if ((int)$userId == 0) {
-			$user 	= PhocacartUser::getUser();
-			$userId = (int)$user->id;
+		if ((int) $userId == 0)
+		{
+			$user 	= self::getUser();
+			$userId = (int) $user->id;
 		}
 
-		if ((int)$userId > 0) {
-
+		if ((int) $userId > 0)
+		{
 			$query = 'SELECT u.*, r.title as regiontitle, c.title as countrytitle FROM #__phocacart_users AS u'
-					.' LEFT JOIN #__phocacart_countries AS c ON c.id = u.country'
-					.' LEFT JOIN #__phocacart_regions AS r ON r.id = u.region'
-					.' WHERE u.user_id = '.(int)$userId
-					.' ORDER BY u.type ASC';
+					. ' LEFT JOIN #__phocacart_countries AS c ON c.id = u.country'
+					. ' LEFT JOIN #__phocacart_regions AS r ON r.id = u.region'
+					. ' WHERE u.user_id = ' . (int) $userId
+					. ' ORDER BY u.type ASC';
 			$db->setQuery($query);
 			$data = $db->loadObjectList();
+
 			return $data;
 		}
+
 		return false;
 	}
 
-	public static function buildName($nameFirst, $nameLast, $nameMiddle = '', $nameDegreePrefix = '', $nameDegreePostfix = '') {
+	public static function buildName($nameFirst, $nameLast, $nameMiddle = '', $nameDegreePrefix = '', $nameDegreePostfix = '')
+	{
 
 		$name = '';
 
-		if ($nameDegreePrefix != '') {
+		if ($nameDegreePrefix != '')
+		{
 			$name = $nameDegreePrefix;
 		}
 
-		if ($nameFirst != '') {
-
-			if ($name != '') {
-				$name = $name . ' '. $nameFirst;
-			} else {
+		if ($nameFirst != '')
+		{
+			if ($name != '')
+			{
+				$name = $name . ' ' . $nameFirst;
+			}
+			else
+			{
 				$name = $nameFirst;
 			}
 		}
 
-		if ($nameMiddle != '') {
-
-			if ($name != '') {
-				$name = $name . ' '. $nameMiddle;
-			} else {
+		if ($nameMiddle != '')
+		{
+			if ($name != '')
+			{
+				$name = $name . ' ' . $nameMiddle;
+			}
+			else
+			{
 				$name = $nameMiddle;
 			}
 		}
 
-		if ($nameLast != '') {
-
-			if ($name != '') {
-				$name = $name . ' '. $nameLast;
-			} else {
+		if ($nameLast != '')
+		{
+			if ($name != '')
+			{
+				$name = $name . ' ' . $nameLast;
+			}
+			else
+			{
 				$name = $nameLast;
 			}
 		}
 
-		if ($nameDegreePostfix != '') {
-
-			if ($name != '') {
-				$name = $name . ' '. $nameDegreePostfix;
-			} else {
+		if ($nameDegreePostfix != '')
+		{
+			if ($name != '')
+			{
+				$name = $name . ' ' . $nameDegreePostfix;
+			}
+			else
+			{
 				$name = $nameDegreePostfix;
 			}
 		}
@@ -513,15 +632,16 @@ class PhocacartUser
 		return $name;
 	}
 
-	public static function updateNewsletterInfoByUser($userId, $newsletter = 0) {
-
+	public static function updateNewsletterInfoByUser($userId, $newsletter = 0)
+	{
 
 		$db 	= JFactory::getDBO();
 		$query = ' UPDATE #__phocacart_users'
-				.' SET newsletter = '.(int)$newsletter
-				.' WHERE user_id = '.(int)$userId;
+				. ' SET newsletter = ' . (int) $newsletter
+				. ' WHERE user_id = ' . (int) $userId;
 		$db->setQuery($query);
 		$db->execute();
+
 		return true;
 	}
 
@@ -626,4 +746,4 @@ class PhocacartUser
 
 	*/
 }
-?>
+

@@ -36,7 +36,7 @@ $displayData 	= null;
 	</tr>
 	<?php } ?>
 
-    <?php if (isset($d['title']) && $d['title'] != '') { ?>
+	<?php if (isset($d['title']) && $d['title'] != '') { ?>
 	<tr style="border:0">
 		<td style="border:0"><?php echo JText::_( 'COM_PHOCACART_TITLE' ) ?>:</td>
 		<td style="border:0"><?php echo $d['title'] ?></td>

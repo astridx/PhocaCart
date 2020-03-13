@@ -15,8 +15,8 @@ use Mike42\Escpos\CapabilityProfile;
 
 class StarCapabilityProfile
 {
-    public static function getInstance()
-    {
-        return CapabilityProfile::load('SP2000');
-    }
+	public static function getInstance()
+	{
+		return CapabilityProfile::load('SP2000');
+	}
 }

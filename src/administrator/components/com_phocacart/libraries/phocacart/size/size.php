@@ -12,46 +12,49 @@ defined('_JEXEC') or die();
 
 class PhocacartSize
 {
-    public $p;
+	public $p;
 
-    public function __construct() {
-        $this->p    = PhocacartUtils::getComponentParameters();
-    }
+	public function __construct()
+	{
+		$this->p    = PhocacartUtils::getComponentParameters();
+	}
 
-    public function getSizeFormat($value, $type = 'size') {
+	public function getSizeFormat($value, $type = 'size')
+	{
 
-        $suffix = '';
-        if ($value > 0) {
+		$suffix = '';
 
-            switch($type) {
+		if ($value > 0)
+		{
+			switch ($type)
+			{
+				case 'weight':
+					$suffix = $this->p->get('unit_weight');
+				break;
 
-                case 'weight':
-                    $suffix = $this->p->get('unit_weight');
-                break;
+				case 'volume':
+					$suffix = $this->p->get('unit_volume');
+				break;
+				case 'size':
+				default:
+					$suffix = $this->p->get('unit_size');
+				break;
+			}
 
-                case 'volume':
-                    $suffix = $this->p->get('unit_volume');
-                break;
-                case 'size':
-                default:
-                    $suffix = $this->p->get('unit_size');
-                break;
+			return $this->roundSize($value) . ' ' . $suffix;
+		}
 
-            }
+		return false;
 
-            return $this->roundSize($value). ' '.$suffix;
+	}
 
-        }
+	public function roundSize($value)
+	{
 
-        return false;
+		// Possible parameter
+		// $paramsC                  = PhocacartUtils::getComponentParameters();
+		$rounding_size		        = 2;// $paramsC->get( 'rounding_size', 2 );
 
-    }
-
-    public function roundSize($value) {
-
-        // Possible parameter
-        //$paramsC 					= PhocacartUtils::getComponentParameters();
-        $rounding_size		        = 2;//$paramsC->get( 'rounding_size', 2 );
-        return round($value, $rounding_size, 2);
-    }
+		return round($value, $rounding_size, 2);
+	}
 }

@@ -12,123 +12,135 @@ defined('_JEXEC') or die();
 
 class PhocacartCount
 {
-	public static function setProductCount($cid, $type = '', $skipMessage = 0) {
+	public static function setProductCount($cid, $type = '', $skipMessage = 0)
+	{
 
-	    $db 		= JFactory::getDBO();
-	    $app	    = JFactory::getApplication();
-	    $successA   = array();
-	    $errorA     = array();
+		$db 		= JFactory::getDBO();
+		$app	    = JFactory::getApplication();
+		$successA   = array();
+		$errorA     = array();
 
+		if ($type == '')
+		{
+			return false;
+		}
 
-	    if ($type == '') { return false;}
+		if (!empty($cid))
+		{
+			foreach ($cid as $k => $v)
+			{
+				$date 	= JFactory::getDate();
+				$now	= $date->toSql();
 
+				switch ($type)
+				{
+					case 'category':
+						$q = ' SELECT count(a.id)'
+						. ' FROM #__phocacart_products AS a'
+						. ' LEFT JOIN #__phocacart_product_categories AS pc ON a.id = pc.product_id'
+						. ' WHERE a.published AND pc.category_id = ' . (int) $v;
 
-	    if (!empty($cid)) {
-            foreach ($cid as $k => $v) {
+						$db->setQuery($q);
+						$items = $db->loadResult();
+						$q2 = 'UPDATE #__phocacart_categories SET count_products = ' . (int) $items . ', count_date = ' . $db->quote($now) . ' WHERE id = ' . (int) $v;
+						$db->setQuery($q2);
+					break;
 
-                $date 	= JFactory::getDate();
-                $now	= $date->toSql();
+					case 'tag':
 
-                switch($type) {
+						$q0 = 'SELECT type FROM #__phocacart_tags WHERE id = ' . (int) $v;// Apply only for tags, not for labels
+						$db->setQuery($q0);
+						$type0  = $db->loadResult();
 
-                    case 'category':
-                        $q =  ' SELECT count(a.id)'
-                        . ' FROM #__phocacart_products AS a'
-                        . ' LEFT JOIN #__phocacart_product_categories AS pc ON a.id = pc.product_id'
-                        . ' WHERE a.published AND pc.category_id = '.(int)$v;
+						if ($type0 == 0)
+						{
+							$q = ' SELECT count(a.id)'
+								. ' FROM #__phocacart_products AS a'
+								. ' LEFT JOIN #__phocacart_tags_related AS tr ON a.id = tr.item_id'
+								. ' WHERE a.published AND tr.tag_id = ' . (int) $v;
 
-                        $db->setQuery($q);
-			            $items = $db->loadResult();
-			            $q2 = 'UPDATE #__phocacart_categories SET count_products = '.(int)$items.', count_date = '.$db->quote($now) . ' WHERE id = '.(int)$v;
-				        $db->setQuery($q2);
-                    break;
+							$db->setQuery($q);
+							$items = $db->loadResult();
+							$q2 = 'UPDATE #__phocacart_tags SET count_products = ' . (int) $items . ', count_date = ' . $db->quote($now) . ' WHERE id = ' . (int) $v;
+							$db->setQuery($q2);
+						}
+					break;
 
-                    case 'tag':
+					case 'label':
 
-                        $q0 = 'SELECT type FROM #__phocacart_tags WHERE id = '.(int)$v;// Apply only for tags, not for labels
-                        $db->setQuery($q0);
-                        $type0  = $db->loadResult();
-                        if ($type0 == 0) {
-                            $q = ' SELECT count(a.id)'
-                                . ' FROM #__phocacart_products AS a'
-                                . ' LEFT JOIN #__phocacart_tags_related AS tr ON a.id = tr.item_id'
-                                . ' WHERE a.published AND tr.tag_id = ' . (int)$v;
+						$q0 = 'SELECT type FROM #__phocacart_tags WHERE id = ' . (int) $v;// Apply only for labels, not for tags
+						$db->setQuery($q0);
+						$type0  = $db->loadResult();
 
-                            $db->setQuery($q);
-                            $items = $db->loadResult();
-                            $q2 = 'UPDATE #__phocacart_tags SET count_products = ' . (int)$items . ', count_date = ' . $db->quote($now) . ' WHERE id = ' . (int)$v;
-                            $db->setQuery($q2);
-                        }
-                    break;
+						if ($type0 == 1)
+						{
+							$q = ' SELECT count(a.id)'
+								. ' FROM #__phocacart_products AS a'
+								. ' LEFT JOIN #__phocacart_taglabels_related AS tr ON a.id = tr.item_id'
+								. ' WHERE a.published AND tr.tag_id = ' . (int) $v;
 
-                    case 'label':
+							$db->setQuery($q);
+							$items = $db->loadResult();
+							$q2 = 'UPDATE #__phocacart_tags SET count_products = ' . (int) $items . ', count_date = ' . $db->quote($now) . ' WHERE id = ' . (int) $v;
+							$db->setQuery($q2);
+						}
+					break;
 
-                        $q0 = 'SELECT type FROM #__phocacart_tags WHERE id = '.(int)$v;// Apply only for labels, not for tags
-                        $db->setQuery($q0);
-                        $type0  = $db->loadResult();
-                        if ($type0 == 1) {
-                            $q = ' SELECT count(a.id)'
-                                . ' FROM #__phocacart_products AS a'
-                                . ' LEFT JOIN #__phocacart_taglabels_related AS tr ON a.id = tr.item_id'
-                                . ' WHERE a.published AND tr.tag_id = ' . (int)$v;
+					case 'manufacturer':
 
-                            $db->setQuery($q);
-                            $items = $db->loadResult();
-                            $q2 = 'UPDATE #__phocacart_tags SET count_products = ' . (int)$items . ', count_date = ' . $db->quote($now) . ' WHERE id = ' . (int)$v;
-                            $db->setQuery($q2);
-                        }
-                    break;
+						$q = ' SELECT count(a.id)'
+						. ' FROM #__phocacart_products AS a'
+						. ' WHERE a.published AND a.manufacturer_id = ' . (int) $v;
 
-                    case 'manufacturer':
+						$db->setQuery($q);
+						$items = $db->loadResult();
+						$q2 = 'UPDATE #__phocacart_manufacturers SET count_products = ' . (int) $items . ', count_date = ' . $db->quote($now) . ' WHERE id = ' . (int) $v;
+						$db->setQuery($q2);
+					break;
 
-                        $q =  ' SELECT count(a.id)'
-                        . ' FROM #__phocacart_products AS a'
-                        . ' WHERE a.published AND a.manufacturer_id = '.(int)$v;
+					case 'parameter':
+						$q = ' SELECT count(a.id)'
+						. ' FROM #__phocacart_products AS a'
+						. ' LEFT JOIN #__phocacart_parameter_values_related AS pvr ON a.id = pvr.item_id'
+						. ' WHERE a.published AND pvr.parameter_value_id = ' . (int) $v;
 
-                        $db->setQuery($q);
-			            $items = $db->loadResult();
-			            $q2 = 'UPDATE #__phocacart_manufacturers SET count_products = '.(int)$items.', count_date = '.$db->quote($now) . ' WHERE id = '.(int)$v;
-				        $db->setQuery($q2);
-                    break;
+						$db->setQuery($q);
+						$items = $db->loadResult();
 
-                    case 'parameter':
-                        $q =  ' SELECT count(a.id)'
-                        . ' FROM #__phocacart_products AS a'
-                        . ' LEFT JOIN #__phocacart_parameter_values_related AS pvr ON a.id = pvr.item_id'
-                        . ' WHERE a.published AND pvr.parameter_value_id = '.(int)$v;
+						$q2 = 'UPDATE #__phocacart_parameter_values SET count_products = ' . (int) $items . ', count_date = ' . $db->quote($now) . ' WHERE id = ' . (int) $v;
+						$db->setQuery($q2);
+					break;
+				}
 
-                        $db->setQuery($q);
-			            $items = $db->loadResult();
+				if (!$db->execute())
+				{
+					$errorA[] = $v;
+				}
+				else
+				{
+					$successA[] = $v;
+				}
+			}
+		}
 
-			            $q2 = 'UPDATE #__phocacart_parameter_values SET count_products = '.(int)$items.', count_date = '.$db->quote($now) . ' WHERE id = '.(int)$v;
-				        $db->setQuery($q2);
-                    break;
+		if ($skipMessage == 1)
+		{
+			return true;
+		}
 
-                }
+		if (!empty($errorA))
+		{
+			$errorS = implode(', ', $errorA);
+			$app->enqueueMessage(JText::_('COM_PHOCACART_PRODUCT_COUNT_NOT_SET_FOLLOWING_ITEMS') . ': ' . $errorS, 'error');
+		}
 
+		if (!empty($successA))
+		{
+			$successS = implode(', ', $successA);
+			$app->enqueueMessage(JText::_('COM_PHOCACART_PRODUCT_COUNT_SUCCESSFULLY_SET_FOLLOWING_ITEMS') . ': ' . $successS, 'success');
+		}
 
-				if (!$db->execute()) {
-			        $errorA[] = $v;
-                } else {
-				    $successA[] = $v;
-                }
-	        }
-        }
-
-	    if ($skipMessage == 1) {
-	        return true;
-        }
-
-	    if(!empty($errorA)) {
-            $errorS = implode(', ', $errorA);
-            $app->enqueueMessage(JText::_('COM_PHOCACART_PRODUCT_COUNT_NOT_SET_FOLLOWING_ITEMS') . ': '.$errorS, 'error');
-        }
-        if (!empty($successA)){
-	        $successS = implode(', ', $successA);
-            $app->enqueueMessage(JText::_( 'COM_PHOCACART_PRODUCT_COUNT_SUCCESSFULLY_SET_FOLLOWING_ITEMS' ) . ': '.$successS, 'success');
-        }
-
-	    return true;
-    }
+		return true;
+	}
 
 }

@@ -20,26 +20,26 @@ abstract class PhocacartHtmlBatch
 			JHtml::_('select.option', 'c', JText::_('JLIB_HTML_BATCH_COPY')),
 			JHtml::_('select.option', 'm', JText::_('JLIB_HTML_BATCH_MOVE'))
 		);
-		
+
 		$db = JFactory::getDBO();
 
-       //build the list of categories
+		// Build the list of categories
 		$query = 'SELECT a.title AS text, a.id AS value, a.parent_id as parentid'
 		. ' FROM #__phocacart_categories AS a'
 		// TO DO. ' WHERE a.published = '.(int)$published
 		. ' ORDER BY a.ordering';
-		$db->setQuery( $query );
+		$db->setQuery($query);
 		$data = $db->loadObjectList();
 		$tree = array();
 		$text = '';
-		$catId= -1;
+		$catId = -1;
 		$tree = PhocacartCategory::CategoryTreeOption($data, $tree, 0, $text, $catId);
-		
-		if ($category == 1) {
+
+		if ($category == 1)
+		{
 			array_unshift($tree, JHtml::_('select.option', 0, JText::_('JLIB_HTML_ADD_TO_ROOT'), 'value', 'text'));
 		}
 
-		
 		// Create the batch selector to change select the category by which to move or copy.
 		$lines = array(
 			'<label id="batch-choose-action-lbl" for="batch-choose-action">',
@@ -47,15 +47,16 @@ abstract class PhocacartHtmlBatch
 			'</label>',
 			'<fieldset id="batch-choose-action" class="combo">',
 				'<select name="batch[category_id]" class="inputbox" id="batch-category-id">',
-					'<option value="">'.JText::_('JSELECT').'</option>',
-					/*JHtml::_('select.options',	JHtml::_('category.options', $extension, array('published' => (int) $published))),*/
-					JHtml::_('select.options',  $tree ),
+					'<option value="">' . JText::_('JSELECT') . '</option>',
+					// JHtml::_('select.options',    JHtml::_('category.options', $extension, array('published' => (int) $published))),
+
+					JHtml::_('select.options',  $tree),
 				'</select>',
-				JHtml::_( 'select.radiolist', $options, 'batch[move_copy]', '', 'value', 'text', 'm'),
+				JHtml::_('select.radiolist', $options, 'batch[move_copy]', '', 'value', 'text', 'm'),
 			'</fieldset>'
 		);
 
 		return implode("\n", $lines);
 	}
 }
-?>
+

@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 
 abstract class PhocacartHtmlFeatured
 {
-	
+
 	public static function featured($value = 0, $i, $canChange = true)
 	{
 		JHtml::_('bootstrap.tooltip');

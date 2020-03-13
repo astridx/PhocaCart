@@ -23,17 +23,17 @@ $link	= JRoute::_(PhocacartRoute::getCategoryRoute($v->id, $v->alias));
 $dI	= array();
 if (isset($image->rel) && $image->rel != '') {
 
-    $dI['t']			    = $t;
-    $dI['s']			    = $s;
-    $dI['image']['title']	= $v->title;
-    $dI['image']['image']	= $image;
+	$dI['t']			    = $t;
+	$dI['s']			    = $s;
+	$dI['image']['title']	= $v->title;
+	$dI['image']['image']	= $image;
 
-    echo '<a href="'.$link.'">';
-    echo $layoutI->render($dI);
+	echo '<a href="'.$link.'">';
+	echo $layoutI->render($dI);
 	echo '</a>';
 
-} else if ($v->icon_class != '') {
-    echo '<div class="ph-image-box-content">';
+} elseif ($v->icon_class != '') {
+	echo '<div class="ph-image-box-content">';
 	echo '<div class="ph-image-box-content-item"><span class="'. PhocacartText::filterValue($v->icon_class, 'text').' ph-image-box-content-icon"></span></div>';
 	echo '</div>';
 }  else {
@@ -50,19 +50,19 @@ if (isset($image->rel) && $image->rel != '') {
 //echo '<div class="ph-caption">';
 
 echo '<h3>';
-if ($t['category_name_link'] == 1)
+if ($t['category_name_link'] == 1) {
 	echo '<a href="'.JRoute::_(PhocacartRoute::getCategoryRoute($v->id, $v->alias)).'">'.$v->title.'</a>';
-else {
+} else {
 	echo $v->title;
 }
 echo '</h3>';
 
 
-if (!empty($v->subcategories) && (int)$t['csv_display_subcategories'] > 0) {
+if (!empty($v->subcategories) && (int) $t['csv_display_subcategories'] > 0) {
 	echo '<ul>';
 	$j = 0;
 	foreach($v->subcategories as $v2) {
-		if ($j == (int)$t['csv_display_subcategories']) {
+		if ($j == (int) $t['csv_display_subcategories']) {
 			break;
 		}
 		$link2	= JRoute::_(PhocacartRoute::getCategoryRoute($v2->id, $v2->alias));
@@ -74,17 +74,17 @@ if (!empty($v->subcategories) && (int)$t['csv_display_subcategories'] > 0) {
 
 // Description box will be displayed even no description is set - to set height and have all columns same height
 echo '<div class="ph-cat-desc">';
-if ($v->description != '' && (int)$t['csv_display_category_desc'] > 0) {
+if ($v->description != '' && (int) $t['csv_display_category_desc'] > 0) {
 	echo $v->description;
 }
 echo '</div>';
 
 
-if ((int)$t['display_view_category_button'] > 0) {
+if ((int) $t['display_view_category_button'] > 0) {
 
 	$d2									= array();
 	$d2['link']							= $link;
-    $d2['s']							= $s;
+	$d2['s']							= $s;
 	$d2['display_view_category_button']	= $t['display_view_category_button'];
 	echo '<div class="ph-item-action-box">';
 	echo $layoutV->render($d2);

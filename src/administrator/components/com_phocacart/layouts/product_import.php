@@ -9,7 +9,7 @@
 defined('_JEXEC') or die();
 
 function filter_xml($matches) {
-    return trim(htmlspecialchars($matches[1]));
+	return trim(htmlspecialchars($matches[1]));
 }
 
 
@@ -25,7 +25,7 @@ $csv = false;
 if (isset($d['file_type']) && $d['file_type'] == 1) {
 	$xml = true;
 	$csv = false;
-} else if (isset($d['file_type']) && $d['file_type'] == 0) {
+} elseif (isset($d['file_type']) && $d['file_type'] == 0) {
 	$csv = true;
 	$xml = false;
 }
@@ -110,15 +110,15 @@ if($xml) {
 
 					if (isset($data['categories']['category']['id']) && $data['categories']['category']['ordering']) {
 
-						$idC = (int)PhocacartUtils::getIntFromString($data['categories']['category']['id']);
-						$data['catid_multiple'][0] 				= (int)PhocacartUtils::getIntFromString($idC);
-						$data['catid_multiple_ordering'][$idC]	= (int)$data['categories']['category']['ordering'];
+						$idC = (int) PhocacartUtils::getIntFromString($data['categories']['category']['id']);
+						$data['catid_multiple'][0] 				= (int) PhocacartUtils::getIntFromString($idC);
+						$data['catid_multiple_ordering'][$idC]	= (int) $data['categories']['category']['ordering'];
 
-					} else if (is_array($data['categories']['category'])) {
+					} elseif (is_array($data['categories']['category'])) {
 
 						$categories = $data['categories']['category'];
 						foreach($categories as $kC => $vC) {
-							$idC = (int)PhocacartUtils::getIntFromString($vC['id']);
+							$idC = (int) PhocacartUtils::getIntFromString($vC['id']);
 							$data['catid_multiple'][] 				= $idC;
 							$data['catid_multiple_ordering'][$idC]	= $vC['ordering'];
 						}
@@ -167,7 +167,7 @@ if($xml) {
 							$option = $attribute['options']['option'];
 							unset($attribute['options']['option']);
 							$attribute['options'][0] = $option;
-						} else if (isset($attribute['options']['option']) && is_array($attribute['options']['option'])) {
+						} elseif (isset($attribute['options']['option']) && is_array($attribute['options']['option'])) {
 							// OPTIONS ARRAY
 							$attribute['options'] = $attribute['options']['option'];
 						}
@@ -175,7 +175,7 @@ if($xml) {
 						$data['attributes'][0]	= $attribute;
 
 
-					} else if (is_array($data['attributes']['attribute'])) {
+					} elseif (is_array($data['attributes']['attribute'])) {
 						// ATTRIBUTES ARRAY
 						$attributes 			= $data['attributes']['attribute'];
 						$data['attributes'] 	= array();
@@ -188,7 +188,7 @@ if($xml) {
 								$option = $vA['options']['option'];
 								unset($attributes[$kA]['options']['option']);
 								$attributes[$kA]['options'][0] = $option;
-							} else if (isset($vA['options']['option']) && is_array($vA['options']['option'])) {
+							} elseif (isset($vA['options']['option']) && is_array($vA['options']['option'])) {
 								// OPTIONS ARRAY
 								$attributes[$kA]['options'] = $vA['options']['option'];
 							}
@@ -210,7 +210,7 @@ if($xml) {
 						$specification 				= $data['specifications']['specification'];
 						$data['specifications'] 	= array();
 						$data['specifications'][0]	= $specification;
-					} else if (is_array($data['specifications']['specification'])) {
+					} elseif (is_array($data['specifications']['specification'])) {
 						// SPECIFICATIONS ARRAY
 						$specifications 			= $data['specifications']['specification'];
 						$data['specifications'] 	= array();
@@ -229,7 +229,7 @@ if($xml) {
 						$aso 								= $data['advanced_stock_options']['advanced_stock_option'];
 						$data['advanced_stock_options'] 	= array();
 						$data['advanced_stock_options'][0]	= $aso;
-					} else if (is_array($data['advanced_stock_options']['advanced_stock_option'])) {
+					} elseif (is_array($data['advanced_stock_options']['advanced_stock_option'])) {
 						// ADVANCED STOCK OPTIONS
 						$asos 								= $data['advanced_stock_options']['advanced_stock_option'];
 						$data['advanced_stock_options'] 	= array();
@@ -248,7 +248,7 @@ if($xml) {
 						$discount 				= $data['discounts']['discount'];
 						$data['discounts'] 	= array();
 						$data['discounts'][0]	= $discount;
-					} else if (is_array($data['discounts']['discount'])) {
+					} elseif (is_array($data['discounts']['discount'])) {
 						// DISCOUNTS ARRAY
 						$discounts 			= $data['discounts']['discount'];
 						$data['discounts'] 	= array();
@@ -272,14 +272,14 @@ if($xml) {
 
 								foreach($groups as $kG => $vG) {
 									if (isset($vG['id'])) {
-										$data['discounts'][$kD]['groups'][] = (int)PhocacartUtils::getIntFromString($vG['id']);
+										$data['discounts'][$kD]['groups'][] = (int) PhocacartUtils::getIntFromString($vG['id']);
 									}
 								}
 							} else {
 								$group 						= $data['discounts'][$kD]['groups']['group'];
 
 								$data['discounts'][$kD]['groups'] 			= array();
-								$data['discounts'][$kD]['groups'][0] 		= (int)PhocacartUtils::getIntFromString($group['id']);
+								$data['discounts'][$kD]['groups'][0] 		= (int) PhocacartUtils::getIntFromString($group['id']);
 							}
 
 						} else {
@@ -299,7 +299,7 @@ if($xml) {
 						foreach($groups as $kG => $vG) {
 
 							if (isset($vG['id'])) {
-								$data['groups'][] = (int)PhocacartUtils::getIntFromString($vG['id']);
+								$data['groups'][] = (int) PhocacartUtils::getIntFromString($vG['id']);
 
 							}
 						}
@@ -308,7 +308,7 @@ if($xml) {
 						$group 						= $data['groups']['group'];
 
 						$data['groups'] 			= array();
-						$data['groups'][0] 			= (int)PhocacartUtils::getIntFromString($group['id']);
+						$data['groups'][0] 			= (int) PhocacartUtils::getIntFromString($group['id']);
 					}
 
 				} else {
@@ -325,18 +325,18 @@ if($xml) {
 						$data['price_groups'] 		= array();
 						foreach($groups as $kG => $vG) {
 
-							$data['price_groups'][$kG]['id'] 			= (int)PhocacartUtils::getIntFromString($vG['id']);
-							$data['price_groups'][$kG]['product_id'] 	= (int)PhocacartUtils::getIntFromString($vG['product_id']);
-							$data['price_groups'][$kG]['group_id'] 		= (int)PhocacartUtils::getIntFromString($vG['group_id']);
+							$data['price_groups'][$kG]['id'] 			= (int) PhocacartUtils::getIntFromString($vG['id']);
+							$data['price_groups'][$kG]['product_id'] 	= (int) PhocacartUtils::getIntFromString($vG['product_id']);
+							$data['price_groups'][$kG]['group_id'] 		= (int) PhocacartUtils::getIntFromString($vG['group_id']);
 							$data['price_groups'][$kG]['price'] 		= $vG['price'];
 						}
 					} else {
 						$group 						= $data['price_groups']['price_group'];
 
 						$data['price_groups'] 			= array();
-						$data['price_groups'][0]['id'] 			= (int)PhocacartUtils::getIntFromString($group['id']);
-						$data['price_groups'][0]['product_id'] 	= (int)PhocacartUtils::getIntFromString($group['product_id']);
-						$data['price_groups'][0]['group_id'] 	= (int)PhocacartUtils::getIntFromString($group['group_id']);
+						$data['price_groups'][0]['id'] 			= (int) PhocacartUtils::getIntFromString($group['id']);
+						$data['price_groups'][0]['product_id'] 	= (int) PhocacartUtils::getIntFromString($group['product_id']);
+						$data['price_groups'][0]['group_id'] 	= (int) PhocacartUtils::getIntFromString($group['group_id']);
 						$data['price_groups'][0]['price'] 		= $group['price'];
 					}
 
@@ -352,18 +352,18 @@ if($xml) {
 						$groups 					= $data['point_groups']['point_group'];
 						$data['point_groups'] 		= array();
 						foreach($groups as $kG => $vG) {
-							$data['point_groups'][$kG]['id'] 			= (int)PhocacartUtils::getIntFromString($vG['id']);
-							$data['point_groups'][$kG]['product_id'] 	= (int)PhocacartUtils::getIntFromString($vG['product_id']);
-							$data['point_groups'][$kG]['group_id'] 		= (int)PhocacartUtils::getIntFromString($vG['group_id']);
+							$data['point_groups'][$kG]['id'] 			= (int) PhocacartUtils::getIntFromString($vG['id']);
+							$data['point_groups'][$kG]['product_id'] 	= (int) PhocacartUtils::getIntFromString($vG['product_id']);
+							$data['point_groups'][$kG]['group_id'] 		= (int) PhocacartUtils::getIntFromString($vG['group_id']);
 							$data['point_groups'][$kG]['points_received'] = $vG['points_received'];
 						}
 					} else {
 						$group 						= $data['point_groups']['point_group'];
 
 						$data['point_groups'] 			= array();
-						$data['point_groups'][0]['id'] 			= (int)PhocacartUtils::getIntFromString($group['id']);
-						$data['point_groups'][0]['product_id'] 	= (int)PhocacartUtils::getIntFromString($group['product_id']);
-						$data['point_groups'][0]['group_id'] 	= (int)PhocacartUtils::getIntFromString($group['group_id']);
+						$data['point_groups'][0]['id'] 			= (int) PhocacartUtils::getIntFromString($group['id']);
+						$data['point_groups'][0]['product_id'] 	= (int) PhocacartUtils::getIntFromString($group['product_id']);
+						$data['point_groups'][0]['group_id'] 	= (int) PhocacartUtils::getIntFromString($group['group_id']);
 						$data['point_groups'][0]['points_received'] = $group['points_received'];
 					}
 
@@ -381,8 +381,8 @@ if($xml) {
 						$data['price_histories'] 		= array();
 						foreach($histories as $kG => $vG) {
 
-							$data['price_histories'][$kG]['id'] 			= (int)PhocacartUtils::getIntFromString($vG['id']);
-							$data['price_histories'][$kG]['product_id'] 	= (int)PhocacartUtils::getIntFromString($vG['product_id']);
+							$data['price_histories'][$kG]['id'] 			= (int) PhocacartUtils::getIntFromString($vG['id']);
+							$data['price_histories'][$kG]['product_id'] 	= (int) PhocacartUtils::getIntFromString($vG['product_id']);
 							$data['price_histories'][$kG]['date'] 			= $vG['date'];
 							$data['price_histories'][$kG]['price'] 			= $vG['price'];
 						}
@@ -390,8 +390,8 @@ if($xml) {
 						$group 						= $data['price_histories']['price_history'];
 
 						$data['price_histories'] 			= array();
-						$data['price_histories'][0]['id'] 			= (int)PhocacartUtils::getIntFromString($group['id']);
-						$data['price_histories'][0]['product_id'] 	= (int)PhocacartUtils::getIntFromString($group['product_id']);
+						$data['price_histories'][0]['id'] 			= (int) PhocacartUtils::getIntFromString($group['id']);
+						$data['price_histories'][0]['product_id'] 	= (int) PhocacartUtils::getIntFromString($group['product_id']);
 						$data['price_histories'][0]['date'] 		= $group['date'];
 						$data['price_histories'][0]['price'] 		= $group['price'];
 					}
@@ -409,12 +409,12 @@ if($xml) {
 						$relateds 					= $data['related']['related_product'];
 						$data['related'] 			= array();
 						foreach($relateds as $kR => $vR) {
-							$data['related'][] = (int)PhocacartUtils::getIntFromString($vR);
+							$data['related'][] = (int) PhocacartUtils::getIntFromString($vR);
 						}
 					} else {
 						$related 			= $data['related']['related_product'];
 						$data['related'] 	= array();
-						$data['related'][0] = (int)PhocacartUtils::getIntFromString($related);
+						$data['related'][0] = (int) PhocacartUtils::getIntFromString($related);
 					}
 
 				} else {
@@ -431,12 +431,12 @@ if($xml) {
 						$tag 				= $data['tags']['tag'];
 						$data['tags'] 		= array();
 						$data['tags'][0]	= PhocacartUtils::getIntFromString($tag);
-					} else if (is_array($data['tags']['tag'])) {
+					} elseif (is_array($data['tags']['tag'])) {
 						// TAGS ARRAY
 						$tags = $data['tags']['tag'];
 						$data['tags'] 	= array();
 						foreach($tags as $kT => $vT) {
-							$vT = (int)PhocacartUtils::getIntFromString($vT);
+							$vT = (int) PhocacartUtils::getIntFromString($vT);
 							$data['tags'][] 				= $vT;
 						}
 					}
@@ -478,7 +478,7 @@ if($xml) {
 						$cPcAP = count($pcAP);
 						if ($cPcAH > $cPcAP) {
 							$pcAP = array_pad($pcAP, $cPcAH, '');
-						} else if ($cPcAH < $cPcAP) {
+						} elseif ($cPcAH < $cPcAP) {
 							$pcAH = array_pad($pcAH, $cPcAP, '');
 						}
 						$data = array_combine($pcAH, $pcAP);
@@ -513,7 +513,7 @@ if($xml) {
 							if (!empty($categories)) {
 
 								foreach($categories as $kC => $vC) {
-									$idC = (int)PhocacartUtils::getIntFromString($vC['id']);
+									$idC = (int) PhocacartUtils::getIntFromString($vC['id']);
 									$data['catid_multiple'][] 				= $idC;
 									$data['catid_multiple_ordering'][$idC]	= $vC['ordering'];
 								}

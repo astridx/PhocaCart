@@ -12,10 +12,10 @@ defined('_JEXEC') or die();
 $d 					= $displayData;
 $displayData 		= null;
 $v 					= $d['attribute'];
-$attributeIdName	= 'V'.$d['typeview'].'P'.(int)$d['product_id'].'A'.(int)$v->id;
-$productIdName		= 'V'.$d['typeview'].'P'.(int)$d['product_id'];
+$attributeIdName	= 'V'.$d['typeview'].'P'.(int) $d['product_id'].'A'.(int) $v->id;
+$productIdName		= 'V'.$d['typeview'].'P'.(int) $d['product_id'];
 $iconType			= $d['s']['i']['icon-type'];
-$price				= new PhocacartPrice();
+$price				= new PhocacartPrice;
 
 $attr				= array();
 $attr[]				= 'id="phItemAttribute'.$attributeIdName.'"';// ID
@@ -55,7 +55,7 @@ foreach ($v->options as $k2 => $v2) {
 	$suffix =  ' ('.$operator.' '.$amount.')';
 	if (isset($d['zero_attribute_price']) && $d['zero_attribute_price'] == 0 && $price->roundPrice($v2->amount) < 0.01 && $price->roundPrice($v2->amount) > -0.01) {
 		$suffix = '';
-	} else if (isset($d['zero_attribute_price']) && $d['zero_attribute_price'] == 2) {
+	} elseif (isset($d['zero_attribute_price']) && $d['zero_attribute_price'] == 2) {
 		$suffix = '';// hide always
 	}
 
@@ -63,19 +63,19 @@ foreach ($v->options as $k2 => $v2) {
 
 	echo '<div><label class="'.$d['s']['c']['btn'].' phTextAttributeInput '.$active.'" style="background-color: '.strip_tags($v2->color).'">'.htmlspecialchars($v2->title). $suffix.'</label><br />';
 	switch($v->type) {
-        case 10:
-        case 11:
+		case 10:
+		case 11:
 
-        echo '<textarea class="ph-attribute-textarea" name="attribute['.$v->id.']['.$v2->id.']" '.$d['required']['attribute'].$maxLength.'></textarea>';
+		echo '<textarea class="ph-attribute-textarea" name="attribute['.$v->id.']['.$v2->id.']" '.$d['required']['attribute'].$maxLength.'></textarea>';
 
-        break;
+		break;
 
-        default:
+		default:
 
-        echo '<input type="text" name="attribute['.$v->id.']['.$v2->id.']" value="" '.$d['required']['attribute'].$maxLength.' />';
+		echo '<input type="text" name="attribute['.$v->id.']['.$v2->id.']" value="" '.$d['required']['attribute'].$maxLength.' />';
 
-        break;
-    }
+		break;
+	}
 	echo '</div>';
 }
 

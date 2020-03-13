@@ -16,7 +16,6 @@ use Joomla\CMS\Language\LanguageHelper;
 
 class JFormFieldModal_Phocacartcategory extends JFormField
 {
-
 	protected $type = 'Modal_Phocacartcategory';
 
 
@@ -59,7 +58,8 @@ class JFormFieldModal_Phocacartcategory extends JFormField
 				function jSelectPhocacartcategory_" . $this->id . "(id, title, object) {
 					window.processModalSelect('Phocacartcategory', '" . $this->id . "', id, title, '', object);
 				}
-				");
+				"
+				);
 
 				JText::script('JGLOBAL_ASSOCIATIONS_PROPAGATE_FAILED');
 
@@ -98,7 +98,7 @@ class JFormFieldModal_Phocacartcategory extends JFormField
 			}
 			catch (RuntimeException $e)
 			{
-                throw new Exception($e->getMessage(), 500);
+				throw new Exception($e->getMessage(), 500);
 			}
 		}
 

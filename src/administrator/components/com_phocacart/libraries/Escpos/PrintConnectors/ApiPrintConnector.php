@@ -9,94 +9,98 @@ use Exception;
 
 class ApiPrintConnector implements PrintConnector
 {
-    /**
-     * @var string
-     */
-    protected $stream;
-    /**
-     * @var Client
-     */
-    protected $httpClient;
+	/**
+	 * @var string
+	 */
+	protected $stream;
 
-    /**
-     * @var string
-     */
-    protected $printerId;
-    /**
-     * @var string
-     */
-    protected $apiToken;
+	/**
+	 * @var Client
+	 */
+	protected $httpClient;
 
-    /**
-    * Construct new connector
-    *
-    * @param string $host
-    * @param string $printerId
-    * @param string $apiToken
-    */
-    public function __construct($host, $printerId, $apiToken)
-    {
-        $this->httpClient = new Client(array('base_uri' => $host));
-        $this->printerId = $printerId;
-        $this->apiToken = $apiToken;
+	/**
+	 * @var string
+	 */
+	protected $printerId;
 
-        $this->stream = '';
-    }
+	/**
+	 * @var string
+	 */
+	protected $apiToken;
 
-    /**
-     * Print connectors should cause a NOTICE if they are deconstructed
-     * when they have not been finalized.
-     */
-    public function __destruct()
-    {
-        if (! empty($this->stream)) {
-            trigger_error("Print connector was not finalized. Did you forget to close the printer?", E_USER_NOTICE);
-        }
-    }
+	/**
+	 * Construct new connector
+	 *
+	 * @param string $host
+	 * @param string $printerId
+	 * @param string $apiToken
+	 */
+	public function __construct($host, $printerId, $apiToken)
+	{
+		$this->httpClient = new Client(array('base_uri' => $host));
+		$this->printerId = $printerId;
+		$this->apiToken = $apiToken;
 
-    /**
-     * Finish using this print connector (close file, socket, send
-     * accumulated output, etc).
-     */
-    public function finalize()
-    {
-        /** @var Request $request */
-        $request = $this->httpClient->post(
-            'printers/'.$this->printerId.'/print?api_token='.$this->apiToken,
-            null,
-            $this->stream
-        );
+		$this->stream = '';
+	}
 
-        /** @var Response $response */
-        $response = $request->send();
+	/**
+	 * Print connectors should cause a NOTICE if they are deconstructed
+	 * when they have not been finalized.
+	 */
+	public function __destruct()
+	{
+		if (! empty($this->stream))
+		{
+			trigger_error("Print connector was not finalized. Did you forget to close the printer?", E_USER_NOTICE);
+		}
+	}
 
-        if (! $response->isSuccessful()) {
-            throw new Exception(
-                sprintf('Failed to print. API returned "%s: %s"', $response->getStatusCode(), $response->getReasonPhrase())
-            );
-        }
+	/**
+	 * Finish using this print connector (close file, socket, send
+	 * accumulated output, etc).
+	 */
+	public function finalize()
+	{
+		/** @var Request $request */
+		$request = $this->httpClient->post(
+			'printers/' . $this->printerId . '/print?api_token=' . $this->apiToken,
+			null,
+			$this->stream
+		);
 
-        $this->stream = '';
-    }
+		/** @var Response $response */
+		$response = $request->send();
 
-    /**
-     * Read data from the printer.
-     *
-     * @param string $len Length of data to read.
-     * @return string Data read from the printer.
-     */
-    public function read($len)
-    {
-        return $this->stream;
-    }
+		if (! $response->isSuccessful())
+		{
+			throw new Exception(
+				sprintf('Failed to print. API returned "%s: %s"', $response->getStatusCode(), $response->getReasonPhrase())
+			);
+		}
 
-    /**
-     * Write data to the print connector.
-     *
-     * @param string $data The data to write
-     */
-    public function write($data)
-    {
-        $this->stream .= $data;
-    }
+		$this->stream = '';
+	}
+
+	/**
+	 * Read data from the printer.
+	 *
+	 * @param string $len Length of data to read.
+	 * @return string Data read from the printer.
+	 */
+	public function read($len)
+	{
+		return $this->stream;
+	}
+
+	/**
+	 * Write data to the print connector.
+	 *
+	 * @param string $data The data to write
+	 */
+	public function write($data)
+	{
+		$this->stream .= $data;
+	}
 }

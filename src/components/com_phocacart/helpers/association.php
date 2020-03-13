@@ -18,68 +18,80 @@ abstract class PhocacartHelperAssociation
 	public static function getAssociations($id = 0, $view = null)
 	{
 
-
 		$jinput = JFactory::getApplication()->input;
 		$view   = $view === null ? $jinput->get('view') : $view;
 		$id     = empty($id) ? $jinput->getInt('id') : $id;
 
-		if ($view === 'item') {
-			if ($id) {
+		if ($view === 'item')
+		{
+			if ($id)
+			{
 				$associations = JLanguageAssociations::getAssociations('com_phocacart', '#__phocacart_products', 'com_phocacart.item', $id, 'id', 'alias', false);
 
 				$return = array();
 
-				foreach ($associations as $tag => $item) {
-				    $idA = explode(":",$item->id);
-				    $idAlias = '';
-				    if (isset($idA[1])) {
-                        $idAlias = $idA[1];
-                    }
-				    $id = (int)$item->id;
+				foreach ($associations as $tag => $item)
+				{
+					$idA = explode(":", $item->id);
+					$idAlias = '';
 
+					if (isset($idA[1]))
+					{
+						$idAlias = $idA[1];
+					}
+
+					$id = (int) $item->id;
 
 					$catidA = PhocacartCategoryMultiple::getCategories($id, 3);
 					$catid  = 0;
-					if (isset($catidA[0]->id)) {
-					    $catid = $catidA[0]->id;
-                    }
+
+					if (isset($catidA[0]->id))
+					{
+						$catid = $catidA[0]->id;
+					}
+
 					$catidAlias = '';
-					if (isset($catidA[0]->alias)) {
-					    $catidAlias = $catidA[0]->alias;
-                    }
 
-					$return[$tag] = PhocacartRoute::getItemRoute((int)$id, (int)$catid, $idAlias, $catidAlias, array(0 => $tag));
+					if (isset($catidA[0]->alias))
+					{
+						$catidAlias = $catidA[0]->alias;
+					}
 
+					$return[$tag] = PhocacartRoute::getItemRoute((int) $id, (int) $catid, $idAlias, $catidAlias, array(0 => $tag));
 				}
 
 				return $return;
 			}
-		} else if($view === 'category') {
-			if ($id) {
+		}
+		elseif ($view === 'category')
+		{
+			if ($id)
+			{
 				$associations = JLanguageAssociations::getAssociations('com_phocacart', '#__phocacart_categories', 'com_phocacart.category', $id, 'id', 'alias', false);
 
 				$return = array();
 
-				foreach ($associations as $tag => $item) {
-				    $idA = explode(":",$item->id);
-                    $idAlias = '';
-				    if (isset($idA[1])) {
-                        $idAlias = $idA[1];
-                    }
-				    $id = (int)$item->id;
+				foreach ($associations as $tag => $item)
+				{
+					$idA = explode(":", $item->id);
+					$idAlias = '';
 
+					if (isset($idA[1]))
+					{
+						$idAlias = $idA[1];
+					}
 
+					$id = (int) $item->id;
 
-					$return[$tag] = PhocacartRoute::getCategoryRoute((int)$id, $idAlias, array(0 => $tag));// tag = lang
-
+					$return[$tag] = PhocacartRoute::getCategoryRoute((int) $id, $idAlias, array(0 => $tag));// Tag = lang
 				}
 
 				return $return;
 			}
-
 		}
 
-		/*if ($view === 'category' || $view === 'categories')
+		/*
+		if ($view === 'category' || $view === 'categories')
 		{
 			return self::getCategoryAssociations($id, 'com_phocacart');
 		}*/

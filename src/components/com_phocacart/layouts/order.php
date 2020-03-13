@@ -181,7 +181,7 @@ if ($d['format'] == 'pdf') {
 	$taxRecTdRight= 'style="border: 1pt solid #dddddd;text-align:right;"';
 	$bQrInfo	= 'style="font-size: 70%"';
 
-} else if ($d['format'] == 'mail') {
+} elseif ($d['format'] == 'mail') {
 
 	// FORMAT EMAIL
 	$box		= '';
@@ -282,20 +282,20 @@ if ($d['type'] == 1) {
 	$o[] = '<div><h1>'.JText::_('COM_PHOCACART_ORDER').'</h1></div>';
 	$o[] = '<div><b>'.JText::_('COM_PHOCACART_ORDER_NR').'</b>: '.PhocacartOrder::getOrderNumber($d['common']->id, $d['common']->date, $d['common']->order_number).'</div>';
 	$o[] = '<div><b>'.JText::_('COM_PHOCACART_ORDER_DATE').'</b>: '.JHtml::date($d['common']->date, 'DATE_FORMAT_LC4').'</div>';
-} else if ($d['type'] == 2) {
+} elseif ($d['type'] == 2) {
 
 	$o[] = '<div><h1>'.JText::_('COM_PHOCACART_INVOICE').'</h1></div>';
 	$o[] = '<div><b>'.JText::_('COM_PHOCACART_INVOICE_NR').'</b>: '.PhocacartOrder::getInvoiceNumber($d['common']->id, $d['common']->date, $d['common']->invoice_number).'</div>';
 	$o[] = '<div><b>'.JText::_('COM_PHOCACART_INVOICE_DATE').'</b>: '.JHtml::date($d['common']->invoice_date, 'DATE_FORMAT_LC4').'</div>';
 
 	if ($display_time_of_supply_invoice	== 1 && $d['common']->invoice_time_of_supply != '' && $d['common']->invoice_time_of_supply != '0000-00-00 00:00:00') {
-        $o[] = '<div><b>' . JText::_('COM_PHOCACART_DATE_OF_TAXABLE_SUPPLY') . '</b>: ' . JHtml::date($d['common']->invoice_time_of_supply, 'DATE_FORMAT_LC4') . '</div>';
-    }
+		$o[] = '<div><b>' . JText::_('COM_PHOCACART_DATE_OF_TAXABLE_SUPPLY') . '</b>: ' . JHtml::date($d['common']->invoice_time_of_supply, 'DATE_FORMAT_LC4') . '</div>';
+	}
 
-    $o[] = '<div><b>'.JText::_('COM_PHOCACART_INVOICE_DUE_DATE').'</b>: '.PhocacartOrder::getInvoiceDueDate($d['common']->id, $d['common']->date, $d['common']->invoice_due_date, 'DATE_FORMAT_LC4').'</div>';
+	$o[] = '<div><b>'.JText::_('COM_PHOCACART_INVOICE_DUE_DATE').'</b>: '.PhocacartOrder::getInvoiceDueDate($d['common']->id, $d['common']->date, $d['common']->invoice_due_date, 'DATE_FORMAT_LC4').'</div>';
 	$o[] = '<div><b>'.JText::_('COM_PHOCACART_PAYMENT_REFERENCE_NUMBER').'</b>: '.PhocacartOrder::getPaymentReferenceNumber($d['common']->id, $d['common']->date, $d['common']->invoice_prn).'</div>';
 
-} else if ($d['type'] == 3) {
+} elseif ($d['type'] == 3) {
 	$o[] = '<div><h1>'.JText::_('COM_PHOCACART_DELIVERY_NOTE').'</h1></div>';
 	$o[] = '<div style="margin:0;"><b>'.JText::_('COM_PHOCACART_ORDER_NR').'</b>: '.PhocacartOrder::getOrderNumber($d['common']->id, $d['common']->date, $d['common']->order_number).'</div>';
 	$o[] = '<div style="margin:0"><b>'.JText::_('COM_PHOCACART_ORDER_DATE').'</b>: '.JHtml::date($d['common']->date, 'DATE_FORMAT_LC4').'</div>';
@@ -393,8 +393,8 @@ if (!empty($d['bas']['b'])) {
 		$oidnBillingDescArticle = '';
 		if ($d['common']->oidn_spec_billing_desc != '') {
 			$oidnBillingDescArticle = $d['common']->oidn_spec_billing_desc;
-		} else if ((int)$oidn_global_billing_desc > 0) {
-			$oidnBillingDescArticle = PhocacartRenderFront::renderArticle((int)$oidn_global_billing_desc);
+		} elseif ((int) $oidn_global_billing_desc > 0) {
+			$oidnBillingDescArticle = PhocacartRenderFront::renderArticle((int) $oidn_global_billing_desc);
 		}
 
 		if ($oidnBillingDescArticle != '') {
@@ -438,15 +438,15 @@ if (!empty($d['bas']['s'])) {
 
 
 	// -----------------------
-    // ORDER | INVOICE | DELIVERY NOTE SHIPPING ADDRESS DESCRIPTION
-    // -----------------------
-    if ($d['type'] == 1 || $d['type'] == 2 || $d['type'] == 3) {
+	// ORDER | INVOICE | DELIVERY NOTE SHIPPING ADDRESS DESCRIPTION
+	// -----------------------
+	if ($d['type'] == 1 || $d['type'] == 2 || $d['type'] == 3) {
 
 		$oidnShippingDescArticle = '';
 		if ($d['common']->oidn_spec_shipping_desc != '') {
 			$oidnShippingDescArticle = $d['common']->oidn_spec_shipping_desc;
-		} else if ((int)$oidn_global_shipping_desc > 0) {
-			$oidnShippingDescArticle = PhocacartRenderFront::renderArticle((int)$oidn_global_shipping_desc);
+		} elseif ((int) $oidn_global_shipping_desc > 0) {
+			$oidnShippingDescArticle = PhocacartRenderFront::renderArticle((int) $oidn_global_shipping_desc);
 		}
 
 		if ($oidnShippingDescArticle != '') {
@@ -488,8 +488,8 @@ if ($d['type'] == 2) {
 	$invoiceTopDescArticle = '';
 	if ($d['common']->invoice_spec_top_desc != '') {
 		$invoiceTopDescArticle = $d['common']->invoice_spec_top_desc;
-	} else if ((int)$invoice_global_top_desc > 0) {
-		$invoiceTopDescArticle = PhocacartRenderFront::renderArticle((int)$invoice_global_top_desc);
+	} elseif ((int) $invoice_global_top_desc > 0) {
+		$invoiceTopDescArticle = PhocacartRenderFront::renderArticle((int) $invoice_global_top_desc);
 	}
 
 	if ($invoiceTopDescArticle != '') {
@@ -573,10 +573,10 @@ if (!empty($d['products'])) {
 		$p[] = '<td style="text-align:center">'.$v->quantity.'</td>';
 
 
-		$netto 		= (int)$v->quantity * $v->netto;
+		$netto 		= (int) $v->quantity * $v->netto;
 		$nettoUnit	= $v->netto;
-		$tax 		= (int)$v->quantity * $v->tax;
-		$brutto 	= (int)$v->quantity * $v->brutto;
+		$tax 		= (int) $v->quantity * $v->tax;
+		$brutto 	= (int) $v->quantity * $v->brutto;
 		if ($d['type'] != 3) {
 			if ($tax_calculation > 0) {
 				$p[] = '<td style="text-align:right" colspan="2">'.$d['price']->getPriceFormat($v->netto).'</td>';
@@ -602,8 +602,8 @@ if (!empty($d['products'])) {
 
 				$p[] = '<li><span class="ph-small ph-cart-small-attribute ph-idnr-li">'.$v2->attribute_title .' '.$v2->option_title.'</span>';
 				 if (isset($v2->option_value) && urldecode($v2->option_value) != '') {
-                    $p[] =  ': <span class="ph-small ph-cart-small-attribute">' . htmlspecialchars(urldecode($v2->option_value), ENT_QUOTES, 'UTF-8') . '</span>';
-                }
+					$p[] =  ': <span class="ph-small ph-cart-small-attribute">' . htmlspecialchars(urldecode($v2->option_value), ENT_QUOTES, 'UTF-8') . '</span>';
+				}
 				$p[] = '</li>';
 				*/
 
@@ -616,8 +616,8 @@ if (!empty($d['products'])) {
 		}
 
 		if ($pR) {
-			$brutto = (int)$v->quantity * $v->brutto;
-			$oPr[] = $pP->printLineColumns(array((int)$v->quantity . ' x ' . $d['price']->getPriceFormat($v->brutto), $d['price']->getPriceFormat($brutto)));
+			$brutto = (int) $v->quantity * $v->brutto;
+			$oPr[] = $pP->printLineColumns(array((int) $v->quantity . ' x ' . $d['price']->getPriceFormat($v->brutto), $d['price']->getPriceFormat($brutto)));
 		}
 
 		$lastSaleNettoUnit 	= array();
@@ -635,9 +635,9 @@ if (!empty($d['products'])) {
 			foreach($d['discounts'][$v->product_id_key] as $k3 => $v3) {
 
 				$nettoUnit3 							= $v3->netto;
-				$netto3									= (int)$v->quantity * $v3->netto;
-				$tax3 									= (int)$v->quantity * $v3->tax;
-				$brutto3 								= (int)$v->quantity * $v3->brutto;
+				$netto3									= (int) $v->quantity * $v3->netto;
+				$tax3 									= (int) $v->quantity * $v3->tax;
+				$brutto3 								= (int) $v->quantity * $v3->brutto;
 
 				$saleNettoUnit							= $lastSaleNettoUnit[$v->product_id_key] 	- $nettoUnit3;
 				$saleNetto								= $lastSaleNetto[$v->product_id_key] 		- $netto3;
@@ -670,7 +670,7 @@ if (!empty($d['products'])) {
 					if ($pR) {
 						$oPr[] = $pP->printLineColumns(array($v3->title, $d['price']->getPriceFormat($saleBrutto, 1)));
 					}
-				} else if ($display_discount_price_product == 1) {
+				} elseif ($display_discount_price_product == 1) {
 
 					$p[] = '<tr '.$bProduct.'>';
 					$p[] = '<td></td>';
@@ -740,7 +740,7 @@ if (!empty($d['total'])) {
 		if($v->amount == 0 && $v->amount_currency == 0 && $v->type != 'brutto') {
 			// Don't display coupon if null
 
-		} else if ($v->type == 'netto') {
+		} elseif ($v->type == 'netto') {
 			$t[] = '<tr '.$totalF.'>';
 			$t[] = '<td colspan="'.$tColspanLeft.'"></td>';
 			$t[] = '<td colspan="'.$tColspanMid.'"><b>'. PhocacartLanguage::renderTitle($v->title, $v->title_lang, array(0 => array($v->title_lang_suffix, ' '), 1 => array($v->title_lang_suffix2, ' '))).'</b></td>';
@@ -749,7 +749,7 @@ if (!empty($d['total'])) {
 
 			if ($pR) { $oPr[] = $pP->printLineColumns(array(PhocacartLanguage::renderTitle($v->title, $v->title_lang, array(0 => array($v->title_lang_suffix, ' '), 1 => array($v->title_lang_suffix2, ' '))), $d['price']->getPriceFormat($v->amount))); }
 
-		} else if ($v->type == 'brutto') {
+		} elseif ($v->type == 'brutto') {
 
 			// Brutto or Brutto currency
 			$amount = (isset($v->amount_currency) && $v->amount_currency > 0) ? $d['price']->getPriceFormat($v->amount_currency, 0, 1) : $d['price']->getPriceFormat($v->amount);
@@ -771,7 +771,7 @@ if (!empty($d['total'])) {
 				$toPay = $amount;
 			}
 
-		} else if ($v->type == 'rounding') {
+		} elseif ($v->type == 'rounding') {
 
 			// Rounding or rounding currency
 			$amount = (isset($v->amount_currency) && $v->amount_currency > 0) ? $d['price']->getPriceFormat($v->amount_currency, 0, 1) : $d['price']->getPriceFormat($v->amount);
@@ -835,8 +835,8 @@ if ($d['type'] == 2) {
 	$invoiceMiddleDescArticle = '';
 	if ($d['common']->invoice_spec_middle_desc != '') {
 		$invoiceMiddleDescArticle = $d['common']->invoice_spec_middle_desc;
-	} else if ((int)$invoice_global_middle_desc > 0) {
-		$invoiceMiddleDescArticle = PhocacartRenderFront::renderArticle((int)$invoice_global_middle_desc);
+	} elseif ((int) $invoice_global_middle_desc > 0) {
+		$invoiceMiddleDescArticle = PhocacartRenderFront::renderArticle((int) $invoice_global_middle_desc);
 	}
 
 	if ($invoiceMiddleDescArticle != '') {
@@ -932,7 +932,7 @@ if (($display_tax_recapitulation_invoice == 1 && $d['type'] == 2 ) ||  ($display
 
 			if ($v->type == 'rounding') {
 				// Don't display rounding here, only trcrounding (calculation rounding + tax recapitulation rounding)
-			} else if ($amountBrutto > 0 || $amountBrutto < 0) {
+			} elseif ($amountBrutto > 0 || $amountBrutto < 0) {
 
 				$o[] = '<tr>';
 				$o[] = '<td '.$taxRecTd.'>'.$title.'</td>';
@@ -1006,7 +1006,7 @@ if (($display_tax_recapitulation_invoice == 1 && $d['type'] == 2 ) ||  ($display
 // -----------------------
 
 if (($display_reward_points_invoice == 1 && $d['type'] == 2 ) ||  ($display_reward_points_pos == 1 && $d['type'] == 4 )) {
-	if ((int)$d['common']->user_id > 0 && (int)$d['common']->id > 0) {
+	if ((int) $d['common']->user_id > 0 && (int) $d['common']->id > 0) {
 		$pointsUser 	= PhocacartReward::getTotalPointsByUserIdExceptCurrentOrder($d['common']->user_id, $d['common']->id);
 		$pointsOrder 	= PhocacartReward::getTotalPointsByOrderId($d['common']->id);
 
@@ -1030,8 +1030,8 @@ if ($d['type'] == 2) {
 	$invoiceBottomDescArticle = '';
 	if ($d['common']->invoice_spec_bottom_desc != '') {
 		$invoiceBottomDescArticle = $d['common']->invoice_spec_bottom_desc;
-	} else if ((int)$invoice_global_bottom_desc > 0) {
-		$invoiceBottomDescArticle = PhocacartRenderFront::renderArticle((int)$invoice_global_bottom_desc);
+	} elseif ((int) $invoice_global_bottom_desc > 0) {
+		$invoiceBottomDescArticle = PhocacartRenderFront::renderArticle((int) $invoice_global_bottom_desc);
 	}
 
 	if ($invoiceBottomDescArticle != '') {

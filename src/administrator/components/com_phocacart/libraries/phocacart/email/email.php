@@ -10,7 +10,8 @@
  */
 defined('_JEXEC') or die();
 
-class PhocacartEmailMail extends JMail{
+class PhocacartEmailMail extends JMail
+{
 
 
 	public static function getInstance($id = 'Joomla', $exceptions = true)
@@ -24,11 +25,10 @@ class PhocacartEmailMail extends JMail{
 	}
 
 	// PHOCAEDIT
-	//public function sendMail($from, $fromName, $recipient, $subject, $body, $mode = false, $cc = null, $bcc = null, $attachment = null,
+	// public function sendMail($from, $fromName, $recipient, $subject, $body, $mode = false, $cc = null, $bcc = null, $attachment = null,
 	//	$replyTo = null, $replyToName = null)
 	public function sendMailA($from, $fromName, $recipient, $subject, $body, $mode = false, $cc = null, $bcc = null, $attachmentString = '', $attachmentFileName = '', $replyTo = null, $replyToName = null)
 	{
-
 
 		$this->setSubject($subject);
 		$this->setBody($body);
@@ -47,10 +47,8 @@ class PhocacartEmailMail extends JMail{
 
 		if ($this->addCc($cc) === false)
 		{
-
 			return false;
 		}
-
 
 		if ($this->addBcc($bcc) === false)
 		{
@@ -58,8 +56,9 @@ class PhocacartEmailMail extends JMail{
 		}
 
 		// PHOCAEDIT
-		if ($attachmentString != '' && $attachmentFileName != '') {
-			if	($this->addStringAttachment($attachmentString, $attachmentFileName) === false)
+		if ($attachmentString != '' && $attachmentFileName != '')
+		{
+			if ($this->addStringAttachment($attachmentString, $attachmentFileName) === false)
 			{
 				return false;
 			}
@@ -91,10 +90,8 @@ class PhocacartEmailMail extends JMail{
 
 		if ($this->setSender(array($from, $fromName, $autoReplyTo)) === false)
 		{
-
 			return false;
 		}
-
 
 		return $this->Send();
 	}
@@ -103,8 +100,8 @@ class PhocacartEmailMail extends JMail{
 
 
 
-class PhocacartEmailFactory extends JFactory{
-
+class PhocacartEmailFactory extends JFactory
+{
 	public static $mailer = null;
 
 	public static function getMailer()
@@ -148,13 +145,13 @@ class PhocacartEmailFactory extends JFactory{
 				// Check for a false return value if exception throwing is disabled
 				if ($mail->setFrom($mailfrom, JMailHelper::cleanLine($fromname), false) === false)
 				{
-					PhocacartLog::add(2, 'Error sending email', 0, __METHOD__ . '() could not set the sender data. Warning: ' . JLog::WARNING, 'Mail From: '.$mailfrom );
+					PhocacartLog::add(2, 'Error sending email', 0, __METHOD__ . '() could not set the sender data. Warning: ' . JLog::WARNING, 'Mail From: ' . $mailfrom);
 					JLog::add(__METHOD__ . '() could not set the sender data.', JLog::WARNING, 'mail');
 				}
 			}
 			catch (phpmailerException $e)
 			{
-				PhocacartLog::add(2, 'Error sending email', 0, __METHOD__ . '() could not set the sender data. Warning: ' . JLog::WARNING, 'Mail From: '.$mailfrom );
+				PhocacartLog::add(2, 'Error sending email', 0, __METHOD__ . '() could not set the sender data. Warning: ' . JLog::WARNING, 'Mail From: ' . $mailfrom);
 				JLog::add(__METHOD__ . '() could not set the sender data.', JLog::WARNING, 'mail');
 			}
 		}
@@ -185,30 +182,40 @@ class PhocacartEmail
 {
 
 
-	public static function sendEmail($from = '', $fromName = '', $recipient, $subject, $body, $mode = false, $cc = array(), $bcc = array(), $attachmentString = '', $attachmentFilename = '', $replyTo = null, $replyToName = null) {
+	public static function sendEmail($from = '', $fromName = '', $recipient, $subject, $body, $mode = false, $cc = array(), $bcc = array(), $attachmentString = '', $attachmentFilename = '', $replyTo = null, $replyToName = null)
+	{
 
-	//public static function sendEmail($from = '', $fromName = '', $recipient, $subject, $body, $mode = false, $cc = array(), $bcc = array(), $attachment = null, $replyTo = null, $replyToName = null) {
+		// Public static function sendEmail($from = '', $fromName = '', $recipient, $subject, $body, $mode = false, $cc = array(), $bcc = array(), $attachment = null, $replyTo = null, $replyToName = null) {
 
 		$config			= JFactory::getConfig();
 
-		if ($from == '') {
+		if ($from == '')
+		{
 			$from 		= $config->get('mailfrom');
 		}
-		if ($fromName == '') {
+
+		if ($fromName == '')
+		{
 			$fromName 		= $config->get('fromname');
 		}
 
-		if ($replyTo == '') {
+		if ($replyTo == '')
+		{
 			$replyTo 		= $from;
 		}
-		if ($replyToName == '') {
+
+		if ($replyToName == '')
+		{
 			$replyToName 		= $fromName;
 		}
 
-		if ($cc == '') {
+		if ($cc == '')
+		{
 			$cc = array();
 		}
-		if ($bcc == '') {
+
+		if ($bcc == '')
+		{
 			$bcc = array();
 		}
 
@@ -217,30 +224,39 @@ class PhocacartEmail
 		$dCc	= is_array($cc) ? $cc : array(0 => $cc);
 		$dBcc	= is_array($bcc) ? $bcc : array(0 => $bcc);
 
-		if (!empty($dCc)) {
-			foreach($dCc as $k => $v) {
-				if (in_array($v, $dR)) {
+		if (!empty($dCc))
+		{
+			foreach ($dCc as $k => $v)
+			{
+				if (in_array($v, $dR))
+				{
 					unset($dCc[$k]);
 				}
 			}
 		}
 
-		if (!empty($dBcc)) {
-			foreach($dBcc as $k => $v) {
-				if (in_array($v, $dR)) {
+		if (!empty($dBcc))
+		{
+			foreach ($dBcc as $k => $v)
+			{
+				if (in_array($v, $dR))
+				{
 					unset($dBcc[$k]);
-				} else if (in_array($v, $dCc)) {
+				}
+				elseif (in_array($v, $dCc))
+				{
 					unset($dBcc[$k]);
 				}
 			}
 		}
+
 		// Set back cleaned arrays
 		$cc		= $dCc;
 		$bcc	= $dBcc;
 
-
 		// Attachment
-		/*if (!empty($tmpl['attachment'])) {
+		/*
+		if (!empty($tmpl['attachment'])) {
 			$i = 0;
 			foreach ($tmpl['attachment'] as $key => $value) {
 				if(isset($data['attachment'][$i]) && $data['attachment'][$i]) {
@@ -258,21 +274,24 @@ class PhocacartEmail
 
 		$mail 		= PhocacartEmailFactory::getMailer();
 
-
 		$body 		= $body . PhocacartUtilsInfo::getInfo($mode);
-
 
 		$sendMail = $mail->sendMailA($from, $fromName, $recipient, $subject, $body, $mode, $cc, $bcc, $attachmentString, $attachmentFilename, $replyTo, $replyToName);
 
+		if (is_object($sendMail) && $sendMail->getMessage())
+		{
+			PhocacartLog::add(2, 'Error sending email', 0, $sendMail->getMessage() . ', Mail From: ' . $from);
 
+			return false;
+		}
+		elseif (!$sendMail)
+		{
+			PhocacartLog::add(2, 'Error sending email', 0,  'No error data set, Mail From: ' . $from);
 
-		if (is_object($sendMail) && $sendMail->getMessage()) {
-			PhocacartLog::add(2, 'Error sending email', 0, $sendMail->getMessage() . ', Mail From: '.$from );
 			return false;
-		} else if (!$sendMail) {
-			PhocacartLog::add(2, 'Error sending email', 0,  'No error data set, Mail From: '.$from );
-			return false;
-		} else {
+		}
+		else
+		{
 			return true;
 		}
 
@@ -280,60 +299,72 @@ class PhocacartEmail
 
 
 
-	public static function sendQuestionMail ($data, $url, $tmpl) {
+	public static function sendQuestionMail($data, $url, $tmpl)
+	{
 
 		$app						= JFactory::getApplication();
 		$db 						= JFactory::getDBO();
-		$sitename 					= $app->get( 'sitename' );
+		$sitename 					= $app->get('sitename');
 		$paramsC 					= PhocacartUtils::getComponentParameters();
-		$numCharEmail				= $paramsC->get( 'max_char_question_email', 2000 );
-		$send_email_question		= $paramsC->get( 'send_email_question', 0 );
-		$send_email_question_others	= $paramsC->get( 'send_email_question_others', '' );
+		$numCharEmail				= $paramsC->get('max_char_question_email', 2000);
+		$send_email_question		= $paramsC->get('send_email_question', 0);
+		$send_email_question_others	= $paramsC->get('send_email_question_others', '');
 
-		//get all selected users
+		// Get all selected users
 		$query = 'SELECT name, email, sendEmail' .
 		' FROM #__users' .
-		' WHERE id = '.(int)$send_email_question;
-		$db->setQuery( $query );
+		' WHERE id = ' . (int) $send_email_question;
+		$db->setQuery($query);
 		$rows = $db->loadObjectList();
 
-		$subject = $sitename .' - '.JText::_( 'COM_PHOCACART_NEW_QUESTION' );
-		if (isset($data['product']->title) && $data['product']->title != '') {
-			$subject .= ', '.JText::_('COM_PHOCACART_PRODUCT'). ': '. $data['product']->title;
+		$subject = $sitename . ' - ' . JText::_('COM_PHOCACART_NEW_QUESTION');
+
+		if (isset($data['product']->title) && $data['product']->title != '')
+		{
+			$subject .= ', ' . JText::_('COM_PHOCACART_PRODUCT') . ': ' . $data['product']->title;
 		}
-		if (isset($data['category']->title) && $data['category']->title != '') {
-			$subject .= ', '.JText::_('COM_PHOCACART_CATEGORY'). ': '. $data['category']->title;
+
+		if (isset($data['category']->title) && $data['category']->title != '')
+		{
+			$subject .= ', ' . JText::_('COM_PHOCACART_CATEGORY') . ': ' . $data['category']->title;
 		}
 
-
-
-		if (isset($data['name']) && $data['name'] != '') {
+		if (isset($data['name']) && $data['name'] != '')
+		{
 			$fromname = $data['name'];
-		} else {
+		}
+		else
+		{
 			$fromname = 'Unknown';
 		}
 
-		if (isset($data['email']) && $data['email'] != '') {
+		if (isset($data['email']) && $data['email'] != '')
+		{
 			$mailfrom = $data['email'];
-		} else {
+		}
+		else
+		{
 			$mailfrom = isset($rows[0]->email) ? $rows[0]->email : '';
 		}
 
-		if (isset($data['message']) && $data['message'] != '') {
+		if (isset($data['message']) && $data['message'] != '')
+		{
 			$message = $data['message'];
-		} else {
+		}
+		else
+		{
 			$message = JText::_('COM_PHOCACART_NO_MESSAGE');
 		}
 
-
 		$email = '';
-		if (isset($rows[0]->email)) {
+
+		if (isset($rows[0]->email))
+		{
 			$email = $rows[0]->email;
 		}
 
-		$message = str_replace("</p>", "\n", $message );
+		$message = str_replace("</p>", "\n", $message);
 		$message = strip_tags($message);
-
 
 		$layoutE 			= new JLayoutFile('email_ask_question', null, array('component' => 'com_phocacart'));
 		$d					= array();
@@ -349,104 +380,117 @@ class PhocacartEmail
 
 		$body = $layoutE->render($d);
 
-
 		$subject = html_entity_decode($subject, ENT_QUOTES);
 		$body = html_entity_decode($body, ENT_QUOTES);
 
 		$notify = false;
-		// Send email to selected user
-		if ($mailfrom != '' && $send_email_question != '' && $email != '') {
-			$notify = PhocacartEmail::sendEmail($mailfrom, $fromname, $email, $subject, $body, true, null, null, '', '', $mailfrom, $fromname);
-		}
 
+		// Send email to selected user
+		if ($mailfrom != '' && $send_email_question != '' && $email != '')
+		{
+			$notify = self::sendEmail($mailfrom, $fromname, $email, $subject, $body, true, null, null, '', '', $mailfrom, $fromname);
+		}
 
 		// Send email to others
 		$emailOthers	= '';
 		$bcc			= null;
-		if (isset($send_email_question_others) && $send_email_question_others != '') {
-			$bcc = explode(',', $send_email_question_others );
-			if (isset($bcc[0]) && JMailHelper::isEmailAddress($bcc[0])) {
+
+		if (isset($send_email_question_others) && $send_email_question_others != '')
+		{
+			$bcc = explode(',', $send_email_question_others);
+
+			if (isset($bcc[0]) && JMailHelper::isEmailAddress($bcc[0]))
+			{
 				$emailOthers = $bcc[0];
 			}
 		}
 
 		$notifyOthers = false;
-		if ($emailOthers != '' && JMailHelper::isEmailAddress($emailOthers)) {
-			$notifyOthers = PhocacartEmail::sendEmail($mailfrom, $fromname, $emailOthers, $subject, $body, true, null, $bcc, '', '', $mailfrom, $fromname);
+
+		if ($emailOthers != '' && JMailHelper::isEmailAddress($emailOthers))
+		{
+			$notifyOthers = self::sendEmail($mailfrom, $fromname, $emailOthers, $subject, $body, true, null, $bcc, '', '', $mailfrom, $fromname);
 		}
 
-
-		if ($notify || $notifyOthers) {
+		if ($notify || $notifyOthers)
+		{
 			return true;
 		}
+
 		return false;
 	}
 
-	public static function sendSubmitItemMail ($dataItem, $dataContact, $dataParameter, $url, $tmpl) {
+	public static function sendSubmitItemMail($dataItem, $dataContact, $dataParameter, $url, $tmpl)
+	{
 
 		$app							= JFactory::getApplication();
 		$db 							= JFactory::getDBO();
-		$sitename 						= $app->get( 'sitename' );
+		$sitename 						= $app->get('sitename');
 		$paramsC 						= PhocacartUtils::getComponentParameters();
-		$numCharEmail				    = $paramsC->get( 'max_char_submit_item_email', 2000 );
-		$send_email_submit_item			= $paramsC->get( 'send_email_submit_item', 0 );
-		$send_email_submit_item_others	= $paramsC->get( 'send_email_submit_item_others', '' );
+		$numCharEmail				    = $paramsC->get('max_char_submit_item_email', 2000);
+		$send_email_submit_item			= $paramsC->get('send_email_submit_item', 0);
+		$send_email_submit_item_others	= $paramsC->get('send_email_submit_item_others', '');
 
-
-		//get all selected users
+		// Get all selected users
 		$query = 'SELECT name, email, sendEmail' .
 		' FROM #__users' .
-		' WHERE id = '.(int)$send_email_submit_item;
-		$db->setQuery( $query );
+		' WHERE id = ' . (int) $send_email_submit_item;
+		$db->setQuery($query);
 		$rows = $db->loadObjectList();
 
-		$subject = $sitename .' - '.JText::_( 'COM_PHOCACART_NEW_ITEM_SUBMITTED' );
+		$subject = $sitename . ' - ' . JText::_('COM_PHOCACART_NEW_ITEM_SUBMITTED');
 
-
-
-		if (isset($dataContact['name']) && $dataContact['name'] != '') {
+		if (isset($dataContact['name']) && $dataContact['name'] != '')
+		{
 			$fromname = $dataContact['name'];
-		} else {
+		}
+		else
+		{
 			$fromname = 'Unknown';
 		}
 
-		if (isset($dataContact['email']) && $dataContact['email'] != '') {
+		if (isset($dataContact['email']) && $dataContact['email'] != '')
+		{
 			$mailfrom = $dataContact['email'];
-		} else {
+		}
+		else
+		{
 			$mailfrom = isset($rows[0]->email) ? $rows[0]->email : '';
 		}
 
-		/*if (isset($dataItem['title']) && $dataItem['title'] != '') {
+		/*
+		if (isset($dataItem['title']) && $dataItem['title'] != '') {
 			$message[] = $dataItem['title'];
 		} else {
 			$message[] = '';
 		}*/
 
-		/*if (isset($dataContact['title']) && $dataContact['title'] != '') {
+		/*
+		if (isset($dataContact['title']) && $dataContact['title'] != '') {
 			$message .= $dataContact['title'];
 		} else {
 			$message .= '';
 		}*/
 
-		if (isset($dataContact['message']) && $dataContact['message'] != '') {
+		if (isset($dataContact['message']) && $dataContact['message'] != '')
+		{
 			$message = $dataContact['message'];
-		} else {
+		}
+		else
+		{
 			$message = '';
 		}
 
-
 		$email = '';
-		if (isset($rows[0]->email)) {
+
+		if (isset($rows[0]->email))
+		{
 			$email = $rows[0]->email;
 		}
 
-
-
-		$message = str_replace("</p>", "\r\n", $message );
-		$message = str_replace("<br>", "\r\n", $message );
+		$message = str_replace("</p>", "\r\n", $message);
+		$message = str_replace("<br>", "\r\n", $message);
 		$message = strip_tags($message);
-
-
 
 		$layoutE 			= new JLayoutFile('email_submit_item', null, array('component' => 'com_phocacart'));
 		$d					= array();
@@ -463,37 +507,44 @@ class PhocacartEmail
 
 		$body = $layoutE->render($d);
 
-
 		$subject = html_entity_decode($subject, ENT_QUOTES);
 		$body = html_entity_decode($body, ENT_QUOTES);
 
 		$notify = false;
-		// Send email to selected user
-		if ($mailfrom != '' && $send_email_submit_item != '' && $email != '') {
-			$notify = PhocacartEmail::sendEmail($mailfrom, $fromname, $email, $subject, $body, true, null, null, '', '', $mailfrom, $fromname);
-		}
 
+		// Send email to selected user
+		if ($mailfrom != '' && $send_email_submit_item != '' && $email != '')
+		{
+			$notify = self::sendEmail($mailfrom, $fromname, $email, $subject, $body, true, null, null, '', '', $mailfrom, $fromname);
+		}
 
 		// Send email to others
 		$emailOthers	= '';
 		$bcc			= null;
-		if (isset($send_email_submit_item_others) && $send_email_submit_item_others != '') {
-			$bcc = explode(',', $send_email_submit_item_others );
-			if (isset($bcc[0]) && JMailHelper::isEmailAddress($bcc[0])) {
+
+		if (isset($send_email_submit_item_others) && $send_email_submit_item_others != '')
+		{
+			$bcc = explode(',', $send_email_submit_item_others);
+
+			if (isset($bcc[0]) && JMailHelper::isEmailAddress($bcc[0]))
+			{
 				$emailOthers = $bcc[0];
 			}
 		}
 
 		$notifyOthers = false;
-		if ($emailOthers != '' && JMailHelper::isEmailAddress($emailOthers)) {
-			$notifyOthers = PhocacartEmail::sendEmail($mailfrom, $fromname, $emailOthers, $subject, $body, true, null, $bcc, '', '', $mailfrom, $fromname);
+
+		if ($emailOthers != '' && JMailHelper::isEmailAddress($emailOthers))
+		{
+			$notifyOthers = self::sendEmail($mailfrom, $fromname, $emailOthers, $subject, $body, true, null, $bcc, '', '', $mailfrom, $fromname);
 		}
 
-
-		if ($notify || $notifyOthers) {
+		if ($notify || $notifyOthers)
+		{
 			return true;
 		}
+
 		return false;
 	}
 }
-?>
+

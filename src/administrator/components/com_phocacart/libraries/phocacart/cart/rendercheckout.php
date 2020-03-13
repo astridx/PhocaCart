@@ -13,18 +13,22 @@ defined('_JEXEC') or die();
 class PhocacartCartRendercheckout extends PhocacartCart
 {
 	protected $fullitems;
+
 	protected $total;
+
 	public $params;
 
 
-	public function __construct() {
+	public function __construct()
+	{
 
-		$this->setInstance(2);//checkout
+		$this->setInstance(2);// Checkout
 		parent::__construct();
 	}
 
 
-	public function render() {
+	public function render()
+	{
 
 		$app					= JFactory::getApplication();
 		$s                      = PhocacartRenderStyle::getStyles();
@@ -34,28 +38,31 @@ class PhocacartCartRendercheckout extends PhocacartCart
 		$url['actionbase64']	= base64_encode($url['action']);
 		$pos					= PhocacartPos::isPos();
 
-		if ($pos) {
+		if ($pos)
+		{
 			$url['linkcheckout']	= JRoute::_(PhocacartRoute::getPosRoute());
-		} else {
+		}
+		else
+		{
 			$url['linkcheckout']	= JRoute::_(PhocacartRoute::getCheckoutRoute());
 		}
 
-
-		if (empty($this->fullitems)) {
-			$this->fullitems = $this->getFullItems();// get them from parent
+		if (empty($this->fullitems))
+		{
+			$this->fullitems = $this->getFullItems();// Get them from parent
 
 			// SUBTOTAL
-			if (empty($this->total)) {
+			if (empty($this->total))
+			{
 				$this->total = $this->getTotal();
-
 			}
 
 			// COUPONTITLE
-			if (empty($this->coupon['title'])) {
+			if (empty($this->coupon['title']))
+			{
 				$this->coupon['title'] = $this->getCouponTitle();
 			}
 		}
-
 
 		$layout 				= new JLayoutFile('cart_checkout', null, array('component' => 'com_phocacart'));
 		$d						= array();
@@ -73,13 +80,11 @@ class PhocacartCartRendercheckout extends PhocacartCart
 		$d['linkcheckout']		= $url['linkcheckout'];
 		$d['pathitem'] 			= PhocacartPath::getPath('productimage');
 		$d['pos']				= $this->pos;
-		$d['ticketid']			= (int)$this->ticket->id;
-		$d['unitid']			= (int)$this->unit->id;
-		$d['sectionid']			= (int)$this->section->id;
-
-
+		$d['ticketid']			= (int) $this->ticket->id;
+		$d['unitid']			= (int) $this->unit->id;
+		$d['sectionid']			= (int) $this->section->id;
 
 		return $layout->render($d);
 	}
 }
-?>
+

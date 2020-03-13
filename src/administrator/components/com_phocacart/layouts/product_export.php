@@ -58,7 +58,7 @@ $csv = false;
 if ($import_export_type == 1) {
 	$xml = true;
 	$csv = false;
-} else if ($import_export_type == 0) {
+} elseif ($import_export_type == 0) {
 	$csv = true;
 	$xml = false;
 }
@@ -315,8 +315,8 @@ if (!empty($d['products'])){
 
 						case 'categories':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartProduct::getCategoriesByProductId((int)$v['id']);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartProduct::getCategoriesByProductId((int) $v['id']);
 								if (!empty($items)) {
 
 									if ($xml) {
@@ -357,8 +357,8 @@ if (!empty($d['products'])){
 
 						case 'images':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartProduct::getImagesByProductId((int)$v['id']);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartProduct::getImagesByProductId((int) $v['id']);
 								if (!empty($items)) {
 
 									if ($xml) {
@@ -391,8 +391,8 @@ if (!empty($d['products'])){
 
 						case 'attributes':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartAttribute::getAttributesAndOptions((int)$v['id']);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartAttribute::getAttributesAndOptions((int) $v['id']);
 
 								if (!empty($items)) {
 
@@ -454,8 +454,8 @@ if (!empty($d['products'])){
 
 						case 'specifications':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartSpecification::getSpecificationsById((int)$v['id'], 1);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartSpecification::getSpecificationsById((int) $v['id'], 1);
 
 								if (!empty($items)) {
 
@@ -498,8 +498,8 @@ if (!empty($d['products'])){
 
 						case 'discounts':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartDiscountProduct::getDiscountsById((int)$v['id'], 1);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartDiscountProduct::getDiscountsById((int) $v['id'], 1);
 
 								if (!empty($items)) {
 
@@ -515,7 +515,7 @@ if (!empty($d['products'])){
 
 									foreach($items as $kX => $vX) {
 
-										$groups = PhocacartGroup::getGroupsById((int)$vX['id'], 4, 2, (int)$v['id']);
+										$groups = PhocacartGroup::getGroupsById((int) $vX['id'], 4, 2, (int) $v['id']);
 
 
 										if ($xml) {
@@ -574,8 +574,8 @@ if (!empty($d['products'])){
 
 						case 'advanced_stock_options':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartAttribute::getCombinationsStockById((int)$v['id'], 1);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartAttribute::getCombinationsStockById((int) $v['id'], 1);
 
 								if (!empty($items)) {
 
@@ -616,8 +616,8 @@ if (!empty($d['products'])){
 
 						case 'related':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartRelated::getRelatedItemsById((int)$v['id'], 2, 1);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartRelated::getRelatedItemsById((int) $v['id'], 2, 1);
 
 								if (!empty($items)) {
 									if ($xml) {
@@ -650,8 +650,8 @@ if (!empty($d['products'])){
 
 						case 'tags':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartTag::getTags((int)$v['id'], 2);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartTag::getTags((int) $v['id'], 2);
 								if (!empty($items)) {
 									if ($xml) {
 										$title = '';
@@ -684,8 +684,8 @@ if (!empty($d['products'])){
 
 						case 'groups':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartGroup::getGroupsById((int)$v['id'], 3, 2);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartGroup::getGroupsById((int) $v['id'], 3, 2);
 
 								if (!empty($items)) {
 
@@ -727,8 +727,8 @@ if (!empty($d['products'])){
 
 						case 'price_groups':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartGroup::getProductPriceGroupsById((int)$v['id']);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartGroup::getProductPriceGroupsById((int) $v['id']);
 
 
 								if (!empty($items)) {
@@ -772,8 +772,8 @@ if (!empty($d['products'])){
 
 						case 'point_groups':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartGroup::getProductPointGroupsById((int)$v['id']);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartGroup::getProductPointGroupsById((int) $v['id']);
 
 
 								if (!empty($items)) {
@@ -818,8 +818,8 @@ if (!empty($d['products'])){
 						// Price history
 						case 'price_histories':
 
-							if (isset($v['id']) && (int)$v['id'] > 0) {
-								$items = PhocacartPriceHistory::getPriceHistoryById((int)$v['id'], 0, 1);
+							if (isset($v['id']) && (int) $v['id'] > 0) {
+								$items = PhocacartPriceHistory::getPriceHistoryById((int) $v['id'], 0, 1);
 
 
 								if (!empty($items)) {
@@ -876,9 +876,9 @@ if (!empty($d['products'])){
 				//$iA[] = ' ('.(int)$user->id .', '. $db->quote(implode($sP, $iP)).', 0)';
 				//$iA[] = ' ('.(int)$user->id .', '. $db->quote(serialize($iP)).'), 0';
 				if ($xml) {
-					$iA[] = ' ('.(int)$user->id .', '. $db->quote(implode("\n", $iP)).', 0)';
+					$iA[] = ' ('.(int) $user->id .', '. $db->quote(implode("\n", $iP)).', 0)';
 				} else {
-					$iA[] = ' ('.(int)$user->id .', '. $db->quote(str_putcsv($iP)).', 0)';
+					$iA[] = ' ('.(int) $user->id .', '. $db->quote(str_putcsv($iP)).', 0)';
 				}
 			}
 		}
@@ -887,17 +887,17 @@ if (!empty($d['products'])){
 
 // First Row Head - column name (ID) CSV
 if (!empty($iCN) && $d['page'] == 1 && !$xml) {
-	$iO[] = ' ('.(int)$user->id .', '. $db->quote(str_putcsv($iCN)).', 1)';
+	$iO[] = ' ('.(int) $user->id .', '. $db->quote(str_putcsv($iCN)).', 1)';
 }
 // Second Row Head - column name translated CSV
 if (!empty($iCV) && $d['page'] == 1 && !$xml) {
-	$iO[] = ' ('.(int)$user->id .', '. $db->quote(str_putcsv($iCV)).', 1)';
+	$iO[] = ' ('.(int) $user->id .', '. $db->quote(str_putcsv($iCV)).', 1)';
 }
 
 // First and second Row Head - XML
 if ($d['page'] == 1 && $xml) {
-	$iO[] = ' ('.(int)$user->id .', '. $db->quote('<?xml version="1.0" encoding="utf-8"?>').', 1)';
-	$iO[] = ' ('.(int)$user->id .', '. $db->quote('<products>').', 1)';
+	$iO[] = ' ('.(int) $user->id .', '. $db->quote('<?xml version="1.0" encoding="utf-8"?>').', 1)';
+	$iO[] = ' ('.(int) $user->id .', '. $db->quote('<products>').', 1)';
 }
 
 
@@ -909,7 +909,7 @@ if (!empty($iA)) {
 
 // Last Row - XML
 if (($d['last_page'] == $d['page']) && $xml) {
-	$iO[] = ' ('.(int)$user->id .', '. $db->quote('</products>').', 2)';
+	$iO[] = ' ('.(int) $user->id .', '. $db->quote('</products>').', 2)';
 }
 
 if (!empty($iO)) {

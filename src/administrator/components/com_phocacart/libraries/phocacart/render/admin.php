@@ -11,7 +11,8 @@
 defined('_JEXEC') or die();
 class PhocacartRenderAdmin
 {
-	/*public static function quickIconButton( $link, $image, $text, $imgUrl ) {
+	/*
+	public static function quickIconButton( $link, $image, $text, $imgUrl ) {
 
 		return '<div class="thumbnails ph-icon" style="text-align: center">'
 		.'<a class="thumbnail ph-icon-inside" style="text-align: center" href="'.$link.'">'
@@ -19,39 +20,41 @@ class PhocacartRenderAdmin
 		.'<br />'.$text.'</a></div>'. "\n";
 	}
 	*/
-	public static function quickIconButton( $link, $text = '', $icon = '', $color = '') {
+	public static function quickIconButton( $link, $text = '', $icon = '', $color = '')
+	{
 
-	    $s = PhocacartRenderStyle::getStyles();
+		$s = PhocacartRenderStyle::getStyles();
 		$o = '';
 		$o .= '<div class="thumbnails ph-icon">';
-		/*$o .= '   <div class="ph-icon-inside-box"><a class="thumbnail ph-icon-inside" href="'.$link.'"><span style="color: '.$color.';opacity: 0.6;" class="glyphicon glyphicon-'.$icon.' ph-icon-cp-large"></span></a></div>';
+
+		/*
+		$o .= '   <div class="ph-icon-inside-box"><a class="thumbnail ph-icon-inside" href="'.$link.'"><span style="color: '.$color.';opacity: 0.6;" class="glyphicon glyphicon-'.$icon.' ph-icon-cp-large"></span></a></div>';
 		$o .= '   <div class="ph-text-inside-box"><a class="ph-text-inside" href="'.$link.'"><span class="ph-icon-cp-title">'.$text.'</span></a></div>';
 		*/
-		$o .= '   <div class="ph-icon-inside-box"><a class=" icon thumbnail ph-icon-inside" href="'.$link.'" style="background-color: '.$color.'20;"><i style="color: '.$color.';" class="'.$icon.' ph-icon-cp-large"></i></a></div>';
-		$o .= '   <div class="ph-text-inside-box"><a class="ph-text-inside" href="'.$link.'"><span class="ph-icon-cp-title">'.$text.'</span></a></div>';
+		$o .= '   <div class="ph-icon-inside-box"><a class=" icon thumbnail ph-icon-inside" href="' . $link . '" style="background-color: ' . $color . '20;"><i style="color: ' . $color . ';" class="' . $icon . ' ph-icon-cp-large"></i></a></div>';
+		$o .= '   <div class="ph-text-inside-box"><a class="ph-text-inside" href="' . $link . '"><span class="ph-icon-cp-title">' . $text . '</span></a></div>';
 
 		$o .= '</div>';
-
 
 		return $o;
 	}
 
-	public static function getLinks() {
+	public static function getLinks()
+	{
 		$app	= JFactory::getApplication();
 		$option = $app->input->get('option');
 		$oT		= strtoupper($option);
 
-		$links =  array();
-		switch ($option) {
+		$links = array();
 
-
+		switch ($option)
+		{
 			case 'com_phocacart':
 				$links[]	= array('Phoca Cart site', 'https://www.phoca.cz/phocacart');
 				$links[]	= array('Phoca Cart documentation site', 'https://www.phoca.cz/documentation/category/116-phoca-cart-component');
 				$links[]	= array('Phoca Cart download site', 'https://www.phoca.cz/download/category/100-phoca-cart-component');
 				$links[]	= array('Phoca Cart extensions', 'https://www.phoca.cz/phocacart-extensions');
-			break;
-
+					break;
 		}
 
 		$links[]	= array('Phoca News', 'https://www.phoca.cz/news');
@@ -82,44 +85,55 @@ class PhocacartRenderAdmin
 
 		$o = '';
 		$o .= '<p>&nbsp;</p>';
-		$o .= '<h4 style="margin-bottom:5px;">'.JText::_($oT.'_USEFUL_LINKS'). '</h4>';
+		$o .= '<h4 style="margin-bottom:5px;">' . JText::_($oT . '_USEFUL_LINKS') . '</h4>';
 		$o .= '<ul>';
-		foreach ($links as $k => $v) {
-			$o .= '<li><a style="text-decoration:underline" href="'.$v[1].'" target="_blank">'.$v[0].'</a></li>';
+
+		foreach ($links as $k => $v)
+		{
+			$o .= '<li><a style="text-decoration:underline" href="' . $v[1] . '" target="_blank">' . $v[0] . '</a></li>';
 		}
+
 		$o .= '</ul>';
 
 		$o .= '<div>';
 		$o .= '<p>&nbsp;</p>';
-		$o .= '<h4 style="margin-bottom:5px;">'.JText::_($oT.'_USEFUL_TIPS'). '</h4>';
+		$o .= '<h4 style="margin-bottom:5px;">' . JText::_($oT . '_USEFUL_TIPS') . '</h4>';
 
 		$m = mt_rand(0, 10);
-		if ((int)$m > 0) {
+
+		if ((int) $m > 0)
+		{
 			$o .= '<div>';
-			$num = range(0,(count($components) - 1 ));
+			$num = range(0, (count($components) - 1 ));
 			shuffle($num);
-			for ($i = 0; $i<3; $i++) {
+
+			for ($i = 0; $i < 3; $i++)
+			{
 				$numO = $num[$i];
 				$o .= '<div style="float:left;width:33%;margin:0 auto;">';
-				$o .= '<div><a style="text-decoration:underline;" href="https://www.phoca.cz/'.$components[$numO][1].'" target="_blank">'.JHtml::_('image',  'media/'.$option.'/images/administrator/icon-box-'.$components[$numO][2].'.png', ''). '</a></div>';
-				$o .= '<div style="margin-top:-10px;"><small><a style="text-decoration:underline;" href="https://www.phoca.cz/'.$components[$numO][1].'" target="_blank">'.$components[$numO][0].'</a></small></div>';
+				$o .= '<div><a style="text-decoration:underline;" href="https://www.phoca.cz/' . $components[$numO][1] . '" target="_blank">' . JHtml::_('image',  'media/' . $option . '/images/administrator/icon-box-' . $components[$numO][2] . '.png', '') . '</a></div>';
+				$o .= '<div style="margin-top:-10px;"><small><a style="text-decoration:underline;" href="https://www.phoca.cz/' . $components[$numO][1] . '" target="_blank">' . $components[$numO][0] . '</a></small></div>';
 				$o .= '</div>';
 			}
+
 			$o .= '<div style="clear:both"></div>';
 			$o .= '</div>';
-		} else {
-			$num = range(0,(count($banners) - 1 ));
+		}
+		else
+		{
+			$num = range(0, (count($banners) - 1 ));
 			shuffle($num);
 			$numO = $num[0];
-			$o .= '<div><a href="https://www.phoca.cz/'.$banners[$numO][1].'" target="_blank">'.JHtml::_('image',  'media/'.$option.'/images/administrator/b-'.$banners[$numO][2].'.png', ''). '</a></div>';
-
+			$o .= '<div><a href="https://www.phoca.cz/' . $banners[$numO][1] . '" target="_blank">' . JHtml::_('image',  'media/' . $option . '/images/administrator/b-' . $banners[$numO][2] . '.png', '') . '</a></div>';
 		}
 
 		$o .= '<p>&nbsp;</p>';
-		//$o .= '<h4 style="margin-bottom:5px;">'.JText::_($oT.'_PLEASE_READ'). '</h4>';
-		//$o .= '<div><a style="text-decoration:underline" href="https://www.phoca.cz/phoca-needs-your-help/" target="_blank">'.JText::_($oT.'_PHOCA_NEEDS_YOUR_HELP'). '</a></div>';
+
+		// $o .= '<h4 style="margin-bottom:5px;">'.JText::_($oT.'_PLEASE_READ'). '</h4>';
+		// $o .= '<div><a style="text-decoration:underline" href="https://www.phoca.cz/phoca-needs-your-help/" target="_blank">'.JText::_($oT.'_PHOCA_NEEDS_YOUR_HELP'). '</a></div>';
 
 		$o .= '</div>';
+
 		return $o;
 	}
 

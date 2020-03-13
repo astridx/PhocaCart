@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 $layoutI	= new JLayoutFile('image', null, array('component' => 'com_phocacart'));
 
 $d 		= $displayData;
-$price	= new PhocacartPrice();
+$price	= new PhocacartPrice;
 $app 	= JFactory::getApplication();
 
 // Component parameters params
@@ -92,11 +92,11 @@ if (!empty($d['fullitems'])) {
 
 	foreach($d['fullitems'][1] as $k => $v) {
 
-		$link = PhocacartRoute::getItemRoute((int)$v['id'], (int)$v['catid'], $v['alias']);
+		$link = PhocacartRoute::getItemRoute((int) $v['id'], (int) $v['catid'], $v['alias']);
 		if ($v['netto']) {
-			$priceItem = (int)$v['quantity'] * $v['netto'];
+			$priceItem = (int) $v['quantity'] * $v['netto'];
 		} else {
-			$priceItem = (int)$v['quantity'] * $v['brutto'];
+			$priceItem = (int) $v['quantity'] * $v['brutto'];
 		}
 		$priceItem = $price->getPriceFormat($priceItem);
 
@@ -115,15 +115,15 @@ if (!empty($d['fullitems'])) {
 				if (isset($image['image']->rel)) {
 					echo '<div class="'.$cI.' ph-small ph-mod-cart-image">';
 
-                    $d2								= array();
-                    $d2['s']                        = $d['s'];
-                    $d2['t']['display_webp_images']	= $p['display_webp_images'];
-                    $d2['src']						= JURI::base(true).'/'.$image['image']->rel;
-                    $d2['srcset-webp']				= JURI::base(true).'/'.$image['image']->rel_webp;
-                    $d2['alt-value']				= PhocaCartImage::getAltTitle($v['title'], $image['image']->rel);
-                    $d2['class']					= PhocacartRenderFront::completeClass(array($d['s']['c']['img-responsive'], 'ph-img-cart-cart'));
+					$d2								= array();
+					$d2['s']                        = $d['s'];
+					$d2['t']['display_webp_images']	= $p['display_webp_images'];
+					$d2['src']						= JURI::base(true).'/'.$image['image']->rel;
+					$d2['srcset-webp']				= JURI::base(true).'/'.$image['image']->rel_webp;
+					$d2['alt-value']				= PhocaCartImage::getAltTitle($v['title'], $image['image']->rel);
+					$d2['class']					= PhocacartRenderFront::completeClass(array($d['s']['c']['img-responsive'], 'ph-img-cart-cart'));
 
-                    echo $layoutI->render($d2);
+					echo $layoutI->render($d2);
 
 
 					echo '</div>';
@@ -267,14 +267,14 @@ if (!empty($d['fullitems'])) {
 
 		if ($p['zero_shipping_price_calculation'] == -1 && $sC['zero'] == 1) {
 			// Hide completely
-		} else 	if ($p['zero_shipping_price_calculation'] == 0 && $sC['zero'] == 1) {
+		} elseif ($p['zero_shipping_price_calculation'] == 0 && $sC['zero'] == 1) {
 			// Display blank price field
 			echo '<div class="'.$r.'">';
 			echo '<div class="'.$cT.' ph-small ph-cart-shipping-txt">'.$sC['title'].'</div>';
 			echo '<div class="'.$cP.' ph-small ph-right ph-cart-shipping"></div>';
 			echo '</div>';// end row
 
-		} else if ($p['zero_shipping_price_calculation'] == 2 && $sC['zero'] == 1) {
+		} elseif ($p['zero_shipping_price_calculation'] == 2 && $sC['zero'] == 1) {
 			// Display free text
 			echo '<div class="'.$r.'">';
 			echo '<div class="'.$cT.' ph-small ph-cart-shipping-txt">'.$sC['title'].'</div>';
@@ -316,14 +316,14 @@ if (!empty($d['fullitems'])) {
 
 		if ($p['zero_payment_price_calculation'] == -1 && $pC['zero'] == 1) {
 			// Hide completely
-		} else 	if ($p['zero_payment_price_calculation'] == 0 && $pC['zero'] == 1) {
+		} elseif ($p['zero_payment_price_calculation'] == 0 && $pC['zero'] == 1) {
 			// Display blank price field
 			echo '<div class="'.$r.'">';
 			echo '<div class="'.$cT.' ph-small ph-cart-payment-txt">'.$pC['title'].'</div>';
 			echo '<div class="'.$cP.' ph-small ph-right ph-cart-payment"></div>';
 			echo '</div>';// end row
 
-		} else if ($p['zero_payment_price_calculation'] == 2 && $pC['zero'] == 1) {
+		} elseif ($p['zero_payment_price_calculation'] == 2 && $pC['zero'] == 1) {
 			// Display free text
 			echo '<div class="'.$r.'">';
 			echo '<div class="'.$cT.' ph-small ph-cart-payment-txt">'.$pC['title'].'</div>';
@@ -404,7 +404,7 @@ if (!empty($d['fullitems'])) {
 		echo '<div class="'.$cT.' ph-small ph-cart-rounding-currency-txt">'.JText::_('COM_PHOCACART_ROUNDING_CURRENCY').'</div>';
 		echo '<div class="'.$cP.' ph-small ph-right ph-cart-rounding-currency">'.$price->getPriceFormat($d['total'][0]['rounding_currency'], 0, 1).'</div>';
 		echo '</div>';// end row
-	} else if ($d['total'][0]['rounding'] != 0) {
+	} elseif ($d['total'][0]['rounding'] != 0) {
 		echo '<div class="'.$r.'">';
 		echo '<div class="'.$cT.' ph-small ph-cart-rounding-txt">'.JText::_('COM_PHOCACART_ROUNDING').'</div>';
 		echo '<div class="'.$cP.' ph-small ph-right ph-cart-rounding">'.$price->getPriceFormat($d['total'][0]['rounding']).'</div>';
@@ -420,7 +420,7 @@ if (!empty($d['fullitems'])) {
 		echo '<div class="'.$cP.' ph-small ph-right ph-b ph-cart-brutton-currency">'.$price->getPriceFormat($d['total'][0]['brutto_currency'], 0, 1).'</div>';
 		echo '</div>';// end row
 	//} else if (!($price->roundPrice($d['total'][0]['brutto']) > -0.01 && $price->roundPrice($d['total'][0]['brutto'] < 0.01)) == 1) {
-	} else if ($d['total'][0]['brutto'] !== 0 || ($d['total'][0]['brutto'] === 0 && $p['display_zero_total'] == 1)) {
+	} elseif ($d['total'][0]['brutto'] !== 0 || ($d['total'][0]['brutto'] === 0 && $p['display_zero_total'] == 1)) {
 		echo '<div class="'.$r.'">';
 		echo '<div class="'.$cT.' ph-small ph-cart-total-txt">'.JText::_('COM_PHOCACART_TOTAL').'</div>';
 		echo '<div class="'.$cP.' ph-small ph-right ph-b ph-cart-total">'.$price->getPriceFormat($d['total'][0]['brutto']).'</div>';
@@ -445,7 +445,7 @@ if ($app->getName() != 'administrator') {
 
 	if (isset($d['paramsmodule']['display_checkout_link']) && $d['paramsmodule']['display_checkout_link'] == 1) {
 		echo $linkCheckoutHtml;
-	} else if (isset($d['paramsmodule']['display_checkout_link']) && $d['paramsmodule']['display_checkout_link'] == 2 && !empty($d['fullitems'])) {
+	} elseif (isset($d['paramsmodule']['display_checkout_link']) && $d['paramsmodule']['display_checkout_link'] == 2 && !empty($d['fullitems'])) {
 		echo $linkCheckoutHtml;
 	}
 }

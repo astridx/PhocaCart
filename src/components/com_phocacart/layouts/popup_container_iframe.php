@@ -14,24 +14,24 @@ $d['close'] = '<button type="button" class="close" aria-label="'.JText::_('COM_P
 
 ?>
 <div id="<?php echo $d['id'] ?>" class="<?php echo $s['c']['modal.zoom'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none">
-    <div class="<?php echo $s['c']['modal-dialog'] ?> <?php echo $s['c']['modal-lg'] ?>">
-      <div class="<?php echo $s['c']['modal-content'] ?>">
-        <div class="<?php echo $s['c']['modal-header'] ?>">
-          <?php echo $d['s']['c']['class-type'] != 'bs4' ? $d['close'] : '' ?>
+	<div class="<?php echo $s['c']['modal-dialog'] ?> <?php echo $s['c']['modal-lg'] ?>">
+	  <div class="<?php echo $s['c']['modal-content'] ?>">
+		<div class="<?php echo $s['c']['modal-header'] ?>">
+		  <?php echo $d['s']['c']['class-type'] != 'bs4' ? $d['close'] : '' ?>
 		  <h4><span class="<?php echo $d['icon'] ?>"></span> <?php echo $d['title']; ?></h4>
-            <?php echo $d['s']['c']['class-type'] == 'bs4' ? $d['close'] : '' ?>
-        </div>
-        <div class="<?php echo $s['c']['modal-body'] ?>">
+			<?php echo $d['s']['c']['class-type'] == 'bs4' ? $d['close'] : '' ?>
+		</div>
+		<div class="<?php echo $s['c']['modal-body'] ?>">
 			<?php
-            /* We paste the iframe dynamically per Javascript so it does not include previous instance at start
-                <iframe frameborder="0"></iframe>
-                administrator/components/com_phocacart/libraries/phocacart/render/js.php
-                public static function renderAjaxAskAQuestion($options = array()) {
-             */
+			/* We paste the iframe dynamically per Javascript so it does not include previous instance at start
+				<iframe frameborder="0"></iframe>
+				administrator/components/com_phocacart/libraries/phocacart/render/js.php
+				public static function renderAjaxAskAQuestion($options = array()) {
+			 */
 			?>
-        </div>
+		</div>
 		<div class="<?php echo $s['c']['modal-footer'] ?>"></div>
 	   </div>
-    </div>
+	</div>
 </div>
 

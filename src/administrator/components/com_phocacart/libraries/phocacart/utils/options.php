@@ -8,13 +8,15 @@
  * @copyright Copyright (C) Open Source Matters. All rights reserved.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
  */
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
 class PhocacartUtilsOptions
 {
 	private static $options = array();
 
-	private function __construct(){}
+	private function __construct()
+	{
+	}
 
 
 	/*
@@ -34,38 +36,48 @@ class PhocacartUtilsOptions
 	 *
 	 */
 
-	public static function getOptions($component, $client, $option) {
+	public static function getOptions($component, $client, $option)
+	{
 
 		$elementOption = $component . $client . $option;
 
-		if( is_null( $elementOption ) ) {
+		if (is_null($elementOption))
+		{
 			throw new Exception('Function Error: No element added', 500);
+
 			return false;
 		}
 
-		if( !array_key_exists( $elementOption, self::$options ) ) {
-
+		if (!array_key_exists($elementOption, self::$options))
+		{
 			$app = JFactory::getApplication();
 
-			if ($client == 'A') {
+			if ($client == 'A')
+			{
 				self::$options[$elementOption] = JComponentHelper::getParams('com_phocacart');
-			} else {
-				if ($option == 'com_phocacart') {
-					self::$options[$elementOption] =  $app->getParams();
-				} else {
+			}
+			else
+			{
+				if ($option == 'com_phocacart')
+				{
+					self::$options[$elementOption] = $app->getParams();
+				}
+				else
+				{
 					self::$options[$elementOption] = JComponentHelper::getParams('com_phocacart');
 				}
 			}
-
 		}
 
 		return self::$options[$elementOption];
 
 	}
 
-	public final function __clone() {
+	public final function __clone()
+	{
 		throw new Exception('Function Error: Cannot clone instance of Singleton pattern', 500);
+
 		return false;
 	}
 }
-?>
+

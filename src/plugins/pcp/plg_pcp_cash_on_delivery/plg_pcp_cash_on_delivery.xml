@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="pcp" method="upgrade" version="3">
+	<name>plg_pcp_cash_on_delivery</name>
+	<author>Jan Pavelka (www.phoca.cz) changed by Astrid Günther</author>
+	<creationDate>##DATE##</creationDate>
+	<copyright>(C) ##YEAR## Jan Pavelka and Astrid Günther. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@astrid-guenther.de</authorEmail>
+	<authorUrl>www.astrid-guenther.de</authorUrl>
+	<version>##VERSION##</version>
+	<description>PLG_PCP_CASH_ON_DELIVERY_DESCRIPTION</description>
+
+	<files>
+		<file>cash_on_delivery.php</file>
+			##FILES##
+	</files>
+	<languages folder="administrator/language">
+		##LANGUAGE_FILES##
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -71,14 +71,14 @@ echo '<div class="'.$s['c']['col.xs12.sm5.md5'].' '.$d['lt'].'">';
 if (!empty($d['layout']['dP'])) { echo $layoutP->render($d['layout']['dP']);}
 
 if ($t['fade_in_action_icons'] == 0  && $t['display_action_icons'] == 1) {
-    echo '<div class="'.$s['c']['cat_item_grid'].' ph-category-action-box-icons '.$d['lt'].'">';
-    echo '<div class="'.$s['c']['cat_item_btns'].' ph-category-action-icons '.$d['lt'].'">';
-    echo $d['icon']['compare']; // if set in options, it will be displayed on other place, so this is why it is printed this way
-    echo $d['icon']['wishlist'];
-    echo $d['icon']['quickview'];
-    echo $d['icon']['addtocart'];
-    echo '</div>';// end category_action_box_icons
-    echo '</div>';// end category_action_icons
+	echo '<div class="'.$s['c']['cat_item_grid'].' ph-category-action-box-icons '.$d['lt'].'">';
+	echo '<div class="'.$s['c']['cat_item_btns'].' ph-category-action-icons '.$d['lt'].'">';
+	echo $d['icon']['compare']; // if set in options, it will be displayed on other place, so this is why it is printed this way
+	echo $d['icon']['wishlist'];
+	echo $d['icon']['quickview'];
+	echo $d['icon']['addtocart'];
+	echo '</div>';// end category_action_box_icons
+	echo '</div>';// end category_action_icons
 }
 
 // REVIEW - STAR RATING
@@ -101,7 +101,7 @@ if (!empty($d['layout']['dAb'])) { echo $layoutAB->render($d['layout']['dAb']);}
 if (!empty($d['layout']['dV'])) { echo $layoutV->render($d['layout']['dV']);}
 
 // :L: ADD TO CART
-if (!empty($d['layout']['dA'])) { echo $layoutA->render($d['layout']['dA']);} else if ($d['icon']['addtocart'] != '') { echo $layoutBSH->render();}
+if (!empty($d['layout']['dA'])) { echo $layoutA->render($d['layout']['dA']);} elseif ($d['icon']['addtocart'] != '') { echo $layoutBSH->render();}
 
 // :L: ASK A QUESTION
 if (!empty($d['layout']['dQ'])) { echo $layoutQ->render($d['layout']['dQ']);}
@@ -122,14 +122,14 @@ echo '<div class="ph-cb"></div>';
 
 
 if ($t['fade_in_action_icons'] == 1  && $t['display_action_icons'] == 1) {
-    echo '<div class="ph-category-action-box-fade-icons '.$d['lt'].'">';
-    echo '<div class="ph-item-action-fade ph-category-action-fade-icons '.$d['lt'].'">';
-    echo $d['icon']['compare'];
-    echo $d['icon']['wishlist'];
-    echo $d['icon']['quickview'];
-    echo $d['icon']['addtocart'];
-    echo '</div>';
-    echo '</div>';
+	echo '<div class="ph-category-action-box-fade-icons '.$d['lt'].'">';
+	echo '<div class="ph-item-action-fade ph-category-action-fade-icons '.$d['lt'].'">';
+	echo $d['icon']['compare'];
+	echo $d['icon']['wishlist'];
+	echo $d['icon']['quickview'];
+	echo $d['icon']['addtocart'];
+	echo '</div>';
+	echo '</div>';
 }
 
 echo '</div>';// end category_action_box_buttons

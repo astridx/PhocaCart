@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="file" method="upgrade" version="3.0">
+	<name>Komponente Phoca Cart - Deutsche Sprachdateien</name>
+	<version>3.0.0 beta1</version>
+	<creationDate>02.12.2014</creationDate>
+	<author>Benno Mathias</author>		
+	<authorUrl>http://www.reisefotografien.eu</authorUrl>
+	<license>GNU/GPL version 2</license>
+	<description>
+		<![CDATA[
+			<div class="alert alert-info left" style="text-align: left;">
+			<p><strong>Sprachdatei für die Komponente/Version:</strong> Phoca Cart 3.0.0 beta1 (de-DE.com_phocacart)</p>
+			<p><strong>Sprache:</strong> Deutsch (formell)</p>
+			<p><strong>Bereich:</strong> Administrator - Administrationsbereich (Backend) und Site - Benutzerbereich (Frontend)</p>
+			<p><strong>Autor:</strong> Benno Mathias, basierend auf den Übersetzungen von <a style="text-decoration: underline" href="http://www.joomweb.de" target="_blank">Olaf Dryja</a></p>
+			<p><a style="text-decoration: underline" href="http://www.reisefotografien.eu" target="_blank">reisefotografien.eu</a> für <a style="text-decoration: underline" href="http://phoca.cz" target="_blank">Phoca.CZ</a></p>
+			<p><strong>Übersetzungsversion:</strong> 3.0.0. beta1 </p></div> 
+        ]]>
+    </description>
+	<fileset>
+		<files target="language/de-DE">
+			<filename>de-DE.com_phocacart.ini</filename>
+			<filename>de-DE.com_phocacart.sys.ini</filename>
+			<filename>de-DE.plg_pcp_cash_on_delivery.ini</filename>
+			<filename>de-DE.plg_pcp_cash_on_delivery.sys.ini</filename>
+			<filename>de-DE.plg_pcp_paypal_standard.ini</filename>
+			<filename>de-DE.plg_pcp_paypal_standard.sys.ini</filename>
+		</files>
+		<files target="administrator/language/de-DE">
+			<filename>de-DE.com_phocacart.ini</filename>
+			<filename>de-DE.com_phocacart.sys.ini</filename>
+			<filename>de-DE.plg_pcp_cash_on_delivery.ini</filename>
+			<filename>de-DE.plg_pcp_cash_on_delivery.sys.ini</filename>
+			<filename>de-DE.plg_pcp_paypal_standard.ini</filename>
+			<filename>de-DE.plg_pcp_paypal_standard.sys.ini</filename>
+		</files>
+	</fileset>
+</extension>
+

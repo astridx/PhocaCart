@@ -16,27 +16,27 @@ if (isset($d['checkout_view']) && $d['checkout_view'] == 1) {
 }
 ?>
 <div id="phAddToCartPopup" class="<?php echo $d['s']['c']['modal.zoom'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="<?php echo $d['s']['c']['modal-dialog'] ?>">
-      <div class="<?php echo $d['s']['c']['modal-content'] ?>">
-        <div class="<?php echo $d['s']['c']['modal-header'] ?>">
-            <?php echo $d['s']['c']['class-type'] != 'bs4' ? $d['close'] : '' ?>
-		    <h4><span class="<?php echo $d['s']['i']['info-sign'] ?>"></span> <?php echo $d['info_msg'] ?></h4>
-            <?php echo $d['s']['c']['class-type'] == 'bs4' ? $d['close'] : '' ?>
-        </div>
-        <div class="<?php echo $d['s']['c']['modal-body'] ?>">
+	<div class="<?php echo $d['s']['c']['modal-dialog'] ?>">
+	  <div class="<?php echo $d['s']['c']['modal-content'] ?>">
+		<div class="<?php echo $d['s']['c']['modal-header'] ?>">
+			<?php echo $d['s']['c']['class-type'] != 'bs4' ? $d['close'] : '' ?>
+			<h4><span class="<?php echo $d['s']['i']['info-sign'] ?>"></span> <?php echo $d['info_msg'] ?></h4>
+			<?php echo $d['s']['c']['class-type'] == 'bs4' ? $d['close'] : '' ?>
+		</div>
+		<div class="<?php echo $d['s']['c']['modal-body'] ?>">
 
 
-            <div class="<?php echo $d['s']['c']['row'] ?>">
-                <div class="<?php echo $d['s']['c']['col.xs12.sm12.md12'] ?> ph-center">
-                    <?php
+			<div class="<?php echo $d['s']['c']['row'] ?>">
+				<div class="<?php echo $d['s']['c']['col.xs12.sm12.md12'] ?> ph-center">
+					<?php
 
-                    JPluginHelper::importPlugin('pcv');
-                    $results = \JFactory::getApplication()->triggerEvent('PCVonPopupAddToCartAfterHeader', array('com_phocacart.popupaddtocart', $d['product'], $d['products'], $d['total']));
-                    echo trim(implode("\n", $results));
+					JPluginHelper::importPlugin('pcv');
+					$results = \JFactory::getApplication()->triggerEvent('PCVonPopupAddToCartAfterHeader', array('com_phocacart.popupaddtocart', $d['product'], $d['products'], $d['total']));
+					echo trim(implode("\n", $results));
 
-                    ?>
-                </div>
-            </div>
+					?>
+				</div>
+			</div>
 
 		<div class="<?php echo $d['s']['c']['row'] ?>">
 <div class="<?php echo $d['s']['c']['col.xs12.sm6.md6'] ?> ph-center">
@@ -47,10 +47,10 @@ if (isset($d['checkout_view']) && $d['checkout_view'] == 1) {
 <a class="<?php echo $d['s']['c']['btn.btn-success'] ?> ph-btn" role="button" href="<?php echo $d['link_checkout']; ?>" ><span class="<?php echo $d['s']['i']['int-link'] ?>"></span> <?php echo JText::_('COM_PHOCACART_PROCEED_TO_CHECKOUT'); ?></a>
 </div>
 		</div>
-        </div>
+		</div>
 		<div class="<?php echo $d['s']['c']['modal-footer'] ?>"></div>
 	   </div>
-    </div>
+	</div>
 </div>
 
 

@@ -8,18 +8,18 @@
  * @copyright Copyright (C) Open Source Matters. All rights reserved.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU/GPL, see LICENSE.php
  */
-defined( '_JEXEC' ) or die( 'Restricted access' );
+defined('_JEXEC') or die('Restricted access');
 
 
-//=========
-//TYPES
-//=========
-//---------
-//LOG (#__phocacart_logs)
+// =========
+// TYPES
+// =========
+// ---------
+// LOG (#__phocacart_logs)
 // 1 ... payment
-//---------
+// ---------
 
-//---------
+// ---------
 // RESPONSES (Info view)
 // components\com_phocacart\views\info\tmpl\default.php
 // components\com_phocacart\controllers\response.php
@@ -41,71 +41,74 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 
 class PhocacartUtilsSettings
 {
-	public static function getManagerGroup($manager) {
+	public static function getManagerGroup($manager)
+	{
 
 		$group = array();
-		switch ($manager) {
 
+		switch ($manager)
+		{
 			// Pathe needs to be set too
 
 			case 'categoryimage':
-				$group['f'] = 4;//File
-				$group['i'] = 1;//Image
-				$group['t'] = 'image';//Text
+				$group['f'] = 4;// File
+				$group['i'] = 1;// Image
+				$group['t'] = 'image';// Text
 				$group['c']	= '&amp;tmpl=component';
-			break;
+					break;
 
 			case 'productimage':
-				$group['f'] = 5;//File
-				$group['i'] = 1;//Image
-				$group['t'] = 'image';//Text
+				$group['f'] = 5;// File
+				$group['i'] = 1;// Image
+				$group['t'] = 'image';// Text
 				$group['c']	= '&amp;tmpl=component';
-			break;
+					break;
 
 			case 'submititem':
-				$group['f'] = 7;//File
-				$group['i'] = 1;//Image
-				$group['t'] = 'image';//Text
+				$group['f'] = 7;// File
+				$group['i'] = 1;// Image
+				$group['t'] = 'image';// Text
 				$group['c']	= '&amp;tmpl=component';
-			break;
+					break;
 
 			case 'productfile':
-				$group['f'] = 3;//File
-				$group['i'] = 0;//Image
-				$group['t'] = 'file';//Text
+				$group['f'] = 3;// File
+				$group['i'] = 0;// Image
+				$group['t'] = 'file';// Text
 				$group['c']	= '&amp;tmpl=component';
-			break;
+					break;
 
 			case 'attributefile':
-				$group['f'] = 3;//File
-				$group['i'] = 0;//Image
-				$group['t'] = 'file';//Text
+				$group['f'] = 3;// File
+				$group['i'] = 0;// Image
+				$group['t'] = 'file';// Text
 				$group['c']	= '&amp;tmpl=component';
-			break;
+					break;
 
 			case 'publicfile':
-				$group['f'] = 6;//File
-				$group['i'] = 0;//Image
-				$group['t'] = 'file';//Text
+				$group['f'] = 6;// File
+				$group['i'] = 0;// Image
+				$group['t'] = 'file';// Text
 				$group['c']	= '&amp;tmpl=component';
-			break;
+					break;
 
 			default:
-				$group['f'] = 0;//File
-				$group['i'] = 0;//Image
-				$group['t'] = 'file';//Text
+				$group['f'] = 0;// File
+				$group['i'] = 0;// Image
+				$group['t'] = 'file';// Text
 				$group['c']	= '&amp;tmpl=component';
-			break;
-
+					break;
 		}
+
 		return $group;
 	}
 
-	public static function getListFilterParams($includeId = 0) {
+	public static function getListFilterParams($includeId = 0)
+	{
 
 		$pC 						= PhocacartUtils::getComponentParameters();
-		$manufacturer_alias			= $pC->get( 'manufacturer_alias', 'manufacturer');
-		$manufacturer_alias 		!= '' ? trim(PhocacartText::filterValue($manufacturer_alias, 'alphanumeric'))  : 'manufacturer';
+		$manufacturer_alias			= $pC->get('manufacturer_alias', 'manufacturer');
+		$manufacturer_alias != '' ? trim(PhocacartText::filterValue($manufacturer_alias, 'alphanumeric')) : 'manufacturer';
 		$p[] = 'price_from';
 		$p[] = 'price_to';
 		$p[] = 'tag';
@@ -114,16 +117,21 @@ class PhocacartUtilsSettings
 		$p[] = 'a';
 		$p[] = 's';
 
-
 		$parameters = PhocacartParameter::getAllParameters();
-		if (!empty($parameters)) {
-			foreach ($parameters as $k => $v) {
+
+		if (!empty($parameters))
+		{
+			foreach ($parameters as $k => $v)
+			{
 				$p[] = trim(PhocacartText::filterValue($v->alias, 'alphanumeric'));
 			}
 		}
-		if ($includeId > 0) {
+
+		if ($includeId > 0)
+		{
 			$p[] = 'id';
 		}
+
 		return $p;
 	}
 
@@ -177,8 +185,10 @@ class PhocacartUtilsSettings
 	}*/
 
 
-	public static function getTaxCalculationType($type) {
-		switch($type) {
+	public static function getTaxCalculationType($type)
+	{
+		switch ($type)
+		{
 			case 1:
 				return JText::_('COM_PHOCACART_PERCENTAGE');
 			break;
@@ -190,7 +200,8 @@ class PhocacartUtilsSettings
 		}
 	}
 
-	public static function getDiscountCalculationTypeArray() {
+	public static function getDiscountCalculationTypeArray()
+	{
 
 		$calcTypeArray = array();
 		$calcTypeArray[0] = JText::_('COM_PHOCACART_FIXED_AMOUNT');
@@ -199,7 +210,8 @@ class PhocacartUtilsSettings
 		return $calcTypeArray;
 	}
 
-	public static function getExtenstionsArray() {
+	public static function getExtenstionsArray()
+	{
 
 		$a = array();
 		$a['components'] 	= JText::_('COM_PHOCACART_COMPONENTS');
@@ -211,8 +223,8 @@ class PhocacartUtilsSettings
 		return $a;
 	}
 
-	public static function getExtenstionsJSONLinks($type) {
-
+	public static function getExtenstionsJSONLinks($type)
+	{
 
 		$dir = 'https://raw.githubusercontent.com/PhocaCz/PhocaCart/master/extensions/';
 
@@ -224,17 +236,19 @@ class PhocacartUtilsSettings
 		$a['languages'] 	= 'languages/languages.json';
 		$a['news'] 			= 'news/news.json';
 
-		if (isset($a[$type])) {
+		if (isset($a[$type]))
+		{
 			return $dir . $a[$type];
 		}
 
 		return false;
 	}
 
-	public static function getExtensionsJSONObtainTypeText($type) {
+	public static function getExtensionsJSONObtainTypeText($type)
+	{
 
-
-		switch($type){
+		switch ($type)
+		{
 			case 0:
 				return JText::_('COM_PHOCACART_PAID');// Paid
 			break;
@@ -257,8 +271,10 @@ class PhocacartUtilsSettings
 	}
 
 
-	public static function getAdditionalHitsType($type) {
-		switch($type) {
+	public static function getAdditionalHitsType($type)
+	{
+		switch ($type)
+		{
 			case 2:
 				return JText::_('COM_PHOCACART_SEARCH_TERM');
 			break;
@@ -274,45 +290,58 @@ class PhocacartUtilsSettings
 
 
 
-	public static function getDefaultAllowedMimeTypesDownload() {
+	public static function getDefaultAllowedMimeTypesDownload()
+	{
 		return '{hqx=application/mac-binhex40}{cpt=application/mac-compactpro}{csv=text/x-comma-separated-values}{bin=application/macbinary}{dms=application/octet-stream}{lha=application/octet-stream}{lzh=application/octet-stream}{exe=application/octet-stream}{class=application/octet-stream}{psd=application/x-photoshop}{so=application/octet-stream}{sea=application/octet-stream}{dll=application/octet-stream}{oda=application/oda}{pdf=application/pdf}{ai=application/postscript}{eps=application/postscript}{ps=application/postscript}{smi=application/smil}{smil=application/smil}{mif=application/vnd.mif}{xls=application/vnd.ms-excel}{ppt=application/powerpoint}{wbxml=application/wbxml}{wmlc=application/wmlc}{dcr=application/x-director}{dir=application/x-director}{dxr=application/x-director}{dvi=application/x-dvi}{gtar=application/x-gtar}{gz=application/x-gzip}{php=application/x-httpd-php}{php4=application/x-httpd-php}{php3=application/x-httpd-php}{phtml=application/x-httpd-php}{phps=application/x-httpd-php-source}{js=application/x-javascript}{swf=application/x-shockwave-flash}{sit=application/x-stuffit}{tar=application/x-tar}{tgz=application/x-tar}{xhtml=application/xhtml+xml}{xht=application/xhtml+xml}{zip=application/x-zip}{mid=audio/midi}{midi=audio/midi}{mpga=audio/mpeg}{mp2=audio/mpeg}{mp3=audio/mpeg}{aif=audio/x-aiff}{aiff=audio/x-aiff}{aifc=audio/x-aiff}{ram=audio/x-pn-realaudio}{rm=audio/x-pn-realaudio}{rpm=audio/x-pn-realaudio-plugin}{ra=audio/x-realaudio}{rv=video/vnd.rn-realvideo}{wav=audio/x-wav}{bmp=image/bmp}{gif=image/gif}{jpeg=image/jpeg}{jpg=image/jpeg}{jpe=image/jpeg}{png=image/png}{tiff=image/tiff}{tif=image/tiff}{css=text/css}{html=text/html}{htm=text/html}{shtml=text/html}{txt=text/plain}{text=text/plain}{log=text/plain}{rtx=text/richtext}{rtf=text/rtf}{xml=text/xml}{xsl=text/xml}{mpeg=video/mpeg}{mpg=video/mpeg}{mpe=video/mpeg}{qt=video/quicktime}{mov=video/quicktime}{avi=video/x-msvideo}{flv=video/x-flv}{movie=video/x-sgi-movie}{doc=application/msword}{xl=application/excel}{eml=message/rfc822}{pptx=application/vnd.openxmlformats-officedocument.presentationml.presentation}{xlsx=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet}{docx=application/vnd.openxmlformats-officedocument.wordprocessingml.document}{rar=application/x-rar-compressed}{odb=application/vnd.oasis.opendocument.database}{odc=application/vnd.oasis.opendocument.chart}{odf=application/vnd.oasis.opendocument.formula}{odg=application/vnd.oasis.opendocument.graphics}{odi=application/vnd.oasis.opendocument.image}{odm=application/vnd.oasis.opendocument.text-master}{odp=application/vnd.oasis.opendocument.presentation}{ods=application/vnd.oasis.opendocument.spreadsheet}{odt=application/vnd.oasis.opendocument.text}{sxc=application/vnd.sun.xml.calc}{sxd=application/vnd.sun.xml.draw}{sxg=application/vnd.sun.xml.writer.global}{sxi=application/vnd.sun.xml.impress}{sxm=application/vnd.sun.xml.math}{sxw=application/vnd.sun.xml.writer}';
 	}
 
-	public static function getDefaultAllowedMimeTypesUpload() {
+	public static function getDefaultAllowedMimeTypesUpload()
+	{
 		return '{pdf=application/pdf}{ppt=application/powerpoint}{gz=application/x-gzip}{tar=application/x-tar}{tgz=application/x-tar}{zip=application/x-zip}{bmp=image/bmp}{gif=image/gif}{jpeg=image/jpeg}{jpg=image/jpeg}{jpe=image/jpeg}{png=image/png}{tiff=image/tiff}{tif=image/tiff}{txt=text/plain}{mpeg=video/mpeg}{mpg=video/mpeg}{mpe=video/mpeg}{qt=video/quicktime}{mov=video/quicktime}{avi=video/x-msvideo}{flv=video/x-flv}{doc=application/msword}';
 	}
 
-	public static function getHTMLTagsUpload() {
+	public static function getHTMLTagsUpload()
+	{
 		return array('abbr','acronym','address','applet','area','audioscope','base','basefont','bdo','bgsound','big','blackface','blink','blockquote','body','bq','br','button','caption','center','cite','code','col','colgroup','comment','custom','dd','del','dfn','dir','div','dl','dt','em','embed','fieldset','fn','font','form','frame','frameset','h1','h2','h3','h4','h5','h6','head','hr','html','iframe','ilayer','img','input','ins','isindex','keygen','kbd','label','layer','legend','li','limittext','link','listing','map','marquee','menu','meta','multicol','nobr','noembed','noframes','noscript','nosmartquotes','object','ol','optgroup','option','param','plaintext','pre','rt','ruby','s','samp','script','select','server','shadow','sidebar','small','spacer','span','strike','strong','style','sub','sup','table','tbody','td','textarea','tfoot','th','thead','title','tr','tt','ul','var','wbr','xml','xmp','!DOCTYPE', '!--');
 	}
 
-	public static function getHTMLTagsExternalSource() {
+	public static function getHTMLTagsExternalSource()
+	{
 
 		return array('a', 'b', 'blockquote', 'br', 'caption', 'center', 'cite', 'code', 'dd', 'div', 'dl', 'dt', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'img', 'li', 'ol', 'p', 'pre', 'small', 'span', 'strike', 'strong', 'sub', 'sup', 'table', 'td', 'th', 'tr', 'ul');
 	}
 
-	public static function isFullGroupBy() {
+	public static function isFullGroupBy()
+	{
 
 		$pC							= PhocacartUtils::getComponentParameters();
-		$sql_only_full_group_by		= $pC->get( 'sql_only_full_group_by', 0 );
-		return (bool)$sql_only_full_group_by;
+		$sql_only_full_group_by		= $pC->get('sql_only_full_group_by', 0);
+
+		return (bool) $sql_only_full_group_by;
 	}
 
-	public static function getShopType() {
+	public static function getShopType()
+	{
 
 		$type = array();
-		$type[0] = 0;// common
-		if (PhocacartPos::isPos()) {
+		$type[0] = 0;// Common
+
+		if (PhocacartPos::isPos())
+		{
 			// POS
 			$type[1] = 2;
-		} else {
+		}
+		else
+		{
 			// ONLINE SHOP
 			$type[1] = 1;
 		}
+
 		return $type;
 	}
 
-	public static function getShopTypes() {
+	public static function getShopTypes()
+	{
 
 		return array(
 			0 => JText::_('COM_PHOCACART_ALL'),
@@ -321,16 +350,19 @@ class PhocacartUtilsSettings
 		);
 	}
 
-	public static function getLangQuery($column, $lang) {
+	public static function getLangQuery($column, $lang)
+	{
 
 		$db 				= JFactory::getDbo();
-		// Possible settings
-		//$pC					= PhocacartUtils::getComponentParameters();
-		//$filter_lang_type	= $pC->get( 'filter_lang_type', 2 );
-		//$type1 				= ' ' . $db->quoteName($column) . ' = '.$db->quote($lang);
-		$type2 				= ' ' . $db->quoteName($column) . ' IN ('.$db->quote($lang).','.$db->quote('*').')';
 
-		/*if ($filter_lang_type == 1) {
+		// Possible settings
+		// $pC                   = PhocacartUtils::getComponentParameters();
+		// $filter_lang_type = $pC->get( 'filter_lang_type', 2 );
+		// $type1                = ' ' . $db->quoteName($column) . ' = '.$db->quote($lang);
+		$type2 				= ' ' . $db->quoteName($column) . ' IN (' . $db->quote($lang) . ',' . $db->quote('*') . ')';
+
+		/*
+		if ($filter_lang_type == 1) {
 			return $type1;
 		} else {
 			return $type2;
@@ -339,55 +371,62 @@ class PhocacartUtilsSettings
 		return $type2;
 	}
 
-	public static function getProductConditionValues($condition) {
+	public static function getProductConditionValues($condition)
+	{
 
-		switch((int)$condition) {
-
-			case 1: return 'refurbished';	break;
-			case 2: return 'used'; 			break;
-			case 0: default: return 'new';	break;
+		switch ((int) $condition)
+		{
+			case 1:
+return 'refurbished';
+			break;
+			case 2:
+return 'used';
+			break;
+			case 0: default:
+return 'new';
+			break;
 		}
 
 	}
 
 
-	public static function getOrderStatusClass($status) {
+	public static function getOrderStatusClass($status)
+	{
 
+		$status = str_replace('COM_PHOCACART_STATUS_', '', $status);
 
-	    $status = str_replace('COM_PHOCACART_STATUS_', '', $status);
+		switch ($status)
+		{
+			case 'CANCELED':
+				$class = 'label label-warning ph-order-status-canceled';
+			break;
 
+			case 'COMPLETED':
+				$class = 'label label-success ph-order-status-completed';
+			break;
 
-        switch ($status) {
-            case 'CANCELED':
-                $class = 'label label-warning ph-order-status-canceled';
-            break;
+			case 'CONFIRMED':
+				$class = 'label label-success ph-order-status-confirmed';
+			break;
 
-            case 'COMPLETED':
-                $class = 'label label-success ph-order-status-completed';
-            break;
+			case 'PENDING':
+				$class = 'label label-info label-primary ph-order-status-pending';
+			break;
 
-            case 'CONFIRMED':
-                $class = 'label label-success ph-order-status-confirmed';
-            break;
+			case 'REFUNDED':
+				$class = 'label label-important label-danger ph-order-status-refunded';
+			break;
 
-            case 'PENDING':
-                $class = 'label label-info label-primary ph-order-status-pending';
-            break;
+			case 'SHIPPED':
+				$class = 'label label-info ph-order-status-shipped';
+			break;
 
-            case 'REFUNDED':
-                $class = 'label label-important label-danger ph-order-status-refunded';
-            break;
+			default:
+				$class = 'label label-default ph-order-status-default';
+			break;
+		}
 
-            case 'SHIPPED':
-                $class = 'label label-info ph-order-status-shipped';
-            break;
-
-            default:
-                $class = 'label label-default ph-order-status-default';
-            break;
-
-        }
-        return $class;
-    }
+		return $class;
+	}
 }
-?>
+

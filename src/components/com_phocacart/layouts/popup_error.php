@@ -12,19 +12,19 @@ $d['close'] = '<button type="button" class="close" aria-label="'.JText::_('COM_P
 
 ?>
 <div id="phAddToCartPopup" class="<?php echo $d['s']['c']['modal.zoom'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="<?php echo $d['s']['c']['modal-dialog'] ?>">
-      <div class="<?php echo $d['s']['c']['modal-content'] ?>">
-        <div class="<?php echo $d['s']['c']['modal-header'] ?>">
-          <?php echo $d['s']['c']['class-type'] != 'bs4' ? $d['close'] : '' ?>
+	<div class="<?php echo $d['s']['c']['modal-dialog'] ?>">
+	  <div class="<?php echo $d['s']['c']['modal-content'] ?>">
+		<div class="<?php echo $d['s']['c']['modal-header'] ?>">
+		  <?php echo $d['s']['c']['class-type'] != 'bs4' ? $d['close'] : '' ?>
 		  <h4><span class="<?php echo $d['s']['i']['info-sign'] ?>"></span> <?php echo JText::_('COM_PHOCACART_ERROR'); ?></h4>
-            <?php echo $d['s']['c']['class-type'] == 'bs4' ? $d['close'] : '' ?>
-        </div>
-        <div class="<?php echo $d['s']['c']['modal-body'] ?>">
+			<?php echo $d['s']['c']['class-type'] == 'bs4' ? $d['close'] : '' ?>
+		</div>
+		<div class="<?php echo $d['s']['c']['modal-body'] ?>">
 			<?php echo $d['info_msg']; ?>
-        </div>
+		</div>
 		<div class="<?php echo $d['s']['c']['modal-footer'] ?>"></div>
 	   </div>
-    </div>
+	</div>
 </div>
 
 

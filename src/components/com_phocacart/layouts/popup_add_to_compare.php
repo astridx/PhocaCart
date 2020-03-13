@@ -16,16 +16,16 @@ if (isset($d['comparison_view']) && $d['comparison_view'] == 1) {
 }
 ?>
 <div id="phAddToComparePopup" class="<?php echo $d['s']['c']['modal.zoom'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="<?php echo $d['s']['c']['modal-dialog'] ?>">
-      <div class="<?php echo $d['s']['c']['modal-content'] ?>">
-        <div class="<?php echo $d['s']['c']['modal-header'] ?>">
-          <?php echo $d['s']['c']['class-type'] != 'bs4' ? $d['close'] : '' ?>
+	<div class="<?php echo $d['s']['c']['modal-dialog'] ?>">
+	  <div class="<?php echo $d['s']['c']['modal-content'] ?>">
+		<div class="<?php echo $d['s']['c']['modal-header'] ?>">
+		  <?php echo $d['s']['c']['class-type'] != 'bs4' ? $d['close'] : '' ?>
 		  <h4><span class="<?php echo $d['s']['i']['info-sign'] ?>"></span> <?php echo $d['info_msg'] ?></h4>
-            <?php echo $d['s']['c']['class-type'] == 'bs4' ? $d['close'] : '' ?>
-        </div>
-        <div class="<?php echo $d['s']['c']['modal-body'] ?>">
+			<?php echo $d['s']['c']['class-type'] == 'bs4' ? $d['close'] : '' ?>
+		</div>
+		<div class="<?php echo $d['s']['c']['modal-body'] ?>">
 
-            <?php if (isset($d['info_msg_additional']) && $d['info_msg_additional'] != '') { ?>
+			<?php if (isset($d['info_msg_additional']) && $d['info_msg_additional'] != '') { ?>
 			<div><?php echo $d['info_msg_additional']; ?></div>
 		  <?php } ?>
 
@@ -38,10 +38,10 @@ if (isset($d['comparison_view']) && $d['comparison_view'] == 1) {
 <a class="<?php echo $d['s']['c']['btn.btn-success'] ?> ph-btn" role="button" href="<?php echo $d['link_comparison']; ?>" ><span class="<?php echo $d['s']['i']['int-link'] ?>"></span> <?php echo JText::_('COM_PHOCACART_PROCEED_TO_COMPARISON_LIST'); ?></a>
 </div>
 		</div>
-        </div>
+		</div>
 		<div class="<?php echo $d['s']['c']['modal-footer'] ?>"></div>
 	   </div>
-    </div>
+	</div>
 </div>
 
 
